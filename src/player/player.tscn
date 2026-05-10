@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://dgw74vsie3qck"]
 
 [ext_resource type="Script" uid="uid://dfuw5soldv2op" path="res://src/player/player.gd" id="1_ocv17"]
-[ext_resource type="PackedScene" uid="uid://qw2qh43d8pag" path="res://assets/ant.gltf" id="2_o822w"]
 [ext_resource type="Script" uid="uid://bvsffj61cut27" path="res://src/player/controllers/movement_controller.gd" id="3_mf2ua"]
 [ext_resource type="Script" uid="uid://c32ayha0n10be" path="res://src/player/controllers/gravity_controller.gd" id="4_244u8"]
 
@@ -9,30 +8,17 @@
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_rxibo"]
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_244u8"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5f2sf"]
+albedo_color = Color(0.38303533, 0, 0, 1)
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_ocv17"]
 radius = 1.5
 
 [node name="player" type="CharacterBody3D" unique_id=1256135889]
 script = ExtResource("1_ocv17")
-antRotationSpeed = null
-arrowTexturePointsUp = null
-rigReorientRate = null
-speed = null
-gravityStrength = null
 stickStrength = 900.0
-maxStickSpeed = null
-jumpSpeed = null
-mouseSens = null
-attachRange = null
-pitchLimit = null
-autoAttach = null
-attachWallDot = null
-faceDot = null
-detachGrace = null
-supportNormalSmoothStep = null
-supportNormalDeadzoneDeg = null
-continuityWeight = null
-decayOfImpluse = null
 
 [node name="colShape" type="CollisionShape3D" parent="." unique_id=206197205]
 transform = Transform3D(0.9998321, 0.01832493, 0, -0.01832493, 0.9998321, 0, 0, 0, 1, 0, 0, 0)
@@ -55,8 +41,33 @@ cull_mask = 1048573
 attributes = SubResource("CameraAttributesPractical_rxibo")
 current = true
 
-[node name="Ant" parent="gravityControl" unique_id=826350348 instance=ExtResource("2_o822w")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -0.5, 0)
+[node name="Ant" type="Node3D" parent="gravityControl" unique_id=1630758703]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="gravityControl/Ant" unique_id=2067314613]
+transform = Transform3D(-0.367, -1.9485874e-08, -1.578096e-08, 0, -0.12591653, 0.3195372, -3.208416e-08, 0.22289242, 0.18051314, 4.7050587e-08, -0.038441107, -0.53819597)
+mesh = SubResource("CapsuleMesh_244u8")
+material = SubResource("StandardMaterial3D_5f2sf")
+
+[node name="CSGMesh3D2" type="CSGMesh3D" parent="gravityControl/Ant" unique_id=781847047]
+transform = Transform3D(-0.34561557, -1.3005648e-08, -5.559624e-09, 0, -0.050172694, 0.18856488, -3.021467e-08, 0.14876728, 0.063594684, -2.6638169e-08, 0.006358739, 0.30470514)
+mesh = SubResource("CapsuleMesh_244u8")
+material = SubResource("StandardMaterial3D_5f2sf")
+
+[node name="CSGMesh3D3" type="CSGMesh3D" parent="gravityControl/Ant" unique_id=1623072626]
+transform = Transform3D(-0.20599663, -8.977499e-09, 3.0816165e-09, 0, 0.021900628, 0.165283, -1.8008798e-08, 0.102690615, -0.035249583, -5.314863e-09, -0.020189319, 0.06079495)
+mesh = SubResource("CapsuleMesh_244u8")
+material = SubResource("StandardMaterial3D_5f2sf")
+
+[node name="CSGMesh3D4" type="CSGMesh3D" parent="gravityControl/Ant" unique_id=773060288]
+transform = Transform3D(-0.11105598, -1.0873345e-08, 8.512387e-09, 0, 0.12300787, 0.09845379, -9.708822e-09, 0.12437657, -0.097370364, 1.1511707e-08, -0.09485574, -0.13167858)
+mesh = SubResource("CapsuleMesh_244u8")
+material = SubResource("StandardMaterial3D_5f2sf")
+
+[node name="CSGMesh3D5" type="CSGMesh3D" parent="gravityControl/Ant" unique_id=604318279]
+transform = Transform3D(-0.16337334, -8.408185e-09, -5.927692e-09, 0, -0.0421273, 0.15480147, -1.428255e-08, 0.09617843, 0.067804895, 2.3986575e-08, -0.14629266, -0.27437443)
+mesh = SubResource("CapsuleMesh_244u8")
+material = SubResource("StandardMaterial3D_5f2sf")
 
 [node name="ShapeCast3D" type="ShapeCast3D" parent="." unique_id=1247176348]
 shape = SubResource("SphereShape3D_ocv17")
