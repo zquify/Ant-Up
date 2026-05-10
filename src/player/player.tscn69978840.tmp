@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://dgw74vsie3qck"]
+
+[ext_resource type="Script" uid="uid://dfuw5soldv2op" path="res://src/player/player.gd" id="1_ocv17"]
+[ext_resource type="PackedScene" uid="uid://qw2qh43d8pag" path="res://assets/ant.gltf" id="2_o822w"]
+[ext_resource type="Script" uid="uid://bvsffj61cut27" path="res://src/player/controllers/movement_controller.gd" id="3_mf2ua"]
+[ext_resource type="Script" uid="uid://c32ayha0n10be" path="res://src/player/controllers/gravity_controller.gd" id="4_244u8"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_5wqtk"]
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_rxibo"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ocv17"]
+radius = 1.5
+
+[node name="player" type="CharacterBody3D" unique_id=1256135889]
+script = ExtResource("1_ocv17")
+antRotationSpeed = null
+arrowTexturePointsUp = null
+rigReorientRate = null
+speed = null
+gravityStrength = null
+stickStrength = 900.0
+maxStickSpeed = null
+jumpSpeed = null
+mouseSens = null
+attachRange = null
+pitchLimit = null
+autoAttach = null
+attachWallDot = null
+faceDot = null
+detachGrace = null
+supportNormalSmoothStep = null
+supportNormalDeadzoneDeg = null
+continuityWeight = null
+decayOfImpluse = null
+
+[node name="colShape" type="CollisionShape3D" parent="." unique_id=206197205]
+transform = Transform3D(0.9998321, 0.01832493, 0, -0.01832493, 0.9998321, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("SphereShape3D_5wqtk")
+
+[node name="gravityControl" type="Node3D" parent="." unique_id=1950351932]
+
+[node name="yawAxis" type="Node3D" parent="gravityControl" unique_id=312281462]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4029261, 0)
+
+[node name="pitchAxis" type="Node3D" parent="gravityControl/yawAxis" unique_id=1714939760]
+
+[node name="SpringArm3D" type="SpringArm3D" parent="gravityControl/yawAxis/pitchAxis" unique_id=1484301058]
+transform = Transform3D(1, 0, 0, 0, 0.98061466, 0.19594614, 0, -0.19594614, 0.98061466, 0, 0, 0)
+spring_length = 7.0
+
+[node name="Camera3D" type="Camera3D" parent="gravityControl/yawAxis/pitchAxis/SpringArm3D" unique_id=1295936674]
+transform = Transform3D(1, 0, 0, 0, 0.98061466, -0.19594614, 0, 0.19594614, 0.98061466, 0, 0, 5)
+cull_mask = 1048573
+attributes = SubResource("CameraAttributesPractical_rxibo")
+current = true
+
+[node name="Ant" parent="gravityControl" unique_id=826350348 instance=ExtResource("2_o822w")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -0.5, 0)
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="." unique_id=1247176348]
+shape = SubResource("SphereShape3D_ocv17")
+target_position = Vector3(0, 0, 0)
+max_results = 6
+
+[node name="controllers" type="Node" parent="." unique_id=61257947]
+
+[node name="movementController" type="Node" parent="controllers" unique_id=1420186005]
+script = ExtResource("3_mf2ua")
+
+[node name="gravityController" type="Node" parent="controllers" unique_id=1535713119]
+script = ExtResource("4_244u8")
