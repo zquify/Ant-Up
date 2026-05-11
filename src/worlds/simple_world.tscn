@@ -14,6 +14,8 @@ sky_material = SubResource("ProceduralSkyMaterial_ag8rn")
 background_mode = 2
 sky = SubResource("Sky_nx3pf")
 tonemap_mode = 2
+ssao_enabled = true
+ssao_radius = 16.0
 glow_enabled = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_qpu5m"]
