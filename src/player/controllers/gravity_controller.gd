@@ -75,49 +75,49 @@ func updateAttachmentAfterMove(delta: float) -> void:
 	if player.justForceAttached:
 		player.justForceAttached = false
 		return
-	
-	# Decay the manual attach lock timer
+
 	if player.manualAttachLockTimer > 0.0:
 		player.manualAttachLockTimer -= delta
 		return
-	
-	# Decay jump grace timer
+
 	if player.jumpGraceTimer > 0.0:
 		player.jumpGraceTimer -= delta
-	
+
 	var supportN := Vector3.ZERO
 	if player.is_on_floor():
 		supportN = player.get_floor_normal().normalized()
 	else:
 		supportN = sampleSupportNormal()
-	if player.attached:
-		if supportN != Vector3.ZERO:
-			player.supposedUp = supportN
-			player.detachTimer = 0.0
-		else:
-			player.detachTimer += delta
-			if player.detachTimer > player.detachGrace:
-				forceDetach()
-	else:
-		player.supposedUp = Vector3.UP
-		if player.autoAttach and player.jumpGraceTimer <= 0.0:
-			var vUp_pre := player.preMoveVel.dot(player.currentUp)
-			var falling := (not player.is_on_floor()) and (vUp_pre < -0.1)
-			if falling:
-				var wallN := _bestWallFromSlideCollisions(player.preMoveVel)
-				if wallN != Vector3.ZERO:
-					player.attached = true
-					player.supposedUp = wallN
-					return
-			# Is the surface wall-like? (Normal horizontal-ish)
+
+	# While airborne from a jump, also check slide collisions for walls
+	if supportN == Vector3.ZERO:
+		supportN = _bestWallFromSlideCollisions(player.preMoveVel)
+
+	if player.jumpGraceTimer > 0.0:
+		# Mid-jump: stay detached, but track surface if we somehow land
+		if player.attached:
 			if supportN != Vector3.ZERO:
-				var wallLike := supportN.dot(Vector3.UP) < player.attachWallDot
-				var camFwd := (-player.pitchNode.global_transform.basis.z).normalized()
-				# Are we looking at it?
-				var facing := camFwd.dot(-supportN) > player.faceDot
-				if wallLike and facing:
-					player.attached = true
-					player.supposedUp = supportN
+				player.supposedUp = supportN
+				player.detachTimer = 0.0
+			else:
+				player.detachTimer += delta
+				if player.detachTimer > player.detachGrace:
+					forceDetach()
+		else:
+			player.supposedUp = Vector3.UP
+		return
+
+	# Not jumping: only attach if actually touching something
+	if supportN != Vector3.ZERO:
+		player.attached = true
+		player.supposedUp = supportN
+		player.detachTimer = 0.0
+	elif player.attached:
+		# Briefly tolerate losing the surface (crossing edges, etc.)
+		player.detachTimer += delta
+		if player.detachTimer > player.detachGrace:
+			forceDetach()
+	# If already detached and no surface found, stay detached — normal gravity applies
 
 func clampIntoFloor() -> void:
 	if player.attached or not player.is_on_floor(): return
