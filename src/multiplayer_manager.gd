@@ -10,14 +10,14 @@ func _on_host_pressed() -> void:
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	# Spawn the host's own player
 	_spawn_player(multiplayer.get_unique_id(), _pick_spawn())
-	$CanvasLayer.hide()
+	$MultiplayerHUD.hide()
 
 func _on_join_pressed() -> void:
 	peer.create_client("127.0.0.1", 1027)
 	multiplayer.multiplayer_peer = peer
 	# 'connected_to_server' is the correct signal for clients
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
-	$CanvasLayer.hide()
+	$MultiplayerHUD.hide()
 
 # ---- Server-side: a new client connected ----
 func _on_peer_connected(id: int) -> void:
