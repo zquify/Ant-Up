@@ -1,6 +1,7 @@
 extends CharacterBody3D
 class_name Player
 
+#region variables
 ## Node that controls pitch (up/down) rotation
 @onready var pitchNode: Node3D = $gravityControl/yawAxis/pitchAxis
 ## Node that controls yaw (left/right) rotation
@@ -76,9 +77,14 @@ var justForceAttached := false
 var justManuallyAttached := false
 var manualAttachLockTimer := 0.0
 var jumpGraceTimer := 0.0
+#endregion
+
+func _enter_tree():
+	set_multiplayer_authority(name.to_int())
 
 func _ready() -> void:
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	cam.current = is_multiplayer_authority()
+	
 	gravityController.setup(self, movementController)
 	movementController.setup(self, gravityController)
 
@@ -87,61 +93,63 @@ func _input(event: InputEvent) -> void:
 		yaw   -= event.relative.x * mouseSens
 		pitch -= event.relative.y * mouseSens
 		pitch = clamp(pitch, -pitchLimit, pitchLimit)
-
+	
+	if Input.is_action_just_pressed("quit"):
+		$"..".exit_game(name.to_int())
+		get_tree().quit()
+	
+	if Input.is_action_just_pressed("esc"):
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED else Input.MOUSE_MODE_CAPTURED
 
 func _physics_process(delta: float) -> void:
-	gravityController.handleInteract()
-	
-	gravityController.updateUpAxis(delta)
+	if is_multiplayer_authority():
+		gravityController.handleInteract()
+		
+		gravityController.updateUpAxis(delta)
 
-	movementController.updatePlanarAndJump(delta)
+		movementController.updatePlanarAndJump(delta)
 
-
-
-	gravityController.applyVerticalAccel(delta)
-
-
-	var imp := movementController.consumeUnsafeImpulse()
-	if imp != Vector3.ZERO:
-		# carry it into the "external" channel so planar steering won't kill it next frame
-		movementController.addExternalKickWorld(imp)
-		# explicit unsafe injection (your requested point)
-		velocity += imp
+		gravityController.applyVerticalAccel(delta)
 
 
-	preMoveVel = velocity
-	move_and_slide()
+		var imp := movementController.consumeUnsafeImpulse()
+		if imp != Vector3.ZERO:
+			# carry it into the "external" channel so planar steering won't kill it next frame
+			movementController.addExternalKickWorld(imp)
+			# explicit unsafe injection (your requested point)
+			velocity += imp
 
 
-	_updateCameraRig()
+		preMoveVel = velocity
+		move_and_slide()
 
-	# ---- break external recoil if we collide into something ----
-# ---- recoil impact: stop/slide external + force-attach to contacted surface ----
-	if movementController.externalVel != Vector3.ZERO and get_slide_collision_count() > 0:
-		var ext := movementController.externalVel
-		var bestN := Vector3.ZERO
-		var bestPush := 0.0
 
-		for i in range(get_slide_collision_count()):
-			var n := (get_slide_collision(i).get_normal() as Vector3).normalized()
-			var push := -ext.dot(n)
-			if push > bestPush:
-				bestPush = push
-				bestN = n
+		_updateCameraRig()
 
-		if bestPush > 0.05 and bestN != Vector3.ZERO:
-			movementController.clearExternalKick()
-			velocity = velocity.slide(bestN)
+		# ---- break external recoil if we collide into something ----
+	# ---- recoil impact: stop/slide external + force-attach to contacted surface ----
+		if movementController.externalVel != Vector3.ZERO and get_slide_collision_count() > 0:
+			var ext := movementController.externalVel
+			var bestN := Vector3.ZERO
+			var bestPush := 0.0
 
-			gravityController.forceAttachToNormal(bestN)
-			justForceAttached = true
+			for i in range(get_slide_collision_count()):
+				var n := (get_slide_collision(i).get_normal() as Vector3).normalized()
+				var push := -ext.dot(n)
+				if push > bestPush:
+					bestPush = push
+					bestN = n
 
-	gravityController.updateAttachmentAfterMove(delta)
-	gravityController.clampIntoFloor()
-	_updateAntRotation(delta)
+			if bestPush > 0.05 and bestN != Vector3.ZERO:
+				movementController.clearExternalKick()
+				velocity = velocity.slide(bestN)
 
-	if Input.is_action_just_pressed("esc"):
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED else Input.MOUSE_MODE_CAPTURED
+				gravityController.forceAttachToNormal(bestN)
+				justForceAttached = true
+
+		gravityController.updateAttachmentAfterMove(delta)
+		gravityController.clampIntoFloor()
+		_updateAntRotation(delta)
 
 func _updateAntRotation(delta: float) -> void:
 	# Get the planar velocity (velocity without the vertical component)
@@ -163,7 +171,6 @@ func _updateAntRotation(delta: float) -> void:
 		
 		antMesh.rotation.y = newRotation
 
-
 func _updateCameraRig() -> void:
 	var up := currentUp.normalized()
 
@@ -182,7 +189,6 @@ func _updateCameraRig() -> void:
 	yawNode.rotation = Vector3(0.0, yaw, 0.0)
 	pitchNode.rotation = Vector3(pitch, 0.0, 0.0)
 
-
 func _screenArrowAngle(camRef: Camera3D, worldDir: Vector3) -> float:
 	var d := worldDir.normalized()
 	var right := camRef.global_transform.basis.x
@@ -195,11 +201,8 @@ func _screenArrowAngle(camRef: Camera3D, worldDir: Vector3) -> float:
 	var y := dProj.dot(up)
 	return Vector2(x, -y).angle()
 
-
-
 func addImpulseWorld(imp: Vector3) -> void:
 	movementController.addExternalKickWorld(imp)
-
 
 func addImpulseWorldUnsafe(imp: Vector3) -> void:
 	movementController.addUnsafeImpulseWorld(imp)

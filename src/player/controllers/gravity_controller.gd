@@ -44,7 +44,6 @@ func updateUpAxis(delta: float) -> void:
 	# Allow walking on any angle when attached
 	player.floor_max_angle = deg_to_rad(179.0 if player.attached else 45.0)
 
-
 func applyVerticalAccel(delta: float) -> void:
 	var up := player.currentUp.normalized()
 	# exclude pushback from gravity/stick
@@ -68,8 +67,6 @@ func applyVerticalAccel(delta: float) -> void:
 
 	var planar := baseVel - up * baseVel.dot(up)
 	player.velocity = planar + up * vUp + ext
-
-
 
 func updateAttachmentAfterMove(delta: float) -> void:
 	if player.justForceAttached:
@@ -149,8 +146,6 @@ func sampleSupportNormal() -> Vector3:
 			bestN = n
 	return bestN
 
-
-
 func _bestWallFromSlideCollisions(preVel: Vector3) -> Vector3:
 	var bestN := Vector3.ZERO
 	var bestScore := -INF
@@ -173,7 +168,6 @@ func _bestWallFromSlideCollisions(preVel: Vector3) -> Vector3:
 			bestN = n
 
 	return bestN
-
 
 func forceAttachToNormal(n: Vector3) -> void:
 	player.attached = true

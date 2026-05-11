@@ -16,7 +16,16 @@ albedo_color = Color(0.38303533, 0, 0, 1)
 [sub_resource type="SphereShape3D" id="SphereShape3D_ocv17"]
 radius = 1.5
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_mf2ua"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("gravityControl/Ant:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
 [node name="player" type="CharacterBody3D" unique_id=1256135889]
+collision_layer = 2
 script = ExtResource("1_ocv17")
 stickStrength = 900.0
 
@@ -81,3 +90,6 @@ script = ExtResource("3_mf2ua")
 
 [node name="gravityController" type="Node" parent="controllers" unique_id=1535713119]
 script = ExtResource("4_244u8")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1577660980]
+replication_config = SubResource("SceneReplicationConfig_mf2ua")
