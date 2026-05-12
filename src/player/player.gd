@@ -103,6 +103,11 @@ func _input(event: InputEvent) -> void:
 	
 	if Input.is_action_just_pressed("esc"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED else Input.MOUSE_MODE_CAPTURED
+	
+	if Input.is_action_just_pressed("respawn"):
+		var mm = get_parent().get_parent()
+		position = mm._pick_spawn()
+		velocity = Vector3.ZERO
 
 func _physics_process(delta: float) -> void:
 	if is_multiplayer_authority():
