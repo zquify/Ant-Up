@@ -13,7 +13,6 @@ config_version=5
 config/name="Ant Up!"
 run/main_scene="uid://blow3hih0wtfk"
 config/features=PackedStringArray("4.6", "Forward Plus")
-run/max_fps=60
 
 [display]
 
