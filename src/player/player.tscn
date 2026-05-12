@@ -23,6 +23,9 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath("gravityControl/Ant:rotation")
 properties/1/spawn = true
 properties/1/replication_mode = 1
+properties/2/path = NodePath("gravityControl:rotation")
+properties/2/spawn = true
+properties/2/replication_mode = 1
 
 [node name="player" type="CharacterBody3D" unique_id=1256135889]
 collision_layer = 2

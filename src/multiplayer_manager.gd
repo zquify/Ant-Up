@@ -2,6 +2,16 @@ extends Node3D
 
 var peer = ENetMultiplayerPeer.new()
 @export var player_scene : PackedScene
+@onready var ip_box = $MultiplayerHUD/IP
+
+var ip : String
+
+func _ready() -> void:
+	ip = ip_box.text
+
+func _on_ip_text_changed() -> void:
+	ip = ip_box.text
+	print(ip)
 
 func _on_host_pressed() -> void:
 	peer.create_server(1027)
@@ -13,7 +23,7 @@ func _on_host_pressed() -> void:
 	$MultiplayerHUD.hide()
 
 func _on_join_pressed() -> void:
-	peer.create_client("127.0.0.1", 1027)
+	peer.create_client(ip, 1027)
 	multiplayer.multiplayer_peer = peer
 	# 'connected_to_server' is the correct signal for clients
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
