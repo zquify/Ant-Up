@@ -1,6 +1,5 @@
 extends CharacterBody3D
 class_name Player
-
 #region variables
 ## Node that controls pitch (up/down) rotation
 @onready var pitchNode: Node3D = $gravityControl/yawAxis/pitchAxis
@@ -12,19 +11,18 @@ class_name Player
 @onready var cam: Camera3D     = $gravityControl/yawAxis/pitchAxis/SpringArm3D/Camera3D
 ## Shape cast pointing downward to detect surfaces beneath the player
 @onready var downProbe: ShapeCast3D = $ShapeCast3D
-
 ## The visual ant mesh that rotates to face movement direction
 @onready var antMesh: Node3D = $gravityControl/Ant
+## Marker3D node on the ant's head where carried objects attach
+@onready var headMarker: Marker3D = $gravityControl/Ant/Head
 ## How fast the ant mesh rotates to face movement direction (degrees/sec)
 @export var antRotationSpeed := 10.0 
 ## Handles gravity, surface attachment, and detachment logic
 @onready var gravityController: GravityController = $controllers/gravityController
 ## Handles WASD movement, jumping, and external impulses
 @onready var movementController: MovementController = $controllers/movementController
-
 ## Whether the arrow texture image points upward (affects rotation offset)
 @export var arrowTexturePointsUp := true
-
 # shared tuning (controllers will read these off the player)
 ## How fast the camera rig rotates to match the surface normal (higher = snappier)
 @export var rigReorientRate := 20.0
@@ -62,7 +60,8 @@ class_name Player
 @export var continuityWeight := 0.35            # 0..1, biases toward last normal
 ## Impulse decay rate (unused in current code)
 @export var decayOfImpluse := 0.3
-
+## Range at which player can pick up carryable objects
+@export var carryRange := 2.5
 # shared runtime state
 var pitch := 0.0
 var yaw := 0.0
@@ -77,17 +76,17 @@ var justForceAttached := false
 var justManuallyAttached := false
 var manualAttachLockTimer := 0.0
 var jumpGraceTimer := 0.0
+# carry system
+var current_carryable: Carryable = null
+var carry_speed_multiplier: float = 1.0
 #endregion
-
 func _enter_tree():
 	set_multiplayer_authority(name.to_int())
-
 func _ready() -> void:
 	cam.current = is_multiplayer_authority()
 	
 	gravityController.setup(self, movementController)
 	movementController.setup(self, gravityController)
-
 func _input(event: InputEvent) -> void:
 	if not is_multiplayer_authority():
 		return
@@ -108,57 +107,48 @@ func _input(event: InputEvent) -> void:
 		var mm = get_parent().get_parent()
 		position = mm._pick_spawn()
 		velocity = Vector3.ZERO
-
 func _physics_process(delta: float) -> void:
 	if is_multiplayer_authority():
 		gravityController.handleInteract()
 		
 		gravityController.updateUpAxis(delta)
-
 		movementController.updatePlanarAndJump(delta)
-
 		gravityController.applyVerticalAccel(delta)
-
-
 		var imp := movementController.consumeUnsafeImpulse()
 		if imp != Vector3.ZERO:
 			# carry it into the "external" channel so planar steering won't kill it next frame
 			movementController.addExternalKickWorld(imp)
 			# explicit unsafe injection (your requested point)
 			velocity += imp
-
-
 		preMoveVel = velocity
 		move_and_slide()
-
-
 		_updateCameraRig()
-
 		# ---- break external recoil if we collide into something ----
 	# ---- recoil impact: stop/slide external + force-attach to contacted surface ----
 		if movementController.externalVel != Vector3.ZERO and get_slide_collision_count() > 0:
 			var ext := movementController.externalVel
 			var bestN := Vector3.ZERO
 			var bestPush := 0.0
-
 			for i in range(get_slide_collision_count()):
 				var n := (get_slide_collision(i).get_normal() as Vector3).normalized()
 				var push := -ext.dot(n)
 				if push > bestPush:
 					bestPush = push
 					bestN = n
-
 			if bestPush > 0.05 and bestN != Vector3.ZERO:
 				movementController.clearExternalKick()
 				velocity = velocity.slide(bestN)
-
 				gravityController.forceAttachToNormal(bestN)
 				justForceAttached = true
-
 		gravityController.updateAttachmentAfterMove(delta)
 		gravityController.clampIntoFloor()
 		_updateAntRotation(delta)
-
+		
+		# Update carryable ghost anchor position if carrying
+		if current_carryable and is_multiplayer_authority():
+			var head_pos = headMarker.global_position
+			current_carryable.update_carrying_player(get_multiplayer_authority(), head_pos)
+			# Uncomment to debug: print("Player sending head pos %.2f to carryable" % head_pos)
 func _updateAntRotation(delta: float) -> void:
 	# Get the planar velocity (velocity without the vertical component)
 	var up := currentUp.normalized()
@@ -178,25 +168,19 @@ func _updateAntRotation(delta: float) -> void:
 		var newRotation := currentRotation + angleDiff * antRotationSpeed * delta
 		
 		antMesh.rotation.y = newRotation
-
 func _updateCameraRig() -> void:
 	var up := currentUp.normalized()
-
 	var refForward := (-rigRoot.global_transform.basis.z).normalized()
 	refForward = refForward - up * refForward.dot(up)
-
 	if refForward.length() < 0.001:
 		var tmp := Vector3.FORWARD if abs(up.dot(Vector3.FORWARD)) < 0.99 else Vector3.RIGHT
 		refForward = tmp - up * tmp.dot(up)
-
 	var fwd := refForward.normalized()
 	var right := fwd.cross(currentUp).normalized()
 	var targetBasis := Basis(right, up, -fwd).orthonormalized()
-
 	rigRoot.global_transform.basis = targetBasis
 	yawNode.rotation = Vector3(0.0, yaw, 0.0)
 	pitchNode.rotation = Vector3(pitch, 0.0, 0.0)
-
 func _screenArrowAngle(camRef: Camera3D, worldDir: Vector3) -> float:
 	var d := worldDir.normalized()
 	var right := camRef.global_transform.basis.x
@@ -208,9 +192,7 @@ func _screenArrowAngle(camRef: Camera3D, worldDir: Vector3) -> float:
 	var x := dProj.dot(right)
 	var y := dProj.dot(up)
 	return Vector2(x, -y).angle()
-
 func addImpulseWorld(imp: Vector3) -> void:
 	movementController.addExternalKickWorld(imp)
-
 func addImpulseWorldUnsafe(imp: Vector3) -> void:
 	movementController.addUnsafeImpulseWorld(imp)

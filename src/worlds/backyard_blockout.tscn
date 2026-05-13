@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://duiq0innusdhe" path="res://assets/placeholder/tree.tscn" id="9_0o1wr"]
 [ext_resource type="PackedScene" uid="uid://bg2y0o72evcm5" path="res://assets/placeholder/table.tscn" id="10_5hvht"]
 [ext_resource type="PackedScene" uid="uid://78s4ppdv8elc" path="res://assets/placeholder/fence.tscn" id="11_0o1wr"]
+[ext_resource type="PackedScene" uid="uid://n16fu4j7ln07" path="res://src/pickup/carryable.tscn" id="12_1mkdf"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ag8rn"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -480,7 +481,7 @@ curve = SubResource("Curve3D_vflc6")
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="stuff/Path3D" unique_id=530356816]
 use_collision = true
-polygon = PackedVector2Array(-20.497, 1.667, 20.497, 1.667, 20.497, 0, -21.111, 0)
+polygon = PackedVector2Array(-20.497, 1.667, 20.497, 1.667, 20.497, 0, -20.497, 0)
 mode = 2
 path_node = NodePath("..")
 path_interval_type = 0
@@ -762,19 +763,13 @@ spawn_path = NodePath("..")
 
 [node name="Spawners" type="Node3D" parent="." unique_id=540988454]
 
-[node name="SpawnLocation" type="Marker3D" parent="Spawners" unique_id=72605859 groups=["spawn_locations"]]
-transform = Transform3D(0.278, 0, 0, 0, 0.278, 0, 0, 0, 0.278, 129.92265, 89.137505, 147.72282)
-
-[node name="SpawnLocation2" type="Marker3D" parent="Spawners" unique_id=1833470813 groups=["spawn_locations"]]
-transform = Transform3D(0.278, 0, 0, 0, 0.278, 0, 0, 0, 0.278, 179.74113, 89.137505, 62.31203)
-
-[node name="SpawnLocation3" type="Marker3D" parent="Spawners" unique_id=1190273782 groups=["spawn_locations"]]
-transform = Transform3D(0.278, 0, 0, 0, 0.278, 0, 0, 0, 0.278, -175.53297, 38.369667, -40.933273)
-
-[node name="SpawnLocation4" type="Marker3D" parent="Spawners" unique_id=520073172 groups=["spawn_locations"]]
+[node name="SpawnLocation" type="Marker3D" parent="Spawners" unique_id=520073172 groups=["spawn_locations"]]
 transform = Transform3D(0.278, 0, 0, 0, 0.278, 0, 0, 0, 0.278, -89.51905, 38.369667, -24.129778)
 
 [node name="Players" type="Node3D" parent="." unique_id=1392558894]
+
+[node name="CarryableObject" parent="." unique_id=1781693122 instance=ExtResource("12_1mkdf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100.12512, 38.80889, -21.218569)
 
 [connection signal="pressed" from="MultiplayerHUD/Host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="MultiplayerHUD/Join" to="." method="_on_join_pressed"]
