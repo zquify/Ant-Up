@@ -63,6 +63,17 @@ class_name Player
 ## Impulse decay rate (unused in current code)
 @export var decayOfImpluse := 0.3
 
+@export_category("Holding Objects")
+@export var followSpeed = 5.0
+@export var maxDistanceFromHold = 5.0
+@export var dropBelowPlayer = true
+@export var groundRay: RayCast3D
+
+@onready var interactRay = $gravityControl/Ant/InteractRay
+var heldObject: RigidBody3D
+@onready var head: Marker3D = $gravityControl/Ant/Head
+
+
 # shared runtime state
 var pitch := 0.0
 var yaw := 0.0
@@ -111,8 +122,6 @@ func _input(event: InputEvent) -> void:
 
 func _physics_process(delta: float) -> void:
 	if is_multiplayer_authority():
-		gravityController.handleInteract()
-		
 		gravityController.updateUpAxis(delta)
 
 		movementController.updatePlanarAndJump(delta)
@@ -158,6 +167,7 @@ func _physics_process(delta: float) -> void:
 		gravityController.updateAttachmentAfterMove(delta)
 		gravityController.clampIntoFloor()
 		_updateAntRotation(delta)
+		handle_holding_objects()
 
 func _updateAntRotation(delta: float) -> void:
 	# Get the planar velocity (velocity without the vertical component)
@@ -214,3 +224,31 @@ func addImpulseWorld(imp: Vector3) -> void:
 
 func addImpulseWorldUnsafe(imp: Vector3) -> void:
 	movementController.addUnsafeImpulseWorld(imp)
+
+func set_held_object(body):
+	if body is RigidBody3D:
+		heldObject = body
+	
+func drop_held_object():
+	heldObject = null
+	
+func handle_holding_objects():
+		
+	# Dropping Objects
+	if Input.is_action_just_pressed("interact"):
+		if heldObject != null: drop_held_object()
+		elif interactRay.is_colliding(): set_held_object(interactRay.get_collider())
+		
+	# Object Following
+	if heldObject != null:
+		var targetPos = head.global_transform.origin
+		var objectPos = heldObject.global_transform.origin # Held object position
+		heldObject.linear_velocity = (targetPos - objectPos) * followSpeed # Our desired position
+		
+		# Drop the object if it's too far away from the camera
+		if heldObject.global_position.distance_to(head.global_position) > maxDistanceFromHold:
+			drop_held_object()
+			
+		# Drop the object if the player is standing on it (must enable dropBelowPlayer and set a groundRay/RayCast3D below the player)
+		if dropBelowPlayer && groundRay.is_colliding():
+			if groundRay.get_collider() == heldObject: drop_held_object()

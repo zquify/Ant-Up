@@ -11,11 +11,6 @@ func setup(p: Player, m:MovementController) -> void:
 	player = p
 	movementController = m
 
-func handleInteract() -> void:
-	if not Input.is_action_just_pressed("interact"): return
-	if player.attached: forceDetach()
-	else: tryAttachFromCamera()
-
 func forceDetach() -> void:
 	player.attached = false
 	player.supposedUp = Vector3.UP

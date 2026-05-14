@@ -27,10 +27,12 @@ properties/2/path = NodePath("gravityControl:rotation")
 properties/2/spawn = true
 properties/2/replication_mode = 1
 
-[node name="player" type="CharacterBody3D" unique_id=1256135889]
+[node name="player" type="CharacterBody3D" unique_id=1256135889 node_paths=PackedStringArray("groundRay")]
 collision_layer = 2
 script = ExtResource("1_ocv17")
 stickStrength = 900.0
+followSpeed = 10.0
+groundRay = NodePath("gravityControl/Ant/GroundRay")
 
 [node name="colShape" type="CollisionShape3D" parent="." unique_id=206197205]
 transform = Transform3D(0.9998321, 0.01832493, 0, -0.01832493, 0.9998321, 0, 0, 0, 1, 0, 0, 0)
@@ -82,7 +84,15 @@ mesh = SubResource("CapsuleMesh_244u8")
 material = SubResource("StandardMaterial3D_5f2sf")
 
 [node name="Head" type="Marker3D" parent="gravityControl/Ant" unique_id=870647616]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, 0)
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 1.1900966, 0)
+
+[node name="InteractRay" type="RayCast3D" parent="gravityControl/Ant" unique_id=228570617]
+target_position = Vector3(0, 0, 2.5)
+hit_back_faces = false
+
+[node name="GroundRay" type="RayCast3D" parent="gravityControl/Ant" unique_id=826694729]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, -0.5, 0)
+target_position = Vector3(0, -0.1, 0)
 
 [node name="ShapeCast3D" type="ShapeCast3D" parent="." unique_id=1247176348]
 shape = SubResource("SphereShape3D_ocv17")
