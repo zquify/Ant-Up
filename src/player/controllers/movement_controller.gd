@@ -1,18 +1,22 @@
 extends Node
 class_name MovementController
+
 ## How fast external velocity (knockback) decays per second
 @export var externalVelDecay := 18.0        # how fast pushback fades (units: speed per second)
 ## Acceleration when moving in a direction (units/sec²)
 @export var planarAccel := 220.0
 ## Deceleration when releasing movement keys (units/sec²)
 @export var planarBrake := 420.0
+
 var externalVel := Vector3.ZERO            # full 3D pushback accumulator
 var unsafeImpulse := Vector3.ZERO
 var player: Player
 var gravityController: GravityController
+
 func setup(p: Player, g: GravityController) -> void:
 	player = p
 	gravityController = g
+
 func updatePlanarAndJump(delta: float) -> void:
 	externalVel = externalVel.move_toward(Vector3.ZERO, externalVelDecay * delta)
 	var up := player.currentUp.normalized()
@@ -32,11 +36,7 @@ func updatePlanarAndJump(delta: float) -> void:
 		wishDir = wishDir.normalized()
 	var vUp := baseVel.dot(up)
 	var curPlanar := baseVel - up * vUp
-	
-	# Apply carry speed multiplier to the target speed
-	var effective_speed = player.speed * player.carry_speed_multiplier
-	var targetPlanar = wishDir * effective_speed
-	
+	var targetPlanar := wishDir * player.speed
 	var rate := planarAccel
 	if wishDir.length() < 0.05:
 		rate = planarBrake
@@ -54,6 +54,8 @@ func addExternalKickWorld(kick: Vector3) -> void:
 
 func clearExternalKick() -> void:
 	externalVel = Vector3.ZERO
+
+
 
 func addUnsafeImpulseWorld(imp: Vector3) -> void:
 	unsafeImpulse += imp
