@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://85avj0q21tqg"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_0o1wr"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1mkdf"]
+
+[node name="Carryable" type="RigidBody3D" unique_id=2115943628]
+mass = 10.0
+gravity_scale = 3.0
+angular_damp = 0.5
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=900629578]
+mesh = SubResource("BoxMesh_0o1wr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=23645579]
+shape = SubResource("BoxShape3D_1mkdf")
