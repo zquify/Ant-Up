@@ -4,11 +4,3 @@
 
 [node name="HUD" type="CanvasLayer" unique_id=1161615856]
 script = ExtResource("1_t0re6")
-
-[node name="Label" type="Label" parent="." unique_id=1899880198]
-offset_left = 8.0
-offset_top = 8.0
-offset_right = 360.0
-offset_bottom = 32.0
-text = "FPS: ____"
-metadata/_edit_use_anchors_ = true
