@@ -55,8 +55,6 @@ func addExternalKickWorld(kick: Vector3) -> void:
 func clearExternalKick() -> void:
 	externalVel = Vector3.ZERO
 
-
-
 func addUnsafeImpulseWorld(imp: Vector3) -> void:
 	unsafeImpulse += imp
 

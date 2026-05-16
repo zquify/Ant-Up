@@ -11,8 +11,12 @@ config_version=5
 [application]
 
 config/name="Ant Up!"
-run/main_scene="uid://blow3hih0wtfk"
+run/main_scene="uid://wh5yrn43ooq4"
 config/features=PackedStringArray("4.6", "Forward Plus")
+
+[autoload]
+
+Globals="*uid://fgbf4d0tk3yh"
 
 [display]
 
