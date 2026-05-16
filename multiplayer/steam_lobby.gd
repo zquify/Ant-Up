@@ -87,6 +87,28 @@ func send_Chat_Message():
 	chat_input.text = ""
 
 
+func leave_Lobby():
+	# If in a lobby, leave it
+	if Globals.LOBBY_ID != 0:
+		display_Message("Leaving lobby...")
+		# Send leave request
+		Steam.leaveLobby(Globals.LOBBY_ID)
+		# Wipe LOBBY_ID
+		Globals.LOBBY_ID = 0
+		
+		lobby_get_name.text = "Lobby Name:"
+		chat_label.text = "Lobby Name"
+		player_count.text = "Players (0)"
+		player_list.clear()
+		
+		# Close session with all users
+		for MEMBERS in Globals.LOBBY_MEMBERS:
+			Steam.closeP2PSessionWithUser(MEMBERS['steam_id'])
+		
+		# Clear lobby list
+		Globals.LOBBY_MEMBERS.clear()
+
+
 func display_Message(message):
 	lobby_output.add_text("\n" + str(message))
 
@@ -203,7 +225,7 @@ func _on_start_pressed() -> void:
 
 
 func _on_leave_pressed() -> void:
-	pass # Replace with function body.
+	leave_Lobby()
 
 
 func _on_message_pressed() -> void:
