@@ -17,9 +17,9 @@ func _ready():
 	name_label.text = Globals.STEAM_NAME
 	# Steamwork Connections
 	Steam.lobby_created.connect(_on_Lobby_Created)
-	#Steam.lobby_match_list.connect(_on_Lobby_Match_List)
+	Steam.lobby_match_list.connect(_on_Lobby_Match_List)
 	Steam.lobby_joined.connect(_on_Lobby_Joined)
-	#Steam.lobby_chat_update.connect(_on_Lobby_Chat_Update)
+	Steam.lobby_chat_update.connect(_on_Lobby_Chat_Update)
 	#Steam.lobby_message.connect(_on_Lobby_Message)
 	#Steam.lobby_data_update.connect(_on_Lobby_Date_Update)
 	#Steam.join_requested.connect(_on_Join_Requested)
@@ -136,6 +136,27 @@ func _on_Lobby_Chat_Update(_lobbyID, _changedID, makingChangeID, chatState):
 	get_Lobby_Members()
 
 
+func _on_Lobby_Match_List(lobbies):
+	for LOBBY in lobbies:
+		# Grab desired lobby data
+		var LOBBY_NAME = Steam.getLobbyData(LOBBY, "name")
+		
+		# Get the current number of members
+		var LOBBY_MEMBERS = Steam.getNumLobbyMembers(LOBBY)
+		
+		# Create button for each lobby
+		var LOBBY_BUTTON = Button.new()
+		LOBBY_BUTTON.set_text("Lobby " + str(LOBBY) + ": " + str(LOBBY_NAME) + " - [" + str(LOBBY_MEMBERS) + "] Players(s)")
+		LOBBY_BUTTON.set_size(Vector2(800, 50))
+		LOBBY_BUTTON.set_name("lobby_" + str(LOBBY))
+		LOBBY_BUTTON.pressed.connect(func():
+			join_Lobby(LOBBY)
+		)
+		
+		# Add lobby to the list
+		lobby_list.add_child(LOBBY_BUTTON)
+
+
 
 #endregion
 
@@ -149,7 +170,12 @@ func _on_create_pressed() -> void:
 
 
 func _on_join_pressed() -> void:
-	pass # Replace with function body.
+	lobby_popup.show()
+	# Set server search distance to worldwide
+	Steam.addRequestLobbyListDistanceFilter(Steam.LobbyDistanceFilter.LOBBY_DISTANCE_FILTER_WORLDWIDE)
+	display_Message("Searching for lobbies...")
+	
+	Steam.requestLobbyList()
 
 
 func _on_start_pressed() -> void:
@@ -165,7 +191,7 @@ func _on_message_pressed() -> void:
 
 
 func _on_close_pressed() -> void:
-	pass # Replace with function body.
+	lobby_popup.hide()
 
 
 
@@ -181,8 +207,8 @@ func check_Command_Line():
 	if ARGUMENTS.size() > 0:
 		for argument in ARGUMENTS:
 			# Invite argument passed
-			#if Globals.LOBBY_INVITE_ARG:
-				#join_lobby(int(argument))
+			if Globals.LOBBY_INVITE_ARG:
+				join_Lobby(int(argument))
 				
 			# Steam connection argument
 			if argument == "+connect_lobby":
