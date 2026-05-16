@@ -4,6 +4,7 @@ extends Node2D
 @onready var name_label: Label = $SteamName
 @onready var lobby_set_name: TextEdit = $Create/LobbyEdit
 @onready var lobby_get_name: Label = $Create/LobbyLabel
+@onready var chat_label: Label = $Chat/ChatLabel
 @onready var lobby_output: RichTextLabel = $Chat/ChatLog
 @onready var lobby_popup: Panel = $Lobbies
 @onready var lobby_list: VBoxContainer = $Lobbies/Scroll/VBox
@@ -20,7 +21,7 @@ func _ready():
 	Steam.lobby_match_list.connect(_on_Lobby_Match_List)
 	Steam.lobby_joined.connect(_on_Lobby_Joined)
 	Steam.lobby_chat_update.connect(_on_Lobby_Chat_Update)
-	#Steam.lobby_message.connect(_on_Lobby_Message)
+	Steam.lobby_message.connect(_on_Lobby_Message)
 	#Steam.lobby_data_update.connect(_on_Lobby_Date_Update)
 	#Steam.join_requested.connect(_on_Join_Requested)
 	# Check for command line arguments
@@ -74,6 +75,18 @@ func add_Player_List(steam_id, steam_name):
 		player_list.add_text(str(MEMBER['steam_name']) + "\n")
 
 
+func send_Chat_Message():
+	# Get chat input
+	var MESSAGE = chat_input.text
+	# Pass message to Steam
+	var SENT = Steam.sendLobbyChatMsg(Globals.LOBBY_ID, MESSAGE)
+	# Check message sent
+	if not SENT:
+		display_Message("ERROR: Chat message failed to send")
+	# Clear chat input
+	chat_input.text = ""
+
+
 func display_Message(message):
 	lobby_output.add_text("\n" + str(message))
 
@@ -90,6 +103,7 @@ func _on_Lobby_Created(result, lobbyID):
 		Steam.setLobbyData(lobbyID, "name", lobby_set_name.text)
 		var lobby_name = Steam.getLobbyData(lobbyID, "name")
 		lobby_get_name.text = str(lobby_name)
+		chat_label.text = str(lobby_name)
 
 func _on_Lobby_Joined(lobbyID, _permissions, _locked, _response):
 	# Set lobby ID
@@ -98,6 +112,7 @@ func _on_Lobby_Joined(lobbyID, _permissions, _locked, _response):
 	# Get the lobby name
 	var lobby_name = Steam.getLobbyData(lobbyID, "name")
 	lobby_get_name.text = str(lobby_name)
+	chat_label.text = str(lobby_name)
 	
 	# Get lobby members
 	get_Lobby_Members()
@@ -157,6 +172,11 @@ func _on_Lobby_Match_List(lobbies):
 		lobby_list.add_child(LOBBY_BUTTON)
 
 
+func _on_Lobby_Message(_result, user, message, _type):
+	# Sender and their message
+	var SENDER = Steam.getFriendPersonaName(user)
+	display_Message(str(SENDER) + " : " + str(message))
+
 
 #endregion
 
@@ -187,7 +207,7 @@ func _on_leave_pressed() -> void:
 
 
 func _on_message_pressed() -> void:
-	pass # Replace with function body.
+	send_Chat_Message()
 
 
 func _on_close_pressed() -> void:
