@@ -72,6 +72,7 @@ class_name Player
 @onready var interactRay = $gravityControl/Ant/InteractRay
 var heldObject: RigidBody3D
 @onready var head: Marker3D = $gravityControl/Ant/Head
+@onready var drop_point: Marker3D = $gravityControl/Ant/DropPoint
 
 
 # shared runtime state
@@ -218,12 +219,32 @@ func addImpulseWorld(imp: Vector3) -> void:
 func addImpulseWorldUnsafe(imp: Vector3) -> void:
 	movementController.addUnsafeImpulseWorld(imp)
 
+var closest_node: Marker3D
+
 func set_held_object(body):
 	if body is RigidBody3D:
 		heldObject = body
+		heldObject.collision_layer = 2
+	
+	var shortest_distance_squared: float = INF # Initialize with infinity
+	
+	var targets = heldObject.find_child("CarryPoints").get_children()
+	
+	for target in targets:
+		if target is Marker3D:
+			# Calculate the squared distance to avoid square root operations
+			var current_distance_squared = interactRay.get_collision_point().distance_squared_to(target.global_position)
+			
+			if current_distance_squared < shortest_distance_squared:
+				shortest_distance_squared = current_distance_squared
+				closest_node = target
 	
 func drop_held_object():
+	heldObject.collision_layer = 1
+	heldObject.linear_velocity = Vector3.ZERO
+	heldObject.global_transform = drop_point.global_transform
 	heldObject = null
+	closest_node = null
 	
 func handle_holding_objects():
 		
@@ -234,9 +255,10 @@ func handle_holding_objects():
 		
 	# Object Following
 	if heldObject != null:
-		var targetPos = head.global_transform.origin
-		var objectPos = heldObject.global_transform.origin # Held object position
-		heldObject.linear_velocity = (targetPos - objectPos) * followSpeed # Our desired position
+		
+		heldObject.global_transform = head.global_transform
+		if closest_node != null:
+			heldObject.global_transform = closest_node.global_transform
 		
 		# Drop the object if it's too far away from the camera
 		if heldObject.global_position.distance_to(head.global_position) > maxDistanceFromHold:
