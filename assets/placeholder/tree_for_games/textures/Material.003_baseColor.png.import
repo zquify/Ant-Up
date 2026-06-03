@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://budjnml2e3h50"
 path.s3tc="res://.godot/imported/Material.003_baseColor.png-a01a4eafff6295497376c176f0e19370.s3tc.ctex"
+path.etc2="res://.godot/imported/Material.003_baseColor.png-a01a4eafff6295497376c176f0e19370.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/placeholder/tree_for_games/textures/Material.003_baseColor.png"
-dest_files=["res://.godot/imported/Material.003_baseColor.png-a01a4eafff6295497376c176f0e19370.s3tc.ctex"]
+dest_files=["res://.godot/imported/Material.003_baseColor.png-a01a4eafff6295497376c176f0e19370.s3tc.ctex", "res://.godot/imported/Material.003_baseColor.png-a01a4eafff6295497376c176f0e19370.etc2.ctex"]
 
 [params]
 

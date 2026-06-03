@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bh75wmwpaj2ys"
 path.s3tc="res://.godot/imported/Screenshot 2026-05-11 at 13-20-02 Top View Vector Illustration Bbq Gardenbarbecue Stock Vector (Royalty Free) 2666176735 Shutterstock.png-8f3833fe7555af601f2e527696b7f715.s3tc.ctex"
+path.etc2="res://.godot/imported/Screenshot 2026-05-11 at 13-20-02 Top View Vector Illustration Bbq Gardenbarbecue Stock Vector (Royalty Free) 2666176735 Shutterstock.png-8f3833fe7555af601f2e527696b7f715.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/placeholder/Screenshot 2026-05-11 at 13-20-02 Top View Vector Illustration Bbq Gardenbarbecue Stock Vector (Royalty Free) 2666176735 Shutterstock.png"
-dest_files=["res://.godot/imported/Screenshot 2026-05-11 at 13-20-02 Top View Vector Illustration Bbq Gardenbarbecue Stock Vector (Royalty Free) 2666176735 Shutterstock.png-8f3833fe7555af601f2e527696b7f715.s3tc.ctex"]
+dest_files=["res://.godot/imported/Screenshot 2026-05-11 at 13-20-02 Top View Vector Illustration Bbq Gardenbarbecue Stock Vector (Royalty Free) 2666176735 Shutterstock.png-8f3833fe7555af601f2e527696b7f715.s3tc.ctex", "res://.godot/imported/Screenshot 2026-05-11 at 13-20-02 Top View Vector Illustration Bbq Gardenbarbecue Stock Vector (Royalty Free) 2666176735 Shutterstock.png-8f3833fe7555af601f2e527696b7f715.etc2.ctex"]
 
 [params]
 

@@ -13,6 +13,7 @@ config_version=5
 config/name="Ant Up!"
 run/main_scene="uid://blow3hih0wtfk"
 config/features=PackedStringArray("4.6", "Forward Plus")
+run/max_fps=60
 
 [display]
 
@@ -89,3 +90,8 @@ respawn={
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+
+[steam]
+
+initialization/app_id=480
+initialization/initialize_on_startup=true

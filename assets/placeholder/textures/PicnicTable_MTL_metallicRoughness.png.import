@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://d6csanebhdul"
 path.s3tc="res://.godot/imported/PicnicTable_MTL_metallicRoughness.png-4439a53ac9c8d2b78048e5f03a1fb8de.s3tc.ctex"
+path.etc2="res://.godot/imported/PicnicTable_MTL_metallicRoughness.png-4439a53ac9c8d2b78048e5f03a1fb8de.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/placeholder/textures/PicnicTable_MTL_metallicRoughness.png"
-dest_files=["res://.godot/imported/PicnicTable_MTL_metallicRoughness.png-4439a53ac9c8d2b78048e5f03a1fb8de.s3tc.ctex"]
+dest_files=["res://.godot/imported/PicnicTable_MTL_metallicRoughness.png-4439a53ac9c8d2b78048e5f03a1fb8de.s3tc.ctex", "res://.godot/imported/PicnicTable_MTL_metallicRoughness.png-4439a53ac9c8d2b78048e5f03a1fb8de.etc2.ctex"]
 
 [params]
 

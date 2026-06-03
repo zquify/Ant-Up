@@ -90,18 +90,12 @@ var manualAttachLockTimer := 0.0
 var jumpGraceTimer := 0.0
 #endregion
 
-func _enter_tree():
-	set_multiplayer_authority(name.to_int())
 
 func _ready() -> void:
-	cam.current = is_multiplayer_authority()
-	
 	gravityController.setup(self, movementController)
 	movementController.setup(self, gravityController)
 
 func _input(event: InputEvent) -> void:
-	if not is_multiplayer_authority():
-		return
 	
 	if event is InputEventMouseMotion:
 		yaw   -= event.relative.x * mouseSens
@@ -121,53 +115,52 @@ func _input(event: InputEvent) -> void:
 		velocity = Vector3.ZERO
 
 func _physics_process(delta: float) -> void:
-	if is_multiplayer_authority():
-		gravityController.updateUpAxis(delta)
+	gravityController.updateUpAxis(delta)
 
-		movementController.updatePlanarAndJump(delta)
+	movementController.updatePlanarAndJump(delta)
 
-		gravityController.applyVerticalAccel(delta)
+	gravityController.applyVerticalAccel(delta)
 
 
-		var imp := movementController.consumeUnsafeImpulse()
-		if imp != Vector3.ZERO:
+	var imp := movementController.consumeUnsafeImpulse()
+	if imp != Vector3.ZERO:
 			# carry it into the "external" channel so planar steering won't kill it next frame
-			movementController.addExternalKickWorld(imp)
+		movementController.addExternalKickWorld(imp)
 			# explicit unsafe injection (your requested point)
-			velocity += imp
+		velocity += imp
 
 
-		preMoveVel = velocity
-		move_and_slide()
+	preMoveVel = velocity
+	move_and_slide()
 
 
-		_updateCameraRig()
+	_updateCameraRig()
 
 		# ---- break external recoil if we collide into something ----
 	# ---- recoil impact: stop/slide external + force-attach to contacted surface ----
-		if movementController.externalVel != Vector3.ZERO and get_slide_collision_count() > 0:
-			var ext := movementController.externalVel
-			var bestN := Vector3.ZERO
-			var bestPush := 0.0
+	if movementController.externalVel != Vector3.ZERO and get_slide_collision_count() > 0:
+		var ext := movementController.externalVel
+		var bestN := Vector3.ZERO
+		var bestPush := 0.0
 
-			for i in range(get_slide_collision_count()):
-				var n := (get_slide_collision(i).get_normal() as Vector3).normalized()
-				var push := -ext.dot(n)
-				if push > bestPush:
-					bestPush = push
-					bestN = n
+		for i in range(get_slide_collision_count()):
+			var n := (get_slide_collision(i).get_normal() as Vector3).normalized()
+			var push := -ext.dot(n)
+			if push > bestPush:
+				bestPush = push
+				bestN = n
 
-			if bestPush > 0.05 and bestN != Vector3.ZERO:
-				movementController.clearExternalKick()
-				velocity = velocity.slide(bestN)
+		if bestPush > 0.05 and bestN != Vector3.ZERO:
+			movementController.clearExternalKick()
+			velocity = velocity.slide(bestN)
 
-				gravityController.forceAttachToNormal(bestN)
-				justForceAttached = true
+			gravityController.forceAttachToNormal(bestN)
+			justForceAttached = true
 
-		gravityController.updateAttachmentAfterMove(delta)
-		gravityController.clampIntoFloor()
-		_updateAntRotation(delta)
-		handle_holding_objects()
+	gravityController.updateAttachmentAfterMove(delta)
+	gravityController.clampIntoFloor()
+	_updateAntRotation(delta)
+	handle_holding_objects()
 
 func _updateAntRotation(delta: float) -> void:
 	# Get the planar velocity (velocity without the vertical component)

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://c8r3fgbxfw826"
 path.s3tc="res://.godot/imported/lambert2_baseColor.png-afc1cd71468bd76ccf4cc6c29172ca60.s3tc.ctex"
+path.etc2="res://.godot/imported/lambert2_baseColor.png-afc1cd71468bd76ccf4cc6c29172ca60.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/placeholder/low_poly_picket_fence/textures/lambert2_baseColor.png"
-dest_files=["res://.godot/imported/lambert2_baseColor.png-afc1cd71468bd76ccf4cc6c29172ca60.s3tc.ctex"]
+dest_files=["res://.godot/imported/lambert2_baseColor.png-afc1cd71468bd76ccf4cc6c29172ca60.s3tc.ctex", "res://.godot/imported/lambert2_baseColor.png-afc1cd71468bd76ccf4cc6c29172ca60.etc2.ctex"]
 
 [params]
 
