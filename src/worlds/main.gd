@@ -4,11 +4,13 @@ extends Node3D
 
 
 func _ready() -> void:
+	respawn()
+
+func respawn() -> void:
 	var spawn_pos = pick_spawn()
 	var player = player_scene.instantiate()
 	$Players.add_child(player)
 	player.global_position = spawn_pos
-
 
 func pick_spawn() -> Vector3:
 	var spawns = get_tree().get_nodes_in_group("spawn_locations")

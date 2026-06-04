@@ -7,29 +7,33 @@ size = Vector3(5, 1, 1)
 size = Vector3(5, 1, 1)
 
 [node name="Carryable" type="RigidBody3D" unique_id=2115943628]
+collision_layer = 4
+collision_mask = 3
 mass = 10.0
 gravity_scale = 3.0
 angular_damp = 0.5
 
 [node name="CarryPoints" type="Node3D" parent="." unique_id=724985414]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
 [node name="Marker" type="Marker3D" parent="CarryPoints" unique_id=1523818663]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
 
 [node name="Marker2" type="Marker3D" parent="CarryPoints" unique_id=995019812]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
 
 [node name="Marker3" type="Marker3D" parent="CarryPoints" unique_id=31576401]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 
 [node name="Marker4" type="Marker3D" parent="CarryPoints" unique_id=427962105]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
 
 [node name="Marker5" type="Marker3D" parent="CarryPoints" unique_id=1945834750]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=900629578]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 mesh = SubResource("BoxMesh_0o1wr")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=23645579]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_1mkdf")

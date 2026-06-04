@@ -29,16 +29,19 @@ properties/2/replication_mode = 1
 
 [node name="player" type="CharacterBody3D" unique_id=1256135889 node_paths=PackedStringArray("groundRay")]
 collision_layer = 2
+collision_mask = 5
 script = ExtResource("1_ocv17")
 stickStrength = 900.0
 followSpeed = 10.0
+maxDistanceFromHold = 20.0
 groundRay = NodePath("gravityControl/Ant/GroundRay")
 
 [node name="colShape" type="CollisionShape3D" parent="." unique_id=206197205]
-transform = Transform3D(0.9998321, 0.01832493, 0, -0.01832493, 0.9998321, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(-0.9998321, -0.01832493, -8.742278e-08, -0.01832493, 0.9998321, 0, 8.74081e-08, 1.6020163e-09, -1, 0, 0, 0)
 shape = SubResource("SphereShape3D_5wqtk")
 
 [node name="gravityControl" type="Node3D" parent="." unique_id=1950351932]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 
 [node name="yawAxis" type="Node3D" parent="gravityControl" unique_id=312281462]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4029261, 0)
@@ -84,20 +87,28 @@ mesh = SubResource("CapsuleMesh_244u8")
 material = SubResource("StandardMaterial3D_5f2sf")
 
 [node name="Head" type="Marker3D" parent="gravityControl/Ant" unique_id=870647616]
-transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, 0, 1.1900966, 0)
+transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, 0, 0.5900966, 0)
 
 [node name="InteractRay" type="RayCast3D" parent="gravityControl/Ant" unique_id=228570617]
 target_position = Vector3(0, 0, 2.5)
+collision_mask = 4
 hit_back_faces = false
 
 [node name="GroundRay" type="RayCast3D" parent="gravityControl/Ant" unique_id=826694729]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, -0.5, 0)
 target_position = Vector3(0, -0.1, 0)
+collision_mask = 5
 
 [node name="DropPoint" type="Marker3D" parent="gravityControl/Ant" unique_id=1109642041]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -1.7484555e-07, 0.19009662, 2)
 
+[node name="GrabAnchor" type="StaticBody3D" parent="gravityControl/Ant" unique_id=224870838]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5900966, 0)
+collision_layer = 0
+collision_mask = 0
+
 [node name="ShapeCast3D" type="ShapeCast3D" parent="." unique_id=1247176348]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 shape = SubResource("SphereShape3D_ocv17")
 target_position = Vector3(0, 0, 0)
 max_results = 6

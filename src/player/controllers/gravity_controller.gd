@@ -64,6 +64,16 @@ func applyVerticalAccel(delta: float) -> void:
 	player.velocity = planar + up * vUp + ext
 
 func updateAttachmentAfterMove(delta: float) -> void:
+	#if player.heldObject != null:
+		#player.attached = false
+		#player.supposedUp = Vector3.UP
+		#player.detachTimer = 0.0
+		#return
+	
+	player.attached = false
+	player.supposedUp = Vector3.UP
+	player.detachTimer = 0.0
+	
 	if player.justForceAttached:
 		player.justForceAttached = false
 		return

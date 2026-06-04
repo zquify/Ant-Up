@@ -70,7 +70,6 @@ class_name Player
 @export var groundRay: RayCast3D
 
 @onready var interactRay = $gravityControl/Ant/InteractRay
-var heldObject: RigidBody3D
 @onready var head: Marker3D = $gravityControl/Ant/Head
 @onready var drop_point: Marker3D = $gravityControl/Ant/DropPoint
 
@@ -112,7 +111,7 @@ func _input(event: InputEvent) -> void:
 	
 	if Input.is_action_just_pressed("respawn"):
 		var mm = get_parent().get_parent()
-		position = mm._pick_spawn()
+		position = mm.pick_spawn()
 		velocity = Vector3.ZERO
 
 func _physics_process(delta: float) -> void:
@@ -219,51 +218,86 @@ func addImpulseWorld(imp: Vector3) -> void:
 func addImpulseWorldUnsafe(imp: Vector3) -> void:
 	movementController.addUnsafeImpulseWorld(imp)
 
+var heldObject: RigidBody3D
 var closest_node: Marker3D
+var grabJoint: PinJoint3D
+
+@onready var grabAnchor: StaticBody3D = $gravityControl/Ant/GrabAnchor
+
 
 func set_held_object(body):
-	if body is RigidBody3D:
-		heldObject = body
-		heldObject.collision_layer = 2
-	
-	var shortest_distance_squared: float = INF # Initialize with infinity
-	
-	var targets = heldObject.find_child("CarryPoints").get_children()
-	
-	for target in targets:
+	if !(body is RigidBody3D):
+		return
+
+	heldObject = body
+	heldObject.collision_layer = 2
+
+	var shortest_distance_squared := INF
+	closest_node = null
+
+	var carry_points := heldObject.find_child("CarryPoints")
+
+	if carry_points == null:
+		return
+
+	for target in carry_points.get_children():
 		if target is Marker3D:
-			# Calculate the squared distance to avoid square root operations
-			var current_distance_squared = interactRay.get_collision_point().distance_squared_to(target.global_position)
-			
-			if current_distance_squared < shortest_distance_squared:
-				shortest_distance_squared = current_distance_squared
+			var dist = interactRay.get_collision_point().distance_squared_to(
+				target.global_position
+			)
+
+			if dist < shortest_distance_squared:
+				shortest_distance_squared = dist
 				closest_node = target
-	
+
+	if closest_node == null:
+		return
+
+	# Snap the chosen carry point onto the grab anchor.
+	var correction := grabAnchor.global_position - closest_node.global_position
+	heldObject.global_position += correction
+
+	# Stop barrel rolls while carried.
+	#heldObject.axis_lock_angular_x = true
+
+	grabJoint = PinJoint3D.new()
+	get_tree().current_scene.add_child(grabJoint)
+
+	grabJoint.global_position = grabAnchor.global_position
+
+	grabJoint.node_a = grabAnchor.get_path()
+	grabJoint.node_b = heldObject.get_path()
+
+
 func drop_held_object():
-	heldObject.collision_layer = 1
-	heldObject.linear_velocity = Vector3.ZERO
-	heldObject.global_transform = drop_point.global_transform
+	if grabJoint:
+		grabJoint.queue_free()
+		grabJoint = null
+
+	if heldObject:
+		heldObject.axis_lock_angular_x = false
+		heldObject.collision_layer = 4
+
 	heldObject = null
 	closest_node = null
-	
+
+
 func handle_holding_objects():
-		
-	# Dropping Objects
+
 	if Input.is_action_just_pressed("interact"):
-		if heldObject != null: drop_held_object()
-		elif interactRay.is_colliding(): set_held_object(interactRay.get_collider())
-		
-	# Object Following
-	if heldObject != null:
-		
-		heldObject.global_transform = head.global_transform
-		if closest_node != null:
-			heldObject.global_transform = closest_node.global_transform
-		
-		# Drop the object if it's too far away from the camera
+		if heldObject:
+			drop_held_object()
+		elif interactRay.is_colliding():
+			set_held_object(interactRay.get_collider())
+
+	if heldObject:
+
+		# Move the anchor to the carry position.
+		grabAnchor.global_transform = head.global_transform
+
 		if heldObject.global_position.distance_to(head.global_position) > maxDistanceFromHold:
 			drop_held_object()
-			
-		# Drop the object if the player is standing on it (must enable dropBelowPlayer and set a groundRay/RayCast3D below the player)
-		if dropBelowPlayer && groundRay.is_colliding():
-			if groundRay.get_collider() == heldObject: drop_held_object()
+
+		if dropBelowPlayer and groundRay.is_colliding():
+			if groundRay.get_collider() == heldObject:
+				drop_held_object()
