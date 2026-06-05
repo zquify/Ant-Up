@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://duiq0innusdhe" path="res://assets/placeholder/tree.tscn" id="9_0o1wr"]
 [ext_resource type="PackedScene" uid="uid://bg2y0o72evcm5" path="res://assets/placeholder/table.tscn" id="10_5hvht"]
 [ext_resource type="PackedScene" uid="uid://78s4ppdv8elc" path="res://assets/placeholder/fence.tscn" id="11_0o1wr"]
-[ext_resource type="PackedScene" uid="uid://85avj0q21tqg" path="res://src/worlds/carryable.tscn" id="12_1mkdf"]
+[ext_resource type="PackedScene" uid="uid://errouh1vod63" path="res://src/pickup/strawberry.tscn" id="11_1mkdf"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ag8rn"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -69,6 +69,10 @@ player_scene = ExtResource("2_5hvht")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1567218981]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 shadow_enabled = true
+shadow_blur = 0.0
+directional_shadow_split_1 = 0.012
+directional_shadow_split_2 = 0.06
+directional_shadow_split_3 = 0.34
 directional_shadow_max_distance = 931.6
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1543290727]
@@ -582,9 +586,24 @@ use_collision = true
 [node name="Spawners" type="Node3D" parent="." unique_id=540988454]
 
 [node name="SpawnLocation" type="Marker3D" parent="Spawners" unique_id=520073172 groups=["spawn_locations"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -89.51905, 38.369667, -24.129778)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
 
 [node name="Players" type="Node3D" parent="." unique_id=1392558894]
 
-[node name="Carryable" parent="." unique_id=2115943628 instance=ExtResource("12_1mkdf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -86.155594, 38.951008, -25.183332)
+[node name="Strawberry" parent="." unique_id=16042779 instance=ExtResource("11_1mkdf")]
+transform = Transform3D(0.98909616, -0.12497056, 0.0779178, 0.12151233, 0.9914447, 0.04766599, -0.08320804, -0.03767828, 0.9958197, -86.58364, 38.49246, -33.32819)
+
+[node name="Strawberry2" parent="." unique_id=1464912394 instance=ExtResource("11_1mkdf")]
+transform = Transform3D(0.98909616, -0.12497056, 0.07791781, 0.107700035, 0.9746566, 0.19607441, -0.10044661, -0.18554468, 0.9774885, -86.0018, 38.49246, -31.676903)
+
+[node name="Strawberry3" parent="." unique_id=849128273 instance=ExtResource("11_1mkdf")]
+transform = Transform3D(0.8141598, 0.57205594, -0.09947771, -0.49924952, 0.7771609, 0.3831069, 0.29646876, -0.26224598, 0.91833186, -88.449905, 39.237125, -32.323616)
+
+[node name="Strawberry4" parent="." unique_id=456536399 instance=ExtResource("11_1mkdf")]
+transform = Transform3D(0.98909616, -0.12497056, 0.0779178, 0.12151233, 0.9914447, 0.04766599, -0.08320804, -0.03767828, 0.9958197, 184.78027, 90.70797, 60.531235)
+
+[node name="Strawberry5" parent="." unique_id=676311777 instance=ExtResource("11_1mkdf")]
+transform = Transform3D(0.98909616, -0.12497056, 0.07791781, 0.107700035, 0.9746566, 0.19607441, -0.10044661, -0.18554468, 0.9774885, 185.36212, 90.70797, 62.182518)
+
+[node name="Strawberry6" parent="." unique_id=1021389744 instance=ExtResource("11_1mkdf")]
+transform = Transform3D(0.8141598, 0.57205594, -0.09947771, -0.49924952, 0.7771609, 0.3831069, 0.29646876, -0.26224598, 0.91833186, 183.58081, 92.15946, 61.535805)

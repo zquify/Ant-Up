@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dfuw5soldv2op" path="res://src/player/player.gd" id="1_ocv17"]
 [ext_resource type="Script" uid="uid://bvsffj61cut27" path="res://src/player/controllers/movement_controller.gd" id="3_mf2ua"]
+[ext_resource type="Script" uid="uid://cg73ylpmmlkaq" path="res://src/player/leg_step.gd" id="4_5f2sf"]
 [ext_resource type="Script" uid="uid://c32ayha0n10be" path="res://src/player/controllers/gravity_controller.gd" id="4_244u8"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_5wqtk"]
@@ -190,11 +191,11 @@ maxDistanceFromHold = 10.0
 groundRay = NodePath("gravityControl/Ant/GroundRay")
 
 [node name="colShape" type="CollisionShape3D" parent="." unique_id=206197205]
-transform = Transform3D(-0.9998321, -0.01832493, -8.742278e-08, -0.01832493, 0.9998321, 0, 8.74081e-08, 1.6020163e-09, -1, 0, 0.5, 0)
+transform = Transform3D(-0.9998321, -0.01832493, -8.742278e-08, -0.01832493, 0.9998321, 0, 8.74081e-08, 1.6020163e-09, -1, 0, 0, 0)
 shape = SubResource("SphereShape3D_5wqtk")
 
 [node name="gravityControl" type="Node3D" parent="." unique_id=1950351932]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.5, 0)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 
 [node name="yawAxis" type="Node3D" parent="gravityControl" unique_id=312281462]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4029261, 0)
@@ -469,8 +470,74 @@ mesh = SubResource("ArrayMesh_672it")
 skin = SubResource("Skin_mi1yx")
 skeleton = NodePath("..")
 
-[node name="Head" type="Marker3D" parent="gravityControl/Ant/Mesh" unique_id=1400601390]
-transform = Transform3D(-1.561121e-07, 0, -0.71428573, 0, 0.71428573, 0, 0.71428573, 0, -1.561121e-07, 0, 1.0733678, 0)
+[node name="TwoBoneIK3D" type="TwoBoneIK3D" parent="gravityControl/Ant/Mesh/Skeleton3D" unique_id=1327014385]
+setting_count = 6
+settings/0/target_node = NodePath("../../../../../LegIK/Front_L")
+settings/0/pole_node = NodePath("../../../FootTargets/Head")
+settings/0/root_bone_name = "Femur_FL"
+settings/0/root_bone = 17
+settings/0/middle_bone_name = "Tarsus_FL"
+settings/0/middle_bone = 18
+settings/0/pole_direction = 0
+settings/0/end_bone_name = "Tarsus_FL.001"
+settings/0/end_bone = 19
+settings/0/use_virtual_end = false
+settings/0/extend_end_bone = false
+settings/1/target_node = NodePath("../../../../../LegIK/Mid_L")
+settings/1/pole_node = NodePath("../../../FootTargets/Head")
+settings/1/root_bone_name = "Femur_ML"
+settings/1/root_bone = 20
+settings/1/middle_bone_name = "Tarsus_ML"
+settings/1/middle_bone = 21
+settings/1/pole_direction = 0
+settings/1/end_bone_name = "Tarsus_ML.001"
+settings/1/end_bone = 22
+settings/1/use_virtual_end = false
+settings/1/extend_end_bone = false
+settings/2/target_node = NodePath("../../../../../LegIK/Back_L")
+settings/2/pole_node = NodePath("../../../FootTargets/Head")
+settings/2/root_bone_name = "Femur_BL"
+settings/2/root_bone = 23
+settings/2/middle_bone_name = "Tarsus_BL"
+settings/2/middle_bone = 24
+settings/2/pole_direction = 0
+settings/2/end_bone_name = "Tarsus_BL.001"
+settings/2/end_bone = 25
+settings/2/use_virtual_end = false
+settings/2/extend_end_bone = false
+settings/3/target_node = NodePath("../../../../../LegIK/Front_R")
+settings/3/pole_node = NodePath("../../../FootTargets/Head")
+settings/3/root_bone_name = "Femur_FR"
+settings/3/root_bone = 32
+settings/3/middle_bone_name = "Tarsus_FR"
+settings/3/middle_bone = 33
+settings/3/pole_direction = 0
+settings/3/end_bone_name = "Tarsus_FR.001"
+settings/3/end_bone = 34
+settings/3/use_virtual_end = false
+settings/3/extend_end_bone = false
+settings/4/target_node = NodePath("../../../../../LegIK/Mid_R")
+settings/4/pole_node = NodePath("../../../FootTargets/Head")
+settings/4/root_bone_name = "Femur_MR"
+settings/4/root_bone = 29
+settings/4/middle_bone_name = "Tarsus_MR"
+settings/4/middle_bone = 30
+settings/4/pole_direction = 0
+settings/4/end_bone_name = "Tarsus_MR.001"
+settings/4/end_bone = 31
+settings/4/use_virtual_end = false
+settings/4/extend_end_bone = false
+settings/5/target_node = NodePath("../../../../../LegIK/Back_R")
+settings/5/pole_node = NodePath("../../../FootTargets/Head")
+settings/5/root_bone_name = "Femur_BR"
+settings/5/root_bone = 26
+settings/5/middle_bone_name = "Tarsus_BR"
+settings/5/middle_bone = 27
+settings/5/pole_direction = 0
+settings/5/end_bone_name = "Tarsus_BR.001"
+settings/5/end_bone = 28
+settings/5/use_virtual_end = false
+settings/5/extend_end_bone = false
 
 [node name="InteractRay" type="RayCast3D" parent="gravityControl/Ant" unique_id=228570617]
 target_position = Vector3(0, 0, 2.5)
@@ -490,8 +557,67 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5900966, 0)
 collision_layer = 0
 collision_mask = 0
 
+[node name="FootTargets" type="Node3D" parent="gravityControl/Ant" unique_id=1538383084]
+
+[node name="Front_L_Arm" type="SpringArm3D" parent="gravityControl/Ant/FootTargets" unique_id=445829541]
+transform = Transform3D(0.97740483, -1.3190203e-08, -0.21137595, -0.21137595, -7.968187e-08, -0.97740483, -3.950646e-09, 1, -8.066953e-08, 0.694, 0.1, 0.434)
+collision_mask = 5
+spring_length = 2.0
+margin = 0.2
+
+[node name="Front_L" type="Marker3D" parent="gravityControl/Ant/FootTargets/Front_L_Arm" unique_id=302263815]
+transform = Transform3D(1, 6.211762e-22, 0, 2.842171e-14, -4.371139e-08, 1, 7.642741e-15, -1, -4.3711395e-08, 0.003, 0, 2)
+
+[node name="Mid_L_Arm" type="SpringArm3D" parent="gravityControl/Ant/FootTargets" unique_id=565453133]
+transform = Transform3D(0.97740483, -9.068316e-09, -0.21137594, -0.21137594, -8.483347e-08, -0.97740483, -9.068316e-09, 1, -8.483347e-08, 0.797, 0.1, -0.175)
+collision_mask = 5
+spring_length = 2.0
+margin = 0.2
+
+[node name="Mid_L" type="Marker3D" parent="gravityControl/Ant/FootTargets/Mid_L_Arm" unique_id=1211998229]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 2)
+
+[node name="Back_L_Arm" type="SpringArm3D" parent="gravityControl/Ant/FootTargets" unique_id=1572676918]
+transform = Transform3D(0.9774048, -9.068316e-09, -0.21137592, -0.21137592, -8.483347e-08, -0.9774048, -9.068315e-09, 1, -8.483346e-08, 0.705, 0.1, -0.592)
+collision_mask = 5
+spring_length = 2.0
+margin = 0.2
+
+[node name="Back_L" type="Marker3D" parent="gravityControl/Ant/FootTargets/Back_L_Arm" unique_id=2000061422]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 2)
+
+[node name="Front_R_Arm" type="SpringArm3D" parent="gravityControl/Ant/FootTargets" unique_id=239887431]
+transform = Transform3D(-0.9774159, -8.643559e-08, 0.21132478, -0.21132478, -9.2373e-09, -0.9774159, 8.643559e-08, -1, -9.2373e-09, -0.694, 0.1, 0.434)
+collision_mask = 5
+spring_length = 2.0
+margin = 0.2
+
+[node name="Front_R" type="Marker3D" parent="gravityControl/Ant/FootTargets/Front_R_Arm" unique_id=669396862]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 2)
+
+[node name="Mid_R_Arm" type="SpringArm3D" parent="gravityControl/Ant/FootTargets" unique_id=1019696954]
+transform = Transform3D(-0.9774159, -8.643559e-08, 0.21132478, -0.21132478, -9.2373e-09, -0.9774159, 8.643559e-08, -1, -9.2373e-09, -0.797, 0.1, -0.175)
+collision_mask = 5
+spring_length = 2.0
+margin = 0.2
+
+[node name="Mid_R" type="Marker3D" parent="gravityControl/Ant/FootTargets/Mid_R_Arm" unique_id=448962110]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 2)
+
+[node name="Back_R_Arm" type="SpringArm3D" parent="gravityControl/Ant/FootTargets" unique_id=1140867383]
+transform = Transform3D(-0.9774159, -8.643559e-08, 0.21132478, -0.21132478, -9.2373e-09, -0.9774159, 8.643559e-08, -1, -9.2373e-09, -0.705, 0.1, -0.592)
+collision_mask = 5
+spring_length = 2.0
+margin = 0.2
+
+[node name="Back_R" type="Marker3D" parent="gravityControl/Ant/FootTargets/Back_R_Arm" unique_id=340762364]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 2)
+
+[node name="Head" type="Marker3D" parent="gravityControl/Ant/FootTargets" unique_id=1400601390]
+transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, 0, 1.002715, 0)
+
 [node name="ShapeCast3D" type="ShapeCast3D" parent="." unique_id=1247176348]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.5, 0)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 shape = SubResource("SphereShape3D_ocv17")
 target_position = Vector3(0, 0, 0)
 max_results = 6
@@ -506,3 +632,31 @@ script = ExtResource("4_244u8")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1577660980]
 replication_config = SubResource("SceneReplicationConfig_mf2ua")
+
+[node name="LegIK" type="Node3D" parent="." unique_id=716931782]
+transform = Transform3D(1, 0, 1.7484555e-07, 0, 1, 0, -1.7484555e-07, 0, 1, 0, 0, 0)
+top_level = true
+
+[node name="Front_L" type="Marker3D" parent="LegIK" unique_id=1511269549]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.694, -0.5, 0.434)
+script = ExtResource("4_5f2sf")
+
+[node name="Mid_L" type="Marker3D" parent="LegIK" unique_id=1693667448]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.79667795, -0.5, -0.17546903)
+script = ExtResource("4_5f2sf")
+
+[node name="Back_L" type="Marker3D" parent="LegIK" unique_id=741757552]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7045995, -0.5, -0.59150517)
+script = ExtResource("4_5f2sf")
+
+[node name="Front_R" type="Marker3D" parent="LegIK" unique_id=303767180]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.694, -0.5, 0.434)
+script = ExtResource("4_5f2sf")
+
+[node name="Mid_R" type="Marker3D" parent="LegIK" unique_id=108034875]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.797, -0.5, -0.175)
+script = ExtResource("4_5f2sf")
+
+[node name="Back_R" type="Marker3D" parent="LegIK" unique_id=393937703]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.705, -0.5, -0.592)
+script = ExtResource("4_5f2sf")

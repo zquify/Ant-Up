@@ -70,7 +70,6 @@ class_name Player
 @export var groundRay: RayCast3D
 
 @onready var interactRay = $gravityControl/Ant/InteractRay
-@onready var head: Marker3D = $gravityControl/Ant/Head
 @onready var drop_point: Marker3D = $gravityControl/Ant/DropPoint
 
 
@@ -268,7 +267,6 @@ func set_held_object(body):
 	grabJoint.node_a = grabAnchor.get_path()
 	grabJoint.node_b = heldObject.get_path()
 
-
 func drop_held_object():
 	if grabJoint:
 		grabJoint.queue_free()
@@ -281,7 +279,6 @@ func drop_held_object():
 	heldObject = null
 	closest_node = null
 
-
 func handle_holding_objects():
 
 	if Input.is_action_just_pressed("interact"):
@@ -292,10 +289,7 @@ func handle_holding_objects():
 
 	if heldObject:
 
-		# Move the anchor to the carry position.
-		grabAnchor.global_transform = head.global_transform
-
-		if heldObject.global_position.distance_to(head.global_position) > maxDistanceFromHold:
+		if heldObject.global_position.distance_to(grabAnchor.global_position) > maxDistanceFromHold:
 			drop_held_object()
 
 		if dropBelowPlayer and groundRay.is_colliding():

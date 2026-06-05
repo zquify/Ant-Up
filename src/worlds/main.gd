@@ -1,10 +1,19 @@
 extends Node3D
 
 @export var player_scene: PackedScene
+@onready var max_fps = Engine.max_fps
 
 
 func _ready() -> void:
 	respawn()
+
+func _input(_event: InputEvent) -> void:
+	
+	if Input.is_action_just_pressed("limit_fps"):
+		if Engine.max_fps == max_fps:
+			Engine.max_fps = 10
+		else:
+			Engine.max_fps = max_fps
 
 func respawn() -> void:
 	var spawn_pos = pick_spawn()

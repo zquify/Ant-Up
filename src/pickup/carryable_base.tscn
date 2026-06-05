@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://b8axd66etyl0"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_cg6di"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1mkdf"]
+
+[node name="Carryable" type="RigidBody3D" unique_id=2115943628]
+collision_layer = 4
+collision_mask = 3
+mass = 10.0
+gravity_scale = 3.0
+angular_damp = 0.5
+
+[node name="CarryPoints" type="Node3D" parent="." unique_id=724985414]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="Marker" type="Marker3D" parent="CarryPoints" unique_id=1523818663]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=900629578]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("BoxMesh_cg6di")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=23645579]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_1mkdf")
