@@ -88,6 +88,10 @@ limit_fps={
 ]
 }
 
+[internationalization]
+
+locale/locale_filter_mode=0
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

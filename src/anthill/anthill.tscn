@@ -19,9 +19,10 @@ script = ExtResource("1_3ydga")
 [node name="Label3D" type="Label3D" parent="." unique_id=367460838]
 transform = Transform3D(0.866653, 0, -0.49891132, 0, 1, 0, 0.49891132, 0, 0.866653, 0, 8.859998, 0)
 pixel_size = 0.01
+billboard = 2
 text = "0"
 font_size = 128
-outline_size = 24
+outline_size = 34
 
 [node name="Area3D" type="Area3D" parent="." unique_id=1831110931]
 collision_layer = 0

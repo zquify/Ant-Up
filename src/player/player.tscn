@@ -179,7 +179,7 @@ properties/2/path = NodePath("gravityControl:rotation")
 properties/2/spawn = true
 properties/2/replication_mode = 1
 
-[node name="player" type="CharacterBody3D" unique_id=1256135889 node_paths=PackedStringArray("groundRay")]
+[node name="player" type="CharacterBody3D" unique_id=1256135889 node_paths=PackedStringArray("groundRay") groups=["player"]]
 top_level = true
 collision_layer = 2
 collision_mask = 5
