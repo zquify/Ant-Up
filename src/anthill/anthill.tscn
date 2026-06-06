@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://cjr6secee7fs6"]
+
+[ext_resource type="Script" uid="uid://uqtox1bqogcq" path="res://src/anthill/anthill.gd" id="1_3ydga"]
+[ext_resource type="PackedScene" uid="uid://basld6iurpqvn" path="res://src/anthill/hill.res" id="1_jkdjn"]
+[ext_resource type="PackedScene" uid="uid://dcy38h0mq74dc" path="res://src/anthill/collision_shape_3d.res" id="2_e0q15"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_3ydga"]
+radius = 19.08276
+
+[node name="Anthill" type="Node3D" unique_id=157153453]
+script = ExtResource("1_3ydga")
+
+[node name="Hill" parent="." unique_id=1783023237 instance=ExtResource("1_jkdjn")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=74625971]
+
+[node name="CollisionShape3D" parent="StaticBody3D" unique_id=1530364272 instance=ExtResource("2_e0q15")]
+
+[node name="Label3D" type="Label3D" parent="." unique_id=367460838]
+transform = Transform3D(0.866653, 0, -0.49891132, 0, 1, 0, 0.49891132, 0, 0.866653, 0, 8.859998, 0)
+pixel_size = 0.01
+text = "0"
+font_size = 128
+outline_size = 24
+
+[node name="Area3D" type="Area3D" parent="." unique_id=1831110931]
+collision_layer = 0
+collision_mask = 7
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=2006475153]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.26952362, 0, -0.13476276)
+shape = SubResource("SphereShape3D_3ydga")

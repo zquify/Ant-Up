@@ -4,7 +4,7 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1mkdf"]
 
-[node name="Carryable" type="RigidBody3D" unique_id=2115943628]
+[node name="Carryable" type="RigidBody3D" unique_id=2115943628 groups=["carryable"]]
 collision_layer = 4
 collision_mask = 3
 mass = 10.0
