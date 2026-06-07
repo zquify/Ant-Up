@@ -40,6 +40,8 @@ class_name Player
 @export var jumpSpeed := 20.0
 ## Mouse sensitivity multiplier
 @export var mouseSens := 0.001
+## Joystick sensitivity multiplier
+@export var stickLookSens := 2.5
 ## Maximum raycast distance for manual surface attachment (interact key)
 @export var attachRange := 2.5
 ## Maximum pitch angle in radians (prevents looking too far up/down)
@@ -93,6 +95,7 @@ var jumpGraceTimer := 0.0
 func _ready() -> void:
 	gravityController.setup(self, movementController)
 	movementController.setup(self, gravityController)
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _input(event: InputEvent) -> void:
 	
@@ -102,7 +105,6 @@ func _input(event: InputEvent) -> void:
 		pitch = clamp(pitch, -pitchLimit, pitchLimit)
 	
 	if Input.is_action_just_pressed("quit"):
-		$"..".exit_game(name.to_int())
 		get_tree().quit()
 	
 	if Input.is_action_just_pressed("esc"):
@@ -111,12 +113,30 @@ func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("respawn"):
 		respawn()
 
+func _updateJoystickLook(delta: float) -> void:
+	var lookX := Input.get_axis("look_left", "look_right")
+	var lookY := Input.get_axis("look_up", "look_down")
+
+	# Deadzone
+	if abs(lookX) < 0.1:
+		lookX = 0.0
+
+	if abs(lookY) < 0.1:
+		lookY = 0.0
+
+	yaw -= lookX * stickLookSens * delta
+	pitch -= lookY * stickLookSens * delta
+
+	pitch = clamp(pitch, -pitchLimit, pitchLimit)
+
 func respawn():
 	var mm = get_parent().get_parent()
-	position = mm.pick_spawn()
+	global_transform = mm.pick_spawn()
 	velocity = Vector3.ZERO
 
 func _physics_process(delta: float) -> void:
+	_updateJoystickLook(delta)
+	
 	gravityController.updateUpAxis(delta)
 
 	movementController.updatePlanarAndJump(delta)

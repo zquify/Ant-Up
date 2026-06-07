@@ -11,6 +11,12 @@ extends CharacterBody3D
 @export var player_stomp_distance := 4.0
 @export var fruit_out_of_place_distance := 30.0
 
+var stuck_timer := 0.0
+var last_position := Vector3.ZERO
+
+@export var stuck_timeout := 1.5
+@export var stuck_distance_threshold := 0.5
+
 var current_fruit = null
 var player_target = null
 
@@ -24,6 +30,7 @@ var state := State.WANDER
 
 func _ready() -> void:
 	await get_tree().physics_frame
+	last_position = global_position
 	set_random_target()
 
 func _physics_process(delta: float) -> void:
@@ -40,6 +47,28 @@ func _physics_process(delta: float) -> void:
 			handle_wander()
 
 	move_ai(delta)
+
+	check_if_stuck(delta)
+
+func check_if_stuck(delta: float) -> void:
+	var moved_distance = global_position.distance_to(last_position)
+
+	if moved_distance < stuck_distance_threshold:
+		stuck_timer += delta
+	else:
+		stuck_timer = 0.0
+		last_position = global_position
+
+	if state == State.WANDER and stuck_timer >= stuck_timeout:
+		handle_stuck()
+
+func handle_stuck() -> void:
+	stuck_timer = 0.0
+	last_position = global_position
+
+	current_fruit = null
+	state = State.WANDER
+	set_random_target()
 
 func update_targets() -> void:
 	player_target = get_tree().get_first_node_in_group("player")

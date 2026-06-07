@@ -21,7 +21,7 @@ func updatePlanarAndJump(delta: float) -> void:
 	externalVel = externalVel.move_toward(Vector3.ZERO, externalVelDecay * delta)
 	var up := player.currentUp.normalized()
 	var baseVel := player.velocity - externalVel
-	var v2 := Input.get_vector("ui_right", "ui_left", "ui_up", "ui_down")
+	var v2 := Input.get_vector("right", "left", "up", "down")
 	var strafe := v2.x
 	var forward := -v2.y
 	var camForward := (-player.pitchNode.global_transform.basis.z).normalized()
@@ -42,7 +42,7 @@ func updatePlanarAndJump(delta: float) -> void:
 		rate = planarBrake
 	curPlanar = curPlanar.move_toward(targetPlanar, rate * delta)
 	player.velocity = curPlanar + up * vUp + externalVel
-	if Input.is_action_just_pressed("ui_accept") and player.is_on_floor():
+	if Input.is_action_just_pressed("jump") and player.is_on_floor():
 		vUp = player.jumpSpeed
 		player.velocity = curPlanar + up * vUp + externalVel
 		if player.attached:

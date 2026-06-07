@@ -76,6 +76,7 @@ fog_density = 0.0
 
 [node name="BackyardBlockout" type="Node3D" unique_id=1953811230]
 script = ExtResource("1_81vy7")
+scene_name = null
 player_scene = ExtResource("2_5hvht")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=895237589]
