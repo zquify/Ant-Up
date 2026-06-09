@@ -46,7 +46,7 @@ mesh = SubResource("BoxMesh_hu87w")
 [node name="PlayerDetector" type="RayCast3D" parent="." unique_id=707223103]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 76, 0)
 target_position = Vector3(0, 0, -200)
-collision_mask = 15
+collision_mask = 11
 
 [node name="FruitDetector" type="Area3D" parent="." unique_id=1194272002]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 77, 0)

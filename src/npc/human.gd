@@ -19,6 +19,10 @@ var last_position := Vector3.ZERO
 
 var current_fruit = null
 var player_target = null
+var border := fruit_pickup_distance
+
+@export var chase_memory_time := 2.0
+var chase_memory := 0.0
 
 enum State {
 	WANDER,
@@ -59,7 +63,7 @@ func check_if_stuck(delta: float) -> void:
 		stuck_timer = 0.0
 		last_position = global_position
 
-	if state == State.WANDER and stuck_timer >= stuck_timeout:
+	if stuck_timer >= stuck_timeout:
 		handle_stuck()
 
 func handle_stuck() -> void:
@@ -67,6 +71,7 @@ func handle_stuck() -> void:
 	last_position = global_position
 
 	current_fruit = null
+
 	state = State.WANDER
 	set_random_target()
 
@@ -80,8 +85,20 @@ func update_targets() -> void:
 			var collider = player_detector.get_collider()
 
 			if collider == player_target:
-				state = State.CHASE_PLAYER
-				return
+				var nav_point = NavigationServer3D.map_get_closest_point(
+					nav_agent.get_navigation_map(),
+					player_target.global_position
+				)
+
+				if nav_point.distance_to(player_target.global_position) <= border:
+					chase_memory = chase_memory_time
+					state = State.CHASE_PLAYER
+					return
+
+	if chase_memory > 0.0:
+		chase_memory -= get_physics_process_delta_time()
+		state = State.CHASE_PLAYER
+		return
 
 	current_fruit = find_closest_misplaced_fruit()
 
@@ -92,18 +109,30 @@ func update_targets() -> void:
 	state = State.WANDER
 
 func handle_player() -> void:
+	
 	if player_target == null:
+		chase_memory = 0.0
 		state = State.WANDER
 		return
 
-	nav_agent.target_position = player_target.global_position
+	var reachable_pos = NavigationServer3D.map_get_closest_point(
+		nav_agent.get_navigation_map(),
+		player_target.global_position
+	)
+
+	nav_agent.target_position = reachable_pos
 
 func handle_fruit() -> void:
 	if current_fruit == null or not is_instance_valid(current_fruit):
 		state = State.WANDER
 		return
 
-	nav_agent.target_position = current_fruit.global_position
+	var reachable_pos = NavigationServer3D.map_get_closest_point(
+		nav_agent.get_navigation_map(),
+		current_fruit.global_position
+	)
+
+	nav_agent.target_position = reachable_pos
 
 	if global_position.distance_to(current_fruit.global_position) <= fruit_pickup_distance:
 		current_fruit.return_home()
@@ -119,7 +148,11 @@ func move_ai(delta: float) -> void:
 	if nav_agent.is_navigation_finished():
 		velocity = Vector3.ZERO
 		return
-
+	
+	if nav_agent.get_current_navigation_path().is_empty():
+		handle_stuck()
+		return
+	
 	var next_path_pos = nav_agent.get_next_path_position()
 
 	velocity = global_position.direction_to(next_path_pos) * SPEED
@@ -133,27 +166,39 @@ func move_ai(delta: float) -> void:
 	move_and_slide()
 
 func find_closest_misplaced_fruit():
+	
 	var closest = null
 	var closest_dist := INF
-
+	
+	var nav_map = nav_agent.get_navigation_map()
+	
 	for body in fruit_detector.get_overlapping_bodies():
 		if not body.is_in_group("carryable"):
 			continue
-
+	
 		# Ignore fruit currently being carried
 		if body.collision_layer & (1 << 1):
 			continue
-
+	
 		# Ignore fruit already at home
 		if body.global_position.distance_to(body.starting_transform.origin) < fruit_out_of_place_distance:
 			continue
-
-		var dist := global_position.distance_squared_to(body.global_position)
-
+	
+		# Ignore fruit that is too far from the navmesh
+		var nav_point = NavigationServer3D.map_get_closest_point(
+			nav_map,
+			body.global_position
+		)
+	
+		if nav_point.distance_to(body.global_position) > border:
+			continue
+	
+		var dist = global_position.distance_squared_to(body.global_position)
+	
 		if dist < closest_dist:
 			closest_dist = dist
 			closest = body
-
+	
 	return closest
 
 func stomp_player(player) -> void:
