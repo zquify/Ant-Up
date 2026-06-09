@@ -7,7 +7,7 @@ extends CharacterBody3D
 @onready var fruit_detector: Area3D = $FruitDetector
 
 @export var SPEED := 30.0
-@export var fruit_pickup_distance := 3.0
+@export var fruit_pickup_distance := 10.0
 @export var player_stomp_distance := 4.0
 @export var fruit_out_of_place_distance := 30.0
 
@@ -106,7 +106,7 @@ func handle_fruit() -> void:
 	nav_agent.target_position = current_fruit.global_position
 
 	if global_position.distance_to(current_fruit.global_position) <= fruit_pickup_distance:
-		current_fruit.global_position = current_fruit.starting_pos
+		current_fruit.return_home()
 		current_fruit = null
 		state = State.WANDER
 		set_random_target()
@@ -145,7 +145,7 @@ func find_closest_misplaced_fruit():
 			continue
 
 		# Ignore fruit already at home
-		if body.global_position.distance_to(body.starting_pos) < fruit_out_of_place_distance:
+		if body.global_position.distance_to(body.starting_transform.origin) < fruit_out_of_place_distance:
 			continue
 
 		var dist := global_position.distance_squared_to(body.global_position)
