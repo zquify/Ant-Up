@@ -9,7 +9,7 @@ extends CharacterBody3D
 @export var SPEED := 30.0
 @export var fruit_pickup_distance := 10.0
 @export var player_stomp_distance := 4.0
-@export var fruit_out_of_place_distance := 30.0
+@export var fruit_out_of_place_distance := 25.0
 
 var stuck_timer := 0.0
 var last_position := Vector3.ZERO

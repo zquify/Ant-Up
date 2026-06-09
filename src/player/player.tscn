@@ -165,6 +165,10 @@ bind/34/name = &"Tarsus_FR.001"
 bind/34/bone = -1
 bind/34/pose = Transform3D(0.9998179, -0.019087814, -1.3760724e-08, 4.697078e-08, 1.18334256e-07, -0.9999999, 0.019087791, 0.9998177, -5.9878204e-08, 0.3094526, -0.49296612, 0.005113049)
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mf2ua"]
+radius = 0.1
+height = 2.5
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_ocv17"]
 radius = 1.5
 
@@ -472,11 +476,6 @@ skeleton = NodePath("..")
 [node name="Head" type="Marker3D" parent="gravityControl/Ant/Mesh" unique_id=1400601390]
 transform = Transform3D(-1.561121e-07, 0, -0.71428573, 0, 0.71428573, 0, 0.71428573, 0, -1.561121e-07, 0, 1.0733678, 0)
 
-[node name="InteractRay" type="RayCast3D" parent="gravityControl/Ant" unique_id=228570617]
-target_position = Vector3(0, 0, 2.5)
-collision_mask = 4
-hit_back_faces = false
-
 [node name="GroundRay" type="RayCast3D" parent="gravityControl/Ant" unique_id=826694729]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, -0.5, 0)
 target_position = Vector3(0, -0.1, 0)
@@ -489,6 +488,11 @@ transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -1.7
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5900966, 0)
 collision_layer = 0
 collision_mask = 0
+
+[node name="InteractRay" type="ShapeCast3D" parent="gravityControl/Ant" unique_id=1495838711]
+transform = Transform3D(1, 1.7484555e-07, 1.7484555e-07, -1.7484555e-07, -4.371139e-08, 1, 1.7484555e-07, -1, -4.3711356e-08, -4.3699757e-08, -0.099999994, 0.24993348)
+shape = SubResource("CapsuleShape3D_mf2ua")
+collision_mask = 4
 
 [node name="ShapeCast3D" type="ShapeCast3D" parent="." unique_id=1247176348]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.5, 0)

@@ -269,7 +269,7 @@ func set_held_object(body):
 
 	for target in carry_points.get_children():
 		if target is Marker3D:
-			var dist = interactRay.get_collision_point().distance_squared_to(
+			var dist = interactRay.get_collision_point(0).distance_squared_to(
 				target.global_position
 			)
 
@@ -313,7 +313,7 @@ func handle_holding_objects():
 		if heldObject:
 			drop_held_object()
 		elif interactRay.is_colliding():
-			set_held_object(interactRay.get_collider())
+			set_held_object(interactRay.get_collider(0))
 
 	if heldObject:
 

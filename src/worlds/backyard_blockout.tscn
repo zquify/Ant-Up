@@ -590,9 +590,6 @@ collision_mask = 0
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Bounds/StaticBody3D4" unique_id=1518923385]
 shape = SubResource("BoxShape3D_0o1wr")
 
-[node name="Strawberry" parent="NavigationRegion3D/Bounds" unique_id=2115943628 instance=ExtResource("11_1mkdf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 158.39635, 0, -129.709)
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1567218981]
 transform = Transform3D(-0.9251759, -0.33831474, 0.17202517, 0.19136229, -0.024385136, 0.98121655, -0.32776514, 0.94071704, 0.087301224, 0, 0, 0)
 light_bake_mode = 1
@@ -643,6 +640,9 @@ transform = Transform3D(0.38262418, -0.76036805, -0.524823, 0.82800215, 0.030195
 
 [node name="Strawberry5" parent="Carryables" unique_id=2006483741 instance=ExtResource("11_1mkdf")]
 transform = Transform3D(0.6167997, 0.6106786, -0.49661842, -0.7849315, 0.43018776, -0.44589365, -0.05865857, 0.66483843, 0.7446806, 68.59421, 207.83139, -132.33342)
+
+[node name="Strawberry6" parent="Carryables" unique_id=2115943628 instance=ExtResource("11_1mkdf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 158.39635, 0, -129.709)
 
 [node name="Human" parent="." unique_id=692812724 instance=ExtResource("12_1mkdf")]
 
