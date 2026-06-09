@@ -89,6 +89,9 @@ var justForceAttached := false
 var justManuallyAttached := false
 var manualAttachLockTimer := 0.0
 var jumpGraceTimer := 0.0
+
+var in_menu: bool = false
+
 #endregion
 
 
@@ -98,6 +101,8 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _input(event: InputEvent) -> void:
+	if in_menu:
+		return
 	
 	if event is InputEventMouseMotion:
 		yaw   -= event.relative.x * mouseSens
@@ -107,13 +112,13 @@ func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("quit"):
 		get_tree().quit()
 	
-	if Input.is_action_just_pressed("esc"):
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED else Input.MOUSE_MODE_CAPTURED
-	
 	if Input.is_action_just_pressed("respawn"):
 		respawn()
 
 func _updateJoystickLook(delta: float) -> void:
+	if in_menu:
+		return
+	
 	var lookX := Input.get_axis("look_left", "look_right")
 	var lookY := Input.get_axis("look_up", "look_down")
 
@@ -139,7 +144,7 @@ func _physics_process(delta: float) -> void:
 	
 	gravityController.updateUpAxis(delta)
 
-	movementController.updatePlanarAndJump(delta)
+	if !in_menu: movementController.updatePlanarAndJump(delta)
 
 	gravityController.applyVerticalAccel(delta)
 
