@@ -1,5 +1,7 @@
 extends Control
 
+@onready var tabs: TabContainer = $Tabs
+
 @export var initial_focus : OptionButton
 
 
@@ -31,7 +33,31 @@ func _input(event: InputEvent) -> void:
 			for player in get_tree().get_nodes_in_group("player"):
 				player.in_menu = true
 			
-			initial_focus.grab_focus()
+			focus_current_tab()
+
+
+func focus_current_tab() -> void:
+	var tab := tabs.get_current_tab_control()
+
+	if tab == null:
+		return
+
+	var focusable := _find_first_focusable(tab)
+
+	if focusable:
+		focusable.grab_focus()
+
+
+func _find_first_focusable(node: Node) -> Control:
+	for child in node.get_children():
+		if child is Control and child.focus_mode != Control.FOCUS_NONE:
+			return child
+
+		var found := _find_first_focusable(child)
+		if found:
+			return found
+
+	return null
 
 
 #region Graphics

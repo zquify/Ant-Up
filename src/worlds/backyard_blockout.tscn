@@ -773,6 +773,7 @@ layout_mode = 2
 
 [node name="FPSLimit" type="HSplitContainer" parent="SettingsMenu/Tabs/Graphics" unique_id=1548104749]
 layout_mode = 2
+collapsed = true
 
 [node name="Label" type="Label" parent="SettingsMenu/Tabs/Graphics/FPSLimit" unique_id=1199191232]
 layout_mode = 2
@@ -789,6 +790,7 @@ layout_mode = 2
 
 [node name="RenderScale" type="HSplitContainer" parent="SettingsMenu/Tabs/Graphics" unique_id=2068617172]
 layout_mode = 2
+collapsed = true
 
 [node name="Label" type="Label" parent="SettingsMenu/Tabs/Graphics/RenderScale" unique_id=1522942247]
 layout_mode = 2
