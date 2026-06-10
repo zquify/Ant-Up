@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Ant Up!"
-config/version="26w24b"
+config/version="26w24c"
 run/main_scene="uid://blow3hih0wtfk"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/size/mode=0
@@ -20,7 +20,7 @@ config/size/mode=0
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
-window/size/mode=3
+window/size/mode=2
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 

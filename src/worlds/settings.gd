@@ -2,11 +2,87 @@ extends Control
 
 @onready var tabs: TabContainer = $Tabs
 
-@export var initial_focus : OptionButton
+@onready var resolution_option: OptionButton = $Tabs/Graphics/Resolution
+@onready var window_mode_option: OptionButton = $Tabs/Graphics/WindowMode
+@onready var msaa_option: OptionButton = $Tabs/Graphics/MSAA
+@onready var v_sync_option: CheckBox = $Tabs/Graphics/VSync
+@onready var fps_limit_option: HSlider = $Tabs/Graphics/FPSLimit/HSlider
+@onready var render_scale_option: HSlider = $Tabs/Graphics/RenderScale/HSlider
+@onready var shadows_option: CheckBox = $Tabs/Graphics/Shadows
 
+
+const SETTINGS_FILE = "user://settings.cfg"
+var config := ConfigFile.new()
 
 func _ready() -> void:
 	visible = false
+	load_settings()
+
+
+func save_setting(section: String, key: String, value):
+	config.load(SETTINGS_FILE)
+
+	config.set_value(section, key, value)
+
+	config.save(SETTINGS_FILE)
+
+
+func load_settings():
+	var err := config.load(SETTINGS_FILE)
+
+	if err != OK:
+		return
+
+	var window_mode = config.get_value("graphics", "window_mode", 0)
+	var vsync = config.get_value("graphics", "vsync", true)
+	var fps_limit = config.get_value("graphics", "fps_limit", 60)
+	var render_scale = config.get_value("graphics", "render_scale", 1.0)
+	var msaa = config.get_value("graphics", "msaa", 0)
+	var shadows = config.get_value("graphics", "shadows", true)
+
+	var resolution_index = config.get_value(
+		"graphics",
+		"resolution_index",
+		0
+	)
+
+	resolution_option.select(resolution_index)
+
+	var parts = resolution_option.get_item_text(resolution_index).split(" x ")
+
+	if parts.size() >= 2:
+		set_resolution(
+			Vector2i(
+				parts[0].strip_edges().to_int(),
+				parts[1].strip_edges().to_int()
+			)
+		)
+
+	# Apply settings
+
+	_on_window_mode_item_selected(window_mode)
+
+	DisplayServer.window_set_vsync_mode(
+		DisplayServer.VSYNC_ENABLED if vsync else DisplayServer.VSYNC_DISABLED
+	)
+
+	Engine.max_fps = fps_limit
+
+	get_viewport().scaling_3d_scale = render_scale
+
+	set_msaa(msaa)
+
+	for light in get_tree().get_nodes_in_group("light"):
+		light.shadow_enabled = shadows
+	
+	# Update UI
+	window_mode_option.select(window_mode)
+	msaa_option.select(msaa)
+	
+	v_sync_option.set_pressed_no_signal(vsync)
+	fps_limit_option.set_value_no_signal(fps_limit)
+	render_scale_option.set_value_no_signal(render_scale)
+	shadows_option.set_pressed_no_signal(shadows)
 
 
 func _input(event: InputEvent) -> void:
@@ -71,12 +147,14 @@ func _on_window_mode_item_selected(index: int) -> void:
 
 		2: # Fullscreen
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
+	
+	save_setting("graphics", "window_mode", index)
 
-
-@onready var resolution: OptionButton = $Tabs/Graphics/Resolution
 
 func _on_resolution_item_selected(index: int) -> void:
-	var parts: PackedStringArray = resolution.get_item_text(index).split(" x ")
+	save_setting("graphics", "resolution_index", index)
+	
+	var parts: PackedStringArray = resolution_option.get_item_text(index).split(" x ")
 	 
 	if parts.size() >= 2:
 		# Parse integers, stripping any accidental whitespace like " 1280 "
@@ -93,7 +171,8 @@ func _on_resolution_item_selected(index: int) -> void:
 
 func set_resolution(res: Vector2i):
 	DisplayServer.window_set_size(res)
-	print(DisplayServer.window_get_size())
+	
+	save_setting("graphics", "resolution", res)
 
 
 func _on_v_sync_toggled(toggled_on: bool) -> void:
@@ -106,29 +185,36 @@ func _on_v_sync_toggled(toggled_on: bool) -> void:
 			DisplayServer.VSYNC_DISABLED
 		)
 	
-	print(DisplayServer.window_get_vsync_mode())
+	save_setting("graphics", "vsync", toggled_on)
 
 
 func _on_fps_limit_value_changed(value: float) -> void:
 	Engine.max_fps = int(value)
+	
+	save_setting("graphics", "fps_limit", int(value))
 
 
 func _on_render_scale_value_changed(value: float) -> void:
 	get_viewport().scaling_3d_scale = value
+	
+	save_setting("graphics", "render_scale", value)
 
 
 func _on_msaa_item_selected(index: int) -> void:
 	set_msaa(index)
+	
+	save_setting("graphics", "msaa", index)
 
 
 func set_msaa(index):
 	get_viewport().msaa_3d = index
-	print(get_viewport().msaa_3d)
 
 
 func _on_shadows_toggled(toggled_on: bool) -> void:
 	for light in get_tree().get_nodes_in_group("light"):
 		light.shadow_enabled = toggled_on
+	
+	save_setting("graphics", "shadows", toggled_on)
 
 
 #endregion
@@ -170,6 +256,10 @@ func _on_feedback_pressed() -> void:
 func _on_kill_human_pressed() -> void:
 	for human in get_tree().get_nodes_in_group("human"):
 		human.queue_free()
+
+
+func _on_open_config_pressed() -> void:
+	OS.shell_show_in_file_manager(ProjectSettings.globalize_path("user://settings.cfg"))
 
 
 #endregion

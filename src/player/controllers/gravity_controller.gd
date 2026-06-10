@@ -79,11 +79,6 @@ func applyVerticalAccel(delta: float) -> void:
 	player.velocity = planar + up * vUp + ext
 
 func updateAttachmentAfterMove(delta: float) -> void:
-	#if player.heldObject != null:
-		#player.attached = false
-		#player.supposedUp = Vector3.UP
-		#player.detachTimer = 0.0
-		#return
 	
 	player.attached = false
 	player.supposedUp = Vector3.UP
@@ -105,7 +100,8 @@ func updateAttachmentAfterMove(delta: float) -> void:
 	if player.is_on_floor():
 		supportN = _get_floor_support_normal()
 	else:
-		supportN = sampleSupportNormal()
+		if player.attached:
+			supportN = sampleSupportNormal()
 
 	if supportN != Vector3.ZERO and !_can_attach_to_surface(supportN):
 		supportN = Vector3.ZERO
@@ -127,7 +123,7 @@ func updateAttachmentAfterMove(delta: float) -> void:
 		else:
 			player.supposedUp = Vector3.UP
 		return
-
+	
 	# Not jumping: only attach if actually touching something
 	if supportN != Vector3.ZERO:
 		player.attached = true
