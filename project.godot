@@ -14,6 +14,7 @@ config/name="Ant Up!"
 config/version="26w24b"
 run/main_scene="uid://blow3hih0wtfk"
 config/features=PackedStringArray("4.6", "Forward Plus")
+config/size/mode=0
 
 [display]
 

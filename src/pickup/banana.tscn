@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://cvimbh7d8yat3"]
+
+[ext_resource type="Script" uid="uid://dqi0tnd7w7ijv" path="res://src/pickup/carryable.gd" id="1_tmcxp"]
+[ext_resource type="PackedScene" uid="uid://cuj3msxp07ya5" path="res://assets/placeholder/banana.glb" id="2_tligl"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_tligl"]
+points = PackedVector3Array(-1.8157163, 0.14082496, 0.32716423, -5.24405, 2.9493175, -0.41667643, -5.24405, 2.9493175, -0.61415, 0.28350925, 2.1594522, 0.27372727, 0.14858957, 0.72639215, -1.1191224, -0.012720346, 0.6788932, 1.261095, -3.716842, 1.0215492, -0.7917013, 0.3824587, -0.11065316, -0.41667643, -5.440712, 2.257986, -0.12046611, 0.28350925, 2.0602806, -0.61415, 0.18456006, 1.5666546, 1.1623583, -5.638611, 2.9493175, -0.91036034, -1.9133854, 0.5868269, -1.0581145, 0.28350925, -0.11065316, 0.5699376, -1.0824677, -0.15107848, -0.11098064, -3.9412587, 1.2790787, 0.22728015, -1.7032768, 1.364981, -1.1851938, -5.836509, 2.4556916, -0.91036034, -5.440712, 2.751612, -0.12046611, -3.7150278, 0.8511654, -0.36331704, 0.18456006, 2.0602806, 0.66867435, -1.7530175, 1.0223033, 0.91617197, 0.055711742, 1.5411915, -0.9957699, -1.4523498, 0.12863535, -0.72824466, -1.3312716, 0.4277825, 0.82804835, -0.21000051, 1.0743042, 1.261095, -5.9354587, 2.4556916, -0.41667643, -3.7532315, 1.5420179, -1.0882709, 0.13430788, 0.3655308, -1.0227864, 0.28350925, 2.1594522, -0.31793967, 0.3824587, 1.764679, -0.71288675, -0.11166978, 0.38297272, 1.1623583)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_cavrg"]
+points = PackedVector3Array(1.5349554, -0.08253866, 0.1635686, 4.8534765, 3.2298052, 0.46772918, 4.7737956, 3.1679752, 0.30780253, 0.062372684, 1.9699762, 0.5751206, 0.5331958, 1.1954613, -1.0824612, 0.21636651, 0.41938242, 1.0803646, 3.3318684, 1.937473, 1.140823, 3.2144022, 1.071168, -0.2599508, 0.34199297, -0.05667944, -0.60534203, 0.51996374, 1.9871777, -0.5519419, 3.0834782, 0.91875196, 0.73072577, 5.2503347, 2.942624, 0.25084126, 2.2279153, 0.6317012, -0.6969127, 0.28621423, 1.5612707, 1.0519879, 5.1685743, 3.104732, 0.7373873, 0.14362502, -0.2988211, 0.08908248, 1.6203581, 0.52566004, 1.1251795, 3.3079429, 1.7779129, -0.5632516, 0.36985597, 1.5623325, -0.978102, 5.087322, 3.1857858, 0.1698349, 1.1396499, 1.0319357, 1.3027543, 1.3255523, 0.8225336, -1.01995, 1.3976693, 0.08091702, 0.7553736, 2.2139888, 0.15999962, 0.08908248, 0.4737578, 2.142691, 0.016367752, 5.2503347, 2.86157, 0.656127, 3.2244685, 0.92085755, 0.08908248, 1.2916477, -0.02933833, -0.44155654, 0.42962876, 0.33483168, -0.9859022, 0.062372684, 0.18750286, 0.8994, 3.1563761, 1.2745986, 1.018875, 2.219155, 0.32177252, 0.74517316)
+
+[node name="Carryable" type="RigidBody3D" unique_id=2115943628 groups=["carryable"]]
+collision_layer = 4
+collision_mask = 3
+mass = 10.0
+gravity_scale = 3.0
+angular_damp = 0.5
+script = ExtResource("1_tmcxp")
+score = 4
+
+[node name="CarryPoints" type="Node3D" parent="." unique_id=724985414]
+transform = Transform3D(2.072, 0, 0, 0, 1.9151796, 0, 0, 0, 2.072, 0, 0.7062855, 0)
+
+[node name="Marker" type="Marker3D" parent="CarryPoints" unique_id=1523818663]
+transform = Transform3D(0.48125428, 0, -0.036354635, 0, 0.52214426, 0, 0.036354635, 0, 0.48125428, 2.4907486e-05, -0.49564615, -0.00066036347)
+
+[node name="Marker2" type="Marker3D" parent="CarryPoints" unique_id=2059344452]
+transform = Transform3D(0.48125428, 0, -0.036354635, 0, 0.52214426, 0, 0.036354635, 0, 0.48125428, -0.83537054, -0.37740263, -0.06376733)
+
+[node name="Marker3" type="Marker3D" parent="CarryPoints" unique_id=213084514]
+transform = Transform3D(0.48125428, 0, -0.036354635, 0, 0.52214426, 0, 0.036354635, 0, 0.48125428, 1.0182275, -0.32368714, 0.07625611)
+
+[node name="Marker4" type="Marker3D" parent="CarryPoints" unique_id=658806114]
+transform = Transform3D(0.48125428, 0, -0.036354635, 0, 0.52214426, 0, 0.036354635, 0, 0.48125428, 1.4997048, 0.04243037, 0.1126276)
+
+[node name="Marker5" type="Marker3D" parent="CarryPoints" unique_id=1744611436]
+transform = Transform3D(0.48125428, 0, -0.036354635, 0, 0.52214426, 0, 0.036354635, 0, 0.48125428, -1.6387535, -0.004627198, -0.124456026)
+
+[node name="Marker6" type="Marker3D" parent="CarryPoints" unique_id=1857137879]
+transform = Transform3D(0.48262548, 0, 0, 0, 0.52214426, 0, 0, 0, 0.48262548, 0, -0.16511874, 0.5190234)
+
+[node name="Marker7" type="Marker3D" parent="CarryPoints" unique_id=2119944371]
+transform = Transform3D(0.48262548, 0, 0, 0, 0.52214426, 0, 0, 0, 0.48262548, -0.83777565, -0.04687524, 0.39416012)
+
+[node name="Marker8" type="Marker3D" parent="CarryPoints" unique_id=147701706]
+transform = Transform3D(0.48262548, 0, 0, 0, 0.52214426, 0, 0, 0, 0.48262548, 1.0211036, -0.0022088587, 0.5563271)
+
+[node name="Marker9" type="Marker3D" parent="CarryPoints" unique_id=853924566]
+transform = Transform3D(0.48262548, 0, 0, 0, 0.52214426, 0, 0, 0, 0.48262548, 1.5039529, 0.3186629, 0.5208024)
+
+[node name="Marker10" type="Marker3D" parent="CarryPoints" unique_id=847531942]
+transform = Transform3D(0.48262548, 0, 0, 0, 0.52214426, 0, 0, 0, 0.48262548, -1.6434476, 0.2897037, 0.20400521)
+
+[node name="Marker11" type="Marker3D" parent="CarryPoints" unique_id=146474779]
+transform = Transform3D(-0.48262548, -4.219246e-08, 0, 4.56473e-08, -0.52214426, 0, 0, 0, 0.48262548, 0, -0.16511874, -0.5061837)
+
+[node name="Marker12" type="Marker3D" parent="CarryPoints" unique_id=685644853]
+transform = Transform3D(-0.48262548, -4.219246e-08, 0, 4.56473e-08, -0.52214426, 0, 0, 0, 0.48262548, -0.83777565, -0.04687524, -0.5466301)
+
+[node name="Marker13" type="Marker3D" parent="CarryPoints" unique_id=2073076347]
+transform = Transform3D(-0.48262548, -4.219246e-08, 0, 4.56473e-08, -0.52214426, 0, 0, 0, 0.48262548, 1.0211036, -0.0022088587, -0.36693406)
+
+[node name="Marker14" type="Marker3D" parent="CarryPoints" unique_id=1115182437]
+transform = Transform3D(-0.48262548, -4.219246e-08, 0, 4.56473e-08, -0.52214426, 0, 0, 0, 0.48262548, 1.5039529, 0.3186629, -0.25822094)
+
+[node name="Marker15" type="Marker3D" parent="CarryPoints" unique_id=1109184073]
+transform = Transform3D(-0.48262548, -4.219246e-08, 0, 4.56473e-08, -0.52214426, 0, 0, 0, 0.48262548, -1.6434476, 0.2897037, -0.50797135)
+
+[node name="Marker16" type="Marker3D" parent="CarryPoints" unique_id=588767496]
+transform = Transform3D(0.48035812, 0, -0.046727117, 0, 0.52214426, 0, 0.046727117, 0, 0.48035812, -0.00019706642, 0.7356, 0.0040612523)
+
+[node name="Marker17" type="Marker3D" parent="CarryPoints" unique_id=1380998810]
+transform = Transform3D(0.48035812, 0, -0.046727117, 0, 0.52214426, 0, 0.046727117, 0, 0.48035812, -0.8340369, 0.7680491, -0.077051006)
+
+[node name="Marker18" type="Marker3D" parent="CarryPoints" unique_id=433665941]
+transform = Transform3D(0.48035812, 0, -0.046727117, 0, 0.52214426, 0, 0.046727117, 0, 0.48035812, 1.0161095, 0.8064569, 0.102923065)
+
+[node name="Marker19" type="Marker3D" parent="CarryPoints" unique_id=1492398575]
+transform = Transform3D(0.48035812, 0, -0.046727117, 0, 0.52214426, 0, 0.046727117, 0, 0.48035812, 1.4966904, 1.0058098, 0.14967185)
+
+[node name="Marker20" type="Marker3D" parent="CarryPoints" unique_id=1316917324]
+transform = Transform3D(0.48035812, 0, -0.046727117, 0, 0.52214426, 0, 0.046727117, 0, 0.48035812, -1.635924, 0.8596654, -0.15505503)
+
+[node name="Marker21" type="Marker3D" parent="CarryPoints" unique_id=1867379840]
+transform = Transform3D(0.48035812, 0, -0.046727117, 0, 0.52214426, 0, 0.046727117, 0, 0.48035812, -2.7901542, 1.0628501, -0.26733348)
+
+[node name="Marker22" type="Marker3D" parent="CarryPoints" unique_id=1649048995]
+transform = Transform3D(0.48035812, 0, -0.046727117, 0, 0.52214426, 0, 0.046727117, 0, 0.48035812, 2.4538832, 1.243632, 0.24278335)
+
+[node name="Label3D" type="Label3D" parent="." unique_id=763594668]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07916498, 0.6364958, 0)
+layers = 262144
+transparency = 0.6
+billboard = 1
+no_depth_test = true
+fixed_size = true
+modulate = Color(1, 0.7254902, 0, 1)
+text = "O"
+font_size = 20
+outline_size = 10
+
+[node name="banana" parent="." unique_id=1789444435 instance=ExtResource("2_tligl")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1403360601]
+shape = SubResource("ConvexPolygonShape3D_tligl")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="." unique_id=1348785706]
+shape = SubResource("ConvexPolygonShape3D_cavrg")
