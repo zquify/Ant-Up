@@ -165,4 +165,11 @@ func _on_feedback_pressed() -> void:
 	info["locale"] = TranslationServer.get_locale()
 	
 	OS.shell_open(safe_format(info))
+
+
+func _on_kill_human_pressed() -> void:
+	for human in get_tree().get_nodes_in_group("human"):
+		human.queue_free()
+
+
 #endregion

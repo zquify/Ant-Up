@@ -94,7 +94,7 @@ player_scene = ExtResource("2_5hvht")
 navigation_mesh = SubResource("NavigationMesh_1mkdf")
 
 [node name="Grill" type="Node3D" parent="NavigationRegion3D" unique_id=808379977]
-transform = Transform3D(-0.24075505, 0, 0.13900001, 0, 0.278, 0, -0.13900001, 0, -0.24075505, 158.45999, 0, 105.918)
+transform = Transform3D(-0.24075505, 0, 0.13900001, 0, 0.278, 0, -0.13900001, 0, -0.24075505, 156.93784, 0, 76.33556)
 
 [node name="Body" type="Node3D" parent="NavigationRegion3D/Grill" unique_id=1676795257]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 156, 0)
@@ -536,34 +536,34 @@ transform = Transform3D(53.577366, 0, 12.42842, 0, 54.999996, 0, -12.42842, 0, 5
 [node name="Fences" type="Node3D" parent="NavigationRegion3D" unique_id=1745626675]
 
 [node name="Fence" parent="NavigationRegion3D/Fences" unique_id=1353338463 instance=ExtResource("11_0o1wr")]
-transform = Transform3D(0.07733826, -2.0039525e-16, -9.220583e-24, 0, -3.2115348e-09, 0.07733826, -2.1094236e-16, -0.07347135, -3.380563e-09, 229, 0, 152)
+transform = Transform3D(0.07733826, -2.0039525e-16, -1.4438892e-23, 0, -3.2115348e-09, 0.121107176, -2.1094236e-16, -0.07347135, -5.2937628e-09, 229, -6.5132446, 152)
 
 [node name="Fence2" parent="NavigationRegion3D/Fences" unique_id=146218539 instance=ExtResource("11_0o1wr")]
-transform = Transform3D(0.07733826, -2.0039525e-16, -9.220583e-24, 0, -3.2115348e-09, 0.07733826, -2.1094236e-16, -0.07347135, -3.380563e-09, 229, 0, 2.850006)
+transform = Transform3D(0.07733826, -2.0039525e-16, -1.4438892e-23, 0, -3.2115348e-09, 0.121107176, -2.1094236e-16, -0.07347135, -5.2937628e-09, 229, -6.5132446, 2.850006)
 
 [node name="Fence3" parent="NavigationRegion3D/Fences" unique_id=1228522410 instance=ExtResource("11_0o1wr")]
-transform = Transform3D(0.07733826, -2.0039525e-16, -9.220583e-24, 0, -3.2115348e-09, 0.07733826, -2.1094236e-16, -0.07347135, -3.380563e-09, -226.3787, 0, 152)
+transform = Transform3D(0.07733826, -2.0039525e-16, -1.4438892e-23, 0, -3.2115348e-09, 0.121107176, -2.1094236e-16, -0.07347135, -5.2937628e-09, -226.3787, -6.5132446, 152)
 
 [node name="Fence4" parent="NavigationRegion3D/Fences" unique_id=65810160 instance=ExtResource("11_0o1wr")]
-transform = Transform3D(0.07733826, -2.0039525e-16, -9.220583e-24, 0, -3.2115348e-09, 0.07733826, -2.1094236e-16, -0.07347135, -3.380563e-09, -226.3787, 0, 2.850006)
+transform = Transform3D(0.07733826, -2.0039525e-16, -1.4438892e-23, 0, -3.2115348e-09, 0.121107176, -2.1094236e-16, -0.07347135, -5.2937628e-09, -226.3787, -6.5132446, 2.850006)
 
 [node name="Fence5" parent="NavigationRegion3D/Fences" unique_id=1243405966 instance=ExtResource("11_0o1wr")]
-transform = Transform3D(-3.3805632e-09, -0.07494078, -3.4481742e-09, 0, -3.2115348e-09, 0.07733826, -0.07733826, 3.2757657e-09, 1.507245e-16, 229, 0, 147.92941)
+transform = Transform3D(-3.3805632e-09, -0.07494078, -5.399638e-09, 0, -3.2115348e-09, 0.121107176, -0.07733826, 3.2757657e-09, 2.360257e-16, 229, -6.5132446, 147.92941)
 
 [node name="Fence6" parent="NavigationRegion3D/Fences" unique_id=374989258 instance=ExtResource("11_0o1wr")]
-transform = Transform3D(-3.3805632e-09, -0.07494078, -3.4481742e-09, 0, -3.2115348e-09, 0.07733826, -0.07733826, 3.2757657e-09, 1.507245e-16, 76.867004, 0, 147.92941)
+transform = Transform3D(-3.3805632e-09, -0.07494078, -5.399638e-09, 0, -3.2115348e-09, 0.121107176, -0.07733826, 3.2757657e-09, 2.360257e-16, 76.867004, -6.5132446, 147.92941)
 
 [node name="Fence7" parent="NavigationRegion3D/Fences" unique_id=296372203 instance=ExtResource("11_0o1wr")]
-transform = Transform3D(-3.3805632e-09, -0.07494078, -3.4481742e-09, 0, -3.2115348e-09, 0.07733826, -0.07733826, 3.2757657e-09, 1.507245e-16, -75.112976, 0, 147.92941)
+transform = Transform3D(-3.3805632e-09, -0.07494078, -5.399638e-09, 0, -3.2115348e-09, 0.121107176, -0.07733826, 3.2757657e-09, 2.360257e-16, -75.112976, -6.5132446, 147.92941)
 
 [node name="Fence8" parent="NavigationRegion3D/Fences" unique_id=1345751707 instance=ExtResource("11_0o1wr")]
-transform = Transform3D(-3.3805632e-09, -0.07494078, -3.4481742e-09, 0, -3.2115348e-09, 0.07733826, -0.07733826, 3.2757657e-09, 1.507245e-16, 229, 0, -152.78177)
+transform = Transform3D(-3.3805632e-09, -0.07494078, -4.7853312e-09, 0, -3.2115348e-09, 0.10732903, -0.07733826, 3.2757657e-09, 2.0917349e-16, 229, 0, -152.78177)
 
 [node name="Fence9" parent="NavigationRegion3D/Fences" unique_id=1791035254 instance=ExtResource("11_0o1wr")]
-transform = Transform3D(-3.3805632e-09, -0.07494078, -3.4481742e-09, 0, -3.2115348e-09, 0.07733826, -0.07733826, 3.2757657e-09, 1.507245e-16, 76.867004, 0, -152.78177)
+transform = Transform3D(-3.3805632e-09, -0.07494078, -5.399638e-09, 0, -3.2115348e-09, 0.121107176, -0.07733826, 3.2757657e-09, 2.360257e-16, 76.867004, -6.5132446, -152.78177)
 
 [node name="Fence10" parent="NavigationRegion3D/Fences" unique_id=1513983617 instance=ExtResource("11_0o1wr")]
-transform = Transform3D(-3.3805632e-09, -0.07494078, -3.4481742e-09, 0, -3.2115348e-09, 0.07733826, -0.07733826, 3.2757657e-09, 1.507245e-16, -75.112976, 0, -152.78177)
+transform = Transform3D(-3.3805632e-09, -0.07494078, -5.399638e-09, 0, -3.2115348e-09, 0.121107176, -0.07733826, 3.2757657e-09, 2.360257e-16, -75.112976, -6.5132446, -152.78177)
 
 [node name="Anthill" parent="NavigationRegion3D" unique_id=157153453 instance=ExtResource("11_5odvn")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 165.1924, -1.1870127, -198.05473)
@@ -602,6 +602,10 @@ collision_mask = 0
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Bounds/StaticBody3D4" unique_id=1518923385]
 shape = SubResource("BoxShape3D_0o1wr")
 
+[node name="House" type="CSGBox3D" parent="NavigationRegion3D" unique_id=1552636808]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8906403, 97.57059, 242.24033)
+size = Vector3(463.94333, 196.14117, 186.7262)
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1567218981 groups=["light"]]
 transform = Transform3D(-0.9277538, -0.37296796, 0.012960614, -0.059892796, 0.18308179, 0.98127174, -0.3683557, 0.9096022, -0.19219293, 0, 0, 0)
 light_bake_mode = 1
@@ -639,7 +643,7 @@ transform = Transform3D(-0.8660254, 0, -0.50000006, 0, 1, 0, 0.50000006, 0, -0.8
 [node name="Carryables" type="Node3D" parent="." unique_id=1224913521]
 
 [node name="Strawberry" parent="Carryables" unique_id=1370598551 instance=ExtResource("11_1mkdf")]
-transform = Transform3D(0.28220752, -0.9593534, 0, 0.9593534, 0.28220752, 0, 0, 0, 1, 181.94357, 89.53749, 63.837948)
+transform = Transform3D(0.28220752, -0.9593534, 0, 0.9593534, 0.28220752, 0, 0, 0, 1, 180.42142, 89.53749, 34.255512)
 
 [node name="Strawberry2" parent="Carryables" unique_id=589476192 instance=ExtResource("11_1mkdf")]
 transform = Transform3D(0.9248641, 0.095165074, 0.36819836, 0.1400352, 0.8149357, -0.5623789, -0.3535768, 0.5716847, 0.7403783, -122.88165, 31.575138, 109.01735)
@@ -648,7 +652,7 @@ transform = Transform3D(0.9248641, 0.095165074, 0.36819836, 0.1400352, 0.8149357
 transform = Transform3D(0.75344867, 0, 0.65750676, 0, 1, 0, -0.65750676, 0, 0.75344867, -94.29309, 38.32395, -58.68248)
 
 [node name="Strawberry4" parent="Carryables" unique_id=2147094246 instance=ExtResource("11_1mkdf")]
-transform = Transform3D(0.38262418, -0.76036805, -0.524823, 0.82800215, 0.030195018, 0.5599113, -0.40989166, -0.6487902, 0.64113975, 147.24265, 49.892857, 130.31187)
+transform = Transform3D(0.38262418, -0.76036805, -0.524823, 0.82800215, 0.030195018, 0.5599113, -0.40989166, -0.6487902, 0.64113975, 145.72049, 49.892857, 100.72944)
 
 [node name="Strawberry5" parent="Carryables" unique_id=2006483741 instance=ExtResource("11_1mkdf")]
 transform = Transform3D(0.6167997, 0.6106786, -0.49661842, -0.7849315, 0.43018776, -0.44589365, -0.05865857, 0.66483843, 0.7446806, 68.59421, 207.83139, -132.33342)
@@ -671,10 +675,11 @@ layout_mode = 0
 offset_right = 416.0
 offset_bottom = 247.0
 focus_mode = 2
-current_tab = 0
+current_tab = 1
 use_hidden_tabs_for_min_size = true
 
 [node name="Graphics" type="VBoxContainer" parent="SettingsMenu/Tabs" unique_id=1848714173]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -810,9 +815,12 @@ button_pressed = true
 text = "Shadows"
 
 [node name="Playtest" type="VBoxContainer" parent="SettingsMenu/Tabs" unique_id=803609757]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 1
+
+[node name="Kill Human" type="Button" parent="SettingsMenu/Tabs/Playtest" unique_id=387420493]
+layout_mode = 2
+text = "Kill Human"
 
 [node name="Feedback" type="Button" parent="SettingsMenu/Tabs/Playtest" unique_id=124704936]
 layout_mode = 2
@@ -825,4 +833,5 @@ text = "Submit Feedback"
 [connection signal="value_changed" from="SettingsMenu/Tabs/Graphics/FPSLimit/HSlider" to="SettingsMenu" method="_on_fps_limit_value_changed"]
 [connection signal="value_changed" from="SettingsMenu/Tabs/Graphics/RenderScale/HSlider" to="SettingsMenu" method="_on_render_scale_value_changed"]
 [connection signal="toggled" from="SettingsMenu/Tabs/Graphics/Shadows" to="SettingsMenu" method="_on_shadows_toggled"]
+[connection signal="pressed" from="SettingsMenu/Tabs/Playtest/Kill Human" to="SettingsMenu" method="_on_kill_human_pressed"]
 [connection signal="pressed" from="SettingsMenu/Tabs/Playtest/Feedback" to="SettingsMenu" method="_on_feedback_pressed"]
