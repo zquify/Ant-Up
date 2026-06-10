@@ -7,6 +7,7 @@ var movementController: MovementController
 var extraGravityStrength := 0.0
 var extraGravityTimer := 0.0
 
+
 func setup(p: Player, m:MovementController) -> void:
 	player = p
 	movementController = m
@@ -106,6 +107,9 @@ func updateAttachmentAfterMove(delta: float) -> void:
 	else:
 		supportN = sampleSupportNormal()
 
+	if supportN != Vector3.ZERO and !_can_attach_to_surface(supportN):
+		supportN = Vector3.ZERO
+
 	# While airborne from a jump, also check slide collisions for walls
 	if supportN == Vector3.ZERO:
 		supportN = _bestWallFromSlideCollisions(player.preMoveVel)
@@ -165,7 +169,10 @@ func sampleSupportNormal() -> Vector3:
 			continue
 
 		var n: Vector3 = player.downProbe.get_collision_normal(i).normalized()
-
+		
+		if !_can_attach_to_surface(n):
+			continue
+		
 		var score := n.dot(player.currentUp)
 
 		if score > bestScore:
@@ -186,7 +193,10 @@ func _bestWallFromSlideCollisions(preVel: Vector3) -> Vector3:
 		if collider and collider.is_in_group("no_crawl"):
 			continue
 		var n := (col.get_normal() as Vector3).normalized()
-
+		
+		if !_can_attach_to_surface(n):
+			continue
+		
 		# wall-like: normal is not "up-ish"
 		if n.dot(Vector3.UP) >= player.attachWallDot:
 			continue
@@ -202,7 +212,17 @@ func _bestWallFromSlideCollisions(preVel: Vector3) -> Vector3:
 
 	return bestN
 
+
 func forceAttachToNormal(n: Vector3) -> void:
 	player.attached = true
 	player.supposedUp = n.normalized()
 	player.detachTimer = 0.0
+
+
+func _can_attach_to_surface(normal: Vector3) -> bool:
+	if player.heldObject == null:
+		return true
+
+	var angle := rad_to_deg(normal.angle_to(Vector3.UP))
+
+	return angle <= player.held_object_max_climb_angle

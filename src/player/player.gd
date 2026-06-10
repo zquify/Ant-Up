@@ -70,6 +70,7 @@ class_name Player
 @export var maxDistanceFromHold = 5.0
 @export var dropBelowPlayer = true
 @export var groundRay: RayCast3D
+@export var held_object_max_climb_angle := 30.0
 
 @onready var interactRay = $gravityControl/Ant/InteractRay
 @onready var drop_point: Marker3D = $gravityControl/Ant/DropPoint

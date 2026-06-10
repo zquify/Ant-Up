@@ -566,7 +566,7 @@ transform = Transform3D(-3.3805632e-09, -0.07494078, -3.4481742e-09, 0, -3.21153
 transform = Transform3D(-3.3805632e-09, -0.07494078, -3.4481742e-09, 0, -3.2115348e-09, 0.07733826, -0.07733826, 3.2757657e-09, 1.507245e-16, -75.112976, 0, -152.78177)
 
 [node name="Anthill" parent="NavigationRegion3D" unique_id=157153453 instance=ExtResource("11_5odvn")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 165.1924, -0.8852043, -198.05473)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 165.1924, -1.1870127, -198.05473)
 
 [node name="Bounds" type="Node3D" parent="NavigationRegion3D" unique_id=186860105]
 
