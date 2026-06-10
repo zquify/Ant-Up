@@ -590,8 +590,8 @@ collision_mask = 0
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Bounds/StaticBody3D4" unique_id=1518923385]
 shape = SubResource("BoxShape3D_0o1wr")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1567218981]
-transform = Transform3D(-0.9251759, -0.33831474, 0.17202517, 0.19136229, -0.024385136, 0.98121655, -0.32776514, 0.94071704, 0.087301224, 0, 0, 0)
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1567218981 groups=["light"]]
+transform = Transform3D(-0.9277538, -0.37296796, 0.012960614, -0.059892796, 0.18308179, 0.98127174, -0.3683557, 0.9096022, -0.19219293, 0, 0, 0)
 light_bake_mode = 1
 shadow_enabled = true
 directional_shadow_split_1 = 0.012
@@ -646,28 +646,33 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 158.39635, 0, -129.709)
 
 [node name="Human" parent="." unique_id=692812724 instance=ExtResource("12_1mkdf")]
 
-[node name="SettingsMenu" type="Control" parent="." unique_id=712257985]
+[node name="SettingsMenu" type="Control" parent="." unique_id=712257985 node_paths=PackedStringArray("initial_focus")]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1280.0
 offset_bottom = 720.0
 script = ExtResource("12_5odvn")
+initial_focus = NodePath("Tabs/Graphics/Resolution")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SettingsMenu" unique_id=1848714173]
+[node name="Tabs" type="TabContainer" parent="SettingsMenu" unique_id=202120384]
 layout_mode = 0
-offset_left = 24.0
-offset_top = 24.0
-offset_right = 160.0
-offset_bottom = 344.0
+offset_right = 416.0
+offset_bottom = 247.0
+focus_mode = 2
+current_tab = 0
+use_hidden_tabs_for_min_size = true
 
-[node name="Resolution" type="OptionButton" parent="SettingsMenu/VBoxContainer" unique_id=2014806921]
+[node name="Graphics" type="VBoxContainer" parent="SettingsMenu/Tabs" unique_id=1848714173]
 layout_mode = 2
-focus_neighbor_bottom = NodePath("../WindowMode")
-focus_next = NodePath("../WindowMode")
+metadata/_tab_index = 0
+
+[node name="Resolution" type="OptionButton" parent="SettingsMenu/Tabs/Graphics" unique_id=2014806921]
+layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_1mkdf")
 keep_pressed_outside = true
+selected = 1
 allow_reselect = true
-item_count = 18
+item_count = 19
 popup/item_0/text = "800 x 1280"
 popup/item_0/id = 0
 popup/item_1/text = "1280 x 720"
@@ -704,15 +709,17 @@ popup/item_16/text = "3840 x 2160"
 popup/item_16/id = 16
 popup/item_17/text = "5120 x 1440"
 popup/item_17/id = 17
+popup/item_18/text = "256 x 144"
+popup/item_18/id = 18
 
-[node name="WindowMode" type="OptionButton" parent="SettingsMenu/VBoxContainer" unique_id=1274027557]
+[node name="HSeparator" type="HSeparator" parent="SettingsMenu/Tabs/Graphics" unique_id=554328285]
 layout_mode = 2
-focus_neighbor_top = NodePath("../Resolution")
-focus_neighbor_bottom = NodePath("../MSAA")
-focus_next = NodePath("../MSAA")
-focus_previous = NodePath("../Resolution")
+
+[node name="WindowMode" type="OptionButton" parent="SettingsMenu/Tabs/Graphics" unique_id=1274027557]
+layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_1mkdf")
 keep_pressed_outside = true
+selected = 2
 allow_reselect = true
 item_count = 3
 popup/item_0/text = "Windowed"
@@ -722,56 +729,86 @@ popup/item_1/id = 1
 popup/item_2/text = "Fullscreen"
 popup/item_2/id = 2
 
-[node name="MSAA" type="OptionButton" parent="SettingsMenu/VBoxContainer" unique_id=2013616386]
+[node name="HSeparator2" type="HSeparator" parent="SettingsMenu/Tabs/Graphics" unique_id=1725345872]
 layout_mode = 2
-focus_neighbor_top = NodePath("../WindowMode")
-focus_neighbor_bottom = NodePath("../VSync")
-focus_next = NodePath("../VSync")
-focus_previous = NodePath("../WindowMode")
+
+[node name="MSAA" type="OptionButton" parent="SettingsMenu/Tabs/Graphics" unique_id=2013616386]
+layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_1mkdf")
 keep_pressed_outside = true
+selected = 1
 allow_reselect = true
 item_count = 4
 popup/item_0/text = "Disabled"
 popup/item_0/id = 0
-popup/item_1/text = "MSAA 2x"
+popup/item_1/text = "MSAA 2x (Average)"
 popup/item_1/id = 1
-popup/item_2/text = "MSAA 4x"
+popup/item_2/text = "MSAA 4x (Slow)"
 popup/item_2/id = 2
-popup/item_3/text = "MSAA 8x"
+popup/item_3/text = "MSAA 8x (Slowest)"
 popup/item_3/id = 3
 
-[node name="VSync" type="CheckBox" parent="SettingsMenu/VBoxContainer" unique_id=980410393]
+[node name="HSeparator3" type="HSeparator" parent="SettingsMenu/Tabs/Graphics" unique_id=1013571241]
 layout_mode = 2
-focus_neighbor_top = NodePath("../MSAA")
-focus_neighbor_bottom = NodePath("../FPSLimit")
-focus_next = NodePath("../FPSLimit")
-focus_previous = NodePath("../MSAA")
+
+[node name="VSync" type="CheckBox" parent="SettingsMenu/Tabs/Graphics" unique_id=980410393]
+layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_1mkdf")
 text = "VSync"
 
-[node name="FPSLimit" type="HSlider" parent="SettingsMenu/VBoxContainer" unique_id=637193104]
+[node name="HSeparator4" type="HSeparator" parent="SettingsMenu/Tabs/Graphics" unique_id=7847861]
 layout_mode = 2
-focus_neighbor_top = NodePath("../VSync")
-focus_neighbor_bottom = NodePath("../RenderScale")
-focus_next = NodePath("../RenderScale")
-focus_previous = NodePath("../VSync")
+
+[node name="FPSLimit" type="HSplitContainer" parent="SettingsMenu/Tabs/Graphics" unique_id=1548104749]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingsMenu/Tabs/Graphics/FPSLimit" unique_id=1199191232]
+layout_mode = 2
+text = "FPS Limit"
+
+[node name="HSlider" type="HSlider" parent="SettingsMenu/Tabs/Graphics/FPSLimit" unique_id=637193104]
+layout_mode = 2
 max_value = 120.0
 step = 10.0
 rounded = true
 
-[node name="RenderScale" type="HSlider" parent="SettingsMenu/VBoxContainer" unique_id=258804601]
+[node name="HSeparator5" type="HSeparator" parent="SettingsMenu/Tabs/Graphics" unique_id=819631467]
 layout_mode = 2
-focus_neighbor_top = NodePath("../VSync")
-focus_previous = NodePath("../VSync")
+
+[node name="RenderScale" type="HSplitContainer" parent="SettingsMenu/Tabs/Graphics" unique_id=2068617172]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingsMenu/Tabs/Graphics/RenderScale" unique_id=1522942247]
+layout_mode = 2
+text = "Render Scale"
+
+[node name="HSlider" type="HSlider" parent="SettingsMenu/Tabs/Graphics/RenderScale" unique_id=258804601]
+layout_mode = 2
 min_value = 0.2
 max_value = 1.0
 step = 0.01
 value = 1.0
 
-[connection signal="item_selected" from="SettingsMenu/VBoxContainer/Resolution" to="SettingsMenu" method="_on_resolution_item_selected"]
-[connection signal="item_selected" from="SettingsMenu/VBoxContainer/WindowMode" to="SettingsMenu" method="_on_window_mode_item_selected"]
-[connection signal="item_selected" from="SettingsMenu/VBoxContainer/MSAA" to="SettingsMenu" method="_on_msaa_item_selected"]
-[connection signal="toggled" from="SettingsMenu/VBoxContainer/VSync" to="SettingsMenu" method="_on_v_sync_toggled"]
-[connection signal="value_changed" from="SettingsMenu/VBoxContainer/FPSLimit" to="SettingsMenu" method="_on_fps_limit_value_changed"]
-[connection signal="value_changed" from="SettingsMenu/VBoxContainer/RenderScale" to="SettingsMenu" method="_on_render_scale_value_changed"]
+[node name="Shadows" type="CheckBox" parent="SettingsMenu/Tabs/Graphics" unique_id=1630634613]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxFlat_1mkdf")
+button_pressed = true
+text = "Shadows"
+
+[node name="Playtest" type="VBoxContainer" parent="SettingsMenu/Tabs" unique_id=803609757]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Feedback" type="Button" parent="SettingsMenu/Tabs/Playtest" unique_id=124704936]
+layout_mode = 2
+text = "Submit Feedback"
+
+[connection signal="item_selected" from="SettingsMenu/Tabs/Graphics/Resolution" to="SettingsMenu" method="_on_resolution_item_selected"]
+[connection signal="item_selected" from="SettingsMenu/Tabs/Graphics/WindowMode" to="SettingsMenu" method="_on_window_mode_item_selected"]
+[connection signal="item_selected" from="SettingsMenu/Tabs/Graphics/MSAA" to="SettingsMenu" method="_on_msaa_item_selected"]
+[connection signal="toggled" from="SettingsMenu/Tabs/Graphics/VSync" to="SettingsMenu" method="_on_v_sync_toggled"]
+[connection signal="value_changed" from="SettingsMenu/Tabs/Graphics/FPSLimit/HSlider" to="SettingsMenu" method="_on_fps_limit_value_changed"]
+[connection signal="value_changed" from="SettingsMenu/Tabs/Graphics/RenderScale/HSlider" to="SettingsMenu" method="_on_render_scale_value_changed"]
+[connection signal="toggled" from="SettingsMenu/Tabs/Graphics/Shadows" to="SettingsMenu" method="_on_shadows_toggled"]
+[connection signal="pressed" from="SettingsMenu/Tabs/Playtest/Feedback" to="SettingsMenu" method="_on_feedback_pressed"]

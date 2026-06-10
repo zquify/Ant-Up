@@ -1,5 +1,6 @@
 extends Control
 
+@export var initial_focus : OptionButton
 
 
 func _ready() -> void:
@@ -30,9 +31,10 @@ func _input(event: InputEvent) -> void:
 			for player in get_tree().get_nodes_in_group("player"):
 				player.in_menu = true
 			
-			$VBoxContainer/Resolution.grab_focus()
+			initial_focus.grab_focus()
 
 
+#region Graphics
 func _on_window_mode_item_selected(index: int) -> void:
 	match index:
 		0: # Windowed
@@ -45,7 +47,7 @@ func _on_window_mode_item_selected(index: int) -> void:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
 
 
-@onready var resolution: OptionButton = $VBoxContainer/Resolution
+@onready var resolution: OptionButton = $Tabs/Graphics/Resolution
 
 func _on_resolution_item_selected(index: int) -> void:
 	var parts: PackedStringArray = resolution.get_item_text(index).split(" x ")
@@ -92,6 +94,50 @@ func _on_render_scale_value_changed(value: float) -> void:
 func _on_msaa_item_selected(index: int) -> void:
 	set_msaa(index)
 
+
 func set_msaa(index):
 	get_viewport().msaa_3d = index
 	print(get_viewport().msaa_3d)
+
+
+func _on_shadows_toggled(toggled_on: bool) -> void:
+	for light in get_tree().get_nodes_in_group("light"):
+		light.shadow_enabled = toggled_on
+
+
+#endregion
+
+#region Playtest
+var url := "https://docs.google.com/forms/d/e/1FAIpQLSd6tJiOMO-xjMPIIq3YlVcJDo98RwbWubZcDM82IxiYsCpKJQ/viewform?usp=pp_url&entry.1156378466={feedback_type}&entry.1137804085={summary}&entry.838380160={details}&entry.1056658173={current_scene}&entry.1006285445={game_version}&entry.788985875={player_id}&entry.177398783={os}&entry.1489247364={gpu}&entry.31249465={cpu}&entry.401160998={locale}"
+var info := {
+	"feedback_type": "",
+	"summary": "",
+	"details": "",
+	"current_scene": "",
+	"game_version": "",
+	"player_id": "",
+	"os": "",
+	"gpu": "",
+	"cpu": "",
+	"locale": ""
+}
+
+func safe_format(dict: Dictionary) -> String:
+	var copy = {}
+	for k in dict:
+		copy[k] = str(dict[k]).uri_encode()
+	
+	return url.format(copy)
+
+func _on_feedback_pressed() -> void:
+	print("pressed feedback")
+	info["current_scene"] = get_tree().current_scene.scene_file_path
+	info["game_version"] = ProjectSettings.get_setting("application/config/version")
+	info["player_id"] = OS.get_unique_id()
+	info["os"] = str(OS.get_name(), " ", OS.get_version_alias())
+	info["gpu"] = str(RenderingServer.get_video_adapter_name(), " / ", OS.get_video_adapter_driver_info())
+	info["cpu"] = OS.get_processor_name()
+	info["locale"] = TranslationServer.get_locale()
+	
+	OS.shell_open(safe_format(info))
+#endregion
