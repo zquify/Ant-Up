@@ -8,7 +8,7 @@ size = Vector3(5, 1, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_1mkdf"]
 size = Vector3(5, 1, 1)
 
-[node name="Carryable" type="RigidBody3D" unique_id=2115943628 groups=["carryable"]]
+[node name="Carryable" type="RigidBody3D" unique_id=2115943628 groups=["carryable", "no_crawl"]]
 collision_layer = 4
 collision_mask = 3
 mass = 10.0
