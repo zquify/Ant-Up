@@ -42,7 +42,7 @@ func updatePlanarAndJump(delta: float) -> void:
 		rate = planarBrake
 	curPlanar = curPlanar.move_toward(targetPlanar, rate * delta)
 	player.velocity = curPlanar + up * vUp + externalVel
-	if Input.is_action_just_pressed("jump") and player.is_on_floor:
+	if Input.is_action_just_pressed("jump") and player.is_on_floor():
 		vUp = player.jumpSpeed
 		player.velocity = curPlanar + up * vUp + externalVel
 		if player.attached:

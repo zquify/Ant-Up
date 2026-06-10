@@ -130,10 +130,9 @@ func safe_format(dict: Dictionary) -> String:
 	return url.format(copy)
 
 func _on_feedback_pressed() -> void:
-	print("pressed feedback")
 	info["current_scene"] = get_tree().current_scene.scene_file_path
 	info["game_version"] = ProjectSettings.get_setting("application/config/version")
-	info["player_id"] = OS.get_unique_id()
+	info["player_id"] = Steam.get_current_steam_id()
 	info["os"] = str(OS.get_name(), " ", OS.get_version_alias())
 	info["gpu"] = str(RenderingServer.get_video_adapter_name(), " / ", OS.get_video_adapter_driver_info())
 	info["cpu"] = OS.get_processor_name()
