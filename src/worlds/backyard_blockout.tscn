@@ -548,15 +548,6 @@ transform = Transform3D(0.07733826, -2.0039525e-16, -1.4438892e-23, 0, -3.211534
 [node name="Fence4" parent="NavigationRegion3D/Fences" unique_id=65810160 instance=ExtResource("11_0o1wr")]
 transform = Transform3D(0.07733826, -2.0039525e-16, -1.4438892e-23, 0, -3.2115348e-09, 0.121107176, -2.1094236e-16, -0.07347135, -5.2937628e-09, -226.3787, -6.5132446, 2.850006)
 
-[node name="Fence5" parent="NavigationRegion3D/Fences" unique_id=1243405966 instance=ExtResource("11_0o1wr")]
-transform = Transform3D(-3.3805632e-09, -0.07494078, -5.399638e-09, 0, -3.2115348e-09, 0.121107176, -0.07733826, 3.2757657e-09, 2.360257e-16, 229, -6.5132446, 147.92941)
-
-[node name="Fence6" parent="NavigationRegion3D/Fences" unique_id=374989258 instance=ExtResource("11_0o1wr")]
-transform = Transform3D(-3.3805632e-09, -0.07494078, -5.399638e-09, 0, -3.2115348e-09, 0.121107176, -0.07733826, 3.2757657e-09, 2.360257e-16, 76.867004, -6.5132446, 147.92941)
-
-[node name="Fence7" parent="NavigationRegion3D/Fences" unique_id=296372203 instance=ExtResource("11_0o1wr")]
-transform = Transform3D(-3.3805632e-09, -0.07494078, -5.399638e-09, 0, -3.2115348e-09, 0.121107176, -0.07733826, 3.2757657e-09, 2.360257e-16, -75.112976, -6.5132446, 147.92941)
-
 [node name="Fence8" parent="NavigationRegion3D/Fences" unique_id=1345751707 instance=ExtResource("11_0o1wr")]
 transform = Transform3D(-3.3805632e-09, -0.07494078, -4.7853312e-09, 0, -3.2115348e-09, 0.10732903, -0.07733826, 3.2757657e-09, 2.0917349e-16, 229, 0, -152.78177)
 
@@ -605,6 +596,7 @@ shape = SubResource("BoxShape3D_0o1wr")
 
 [node name="House" type="CSGBox3D" parent="NavigationRegion3D" unique_id=1552636808]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8906403, 97.57059, 242.24033)
+use_collision = true
 size = Vector3(463.94333, 196.14117, 186.7262)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1567218981 groups=["light"]]
@@ -628,16 +620,16 @@ light_data = ExtResource("10_5odvn")
 [node name="Spawners" type="Node3D" parent="." unique_id=540988454]
 
 [node name="SpawnLocation" type="Marker3D" parent="Spawners" unique_id=520073172 groups=["spawn_locations"]]
-transform = Transform3D(-0.8660254, 0, -0.50000006, 0, 1, 0, 0.50000006, 0, -0.8660254, 163.62993, 12.459975, -201.04755)
+transform = Transform3D(0.9950608, 0, -0.09926745, 0, 1, 0, 0.09926745, 0, 0.9950608, 167.47737, 12.459975, -194.09181)
 
 [node name="SpawnLocation2" type="Marker3D" parent="Spawners" unique_id=164719362 groups=["spawn_locations"]]
-transform = Transform3D(-0.8660254, 0, -0.50000006, 0, 1, 0, 0.50000006, 0, -0.8660254, 162.33382, 12.459975, -197.20544)
+transform = Transform3D(0.9950608, 0, -0.09926745, 0, 1, 0, 0.09926745, 0, 0.9950608, 170.77184, 12.459975, -196.45575)
 
 [node name="SpawnLocation3" type="Marker3D" parent="Spawners" unique_id=111730452 groups=["spawn_locations"]]
-transform = Transform3D(-0.8660254, 0, -0.50000006, 0, 1, 0, 0.50000006, 0, -0.8660254, 169.13847, 12.459975, -200.72351)
+transform = Transform3D(0.9950608, 0, -0.09926745, 0, 1, 0, 0.09926745, 0, 0.9950608, 163.19289, 12.459975, -197.56918)
 
 [node name="SpawnLocation4" type="Marker3D" parent="Spawners" unique_id=1456468861 groups=["spawn_locations"]]
-transform = Transform3D(-0.8660254, 0, -0.50000006, 0, 1, 0, 0.50000006, 0, -0.8660254, 171.59187, 12.459975, -193.77997)
+transform = Transform3D(0.9950608, 0, -0.09926745, 0, 1, 0, 0.09926745, 0, 0.9950608, 165.25198, 12.459975, -204.6397)
 
 [node name="Players" type="Node3D" parent="." unique_id=1392558894]
 
@@ -768,6 +760,7 @@ layout_mode = 2
 [node name="VSync" type="CheckBox" parent="SettingsMenu/Tabs/Graphics" unique_id=980410393]
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_1mkdf")
+button_pressed = true
 text = "VSync"
 
 [node name="HSeparator4" type="HSeparator" parent="SettingsMenu/Tabs/Graphics" unique_id=7847861]
@@ -805,6 +798,9 @@ max_value = 1.0
 step = 0.01
 value = 1.0
 
+[node name="HSeparator6" type="HSeparator" parent="SettingsMenu/Tabs/Graphics" unique_id=93868204]
+layout_mode = 2
+
 [node name="Shadows" type="CheckBox" parent="SettingsMenu/Tabs/Graphics" unique_id=1630634613]
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxFlat_1mkdf")
@@ -819,6 +815,9 @@ metadata/_tab_index = 1
 [node name="Kill Human" type="Button" parent="SettingsMenu/Tabs/Playtest" unique_id=387420493]
 layout_mode = 2
 text = "Kill Human"
+
+[node name="HSeparator" type="HSeparator" parent="SettingsMenu/Tabs/Playtest" unique_id=325915026]
+layout_mode = 2
 
 [node name="Feedback" type="Button" parent="SettingsMenu/Tabs/Playtest" unique_id=124704936]
 layout_mode = 2
