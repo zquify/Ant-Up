@@ -14,10 +14,11 @@ layout_mode = 0
 offset_right = 416.0
 offset_bottom = 247.0
 focus_mode = 2
-current_tab = 0
+current_tab = 1
 use_hidden_tabs_for_min_size = true
 
 [node name="Main" type="VBoxContainer" parent="Tabs" unique_id=2010935739]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -33,7 +34,6 @@ layout_mode = 2
 text = "Quit"
 
 [node name="Graphics" type="VBoxContainer" parent="Tabs" unique_id=2014578109]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
@@ -88,7 +88,7 @@ layout_mode = 2
 [node name="WindowMode" type="OptionButton" parent="Tabs/Graphics" unique_id=873765220]
 layout_mode = 2
 keep_pressed_outside = true
-selected = 2
+selected = 0
 allow_reselect = true
 item_count = 3
 popup/item_0/text = "Windowed"

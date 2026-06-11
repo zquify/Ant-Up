@@ -149,7 +149,7 @@ func _find_first_focusable(node: Node) -> Control:
 func _on_window_mode_item_selected(index: int) -> void:
 	match index:
 		0: # Windowed
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED)
 
 		1: # Borderless
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
