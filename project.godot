@@ -11,10 +11,9 @@ config_version=5
 [application]
 
 config/name="Ant Up!"
-config/version="26w24c"
+config/version="26w24d"
 run/main_scene="uid://blow3hih0wtfk"
 config/features=PackedStringArray("4.6", "Forward Plus")
-config/size/mode=0
 
 [autoload]
 
