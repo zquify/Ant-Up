@@ -667,6 +667,9 @@ transform = Transform3D(0.6167997, 0.6106786, -0.49661842, -0.7849315, 0.4301877
 [node name="Strawberry6" parent="Carryables" unique_id=918199296 instance=ExtResource("11_1mkdf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 158.39635, 0, -129.709)
 
+[node name="Banana" parent="Carryables" unique_id=1824742691 instance=ExtResource("14_a1g66")]
+transform = Transform3D(1, 0, 0, 0, 0.18075947, 0.9835273, 0, -0.9835273, 0.18075947, -119.48252, 31.892765, 109.63659)
+
 [node name="Human" parent="." unique_id=692812724 instance=ExtResource("12_1mkdf")]
 
 [node name="SettingsMenu" type="Control" parent="." unique_id=712257985]
@@ -851,9 +854,6 @@ layout_mode = 2
 [node name="Feedback" type="Button" parent="SettingsMenu/Tabs/Playtest" unique_id=124704936]
 layout_mode = 2
 text = "Submit Feedback"
-
-[node name="Carryable" parent="." unique_id=1824742691 instance=ExtResource("14_a1g66")]
-transform = Transform3D(1, 0, 0, 0, 0.18075947, 0.9835273, 0, -0.9835273, 0.18075947, -119.48252, 31.892765, 109.63659)
 
 [connection signal="item_selected" from="SettingsMenu/Tabs/Graphics/Resolution" to="SettingsMenu" method="_on_resolution_item_selected"]
 [connection signal="item_selected" from="SettingsMenu/Tabs/Graphics/WindowMode" to="SettingsMenu" method="_on_window_mode_item_selected"]
