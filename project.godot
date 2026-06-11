@@ -16,6 +16,14 @@ run/main_scene="uid://blow3hih0wtfk"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/size/mode=0
 
+[autoload]
+
+DebugMonitor="*uid://d1wr0cerismny"
+
+[debug]
+
+file_logging/enable_file_logging=true
+
 [display]
 
 window/size/viewport_width=1280
