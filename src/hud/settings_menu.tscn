@@ -1,0 +1,204 @@
+[gd_scene format=3 uid="uid://dd5h3p5qoqnea"]
+
+[ext_resource type="Script" uid="uid://g4huhx7gfafa" path="res://src/worlds/settings.gd" id="1_tc6f2"]
+
+[node name="SettingsMenu" type="Control" unique_id=703693376]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+script = ExtResource("1_tc6f2")
+
+[node name="Tabs" type="TabContainer" parent="." unique_id=150149636]
+layout_mode = 0
+offset_right = 416.0
+offset_bottom = 247.0
+focus_mode = 2
+current_tab = 0
+use_hidden_tabs_for_min_size = true
+
+[node name="Main" type="VBoxContainer" parent="Tabs" unique_id=2010935739]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="OpenConfig" type="Button" parent="Tabs/Main" unique_id=888569565]
+layout_mode = 2
+text = "Open Config"
+
+[node name="HSeparator4" type="HSeparator" parent="Tabs/Main" unique_id=406449226]
+layout_mode = 2
+
+[node name="Quit" type="Button" parent="Tabs/Main" unique_id=2004416876]
+layout_mode = 2
+text = "Quit"
+
+[node name="Graphics" type="VBoxContainer" parent="Tabs" unique_id=2014578109]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Resolution" type="OptionButton" parent="Tabs/Graphics" unique_id=1410709995]
+layout_mode = 2
+keep_pressed_outside = true
+selected = 1
+allow_reselect = true
+item_count = 19
+popup/item_0/text = "800 x 1280"
+popup/item_0/id = 0
+popup/item_1/text = "1280 x 720"
+popup/item_1/id = 1
+popup/item_2/text = "1280 x 800"
+popup/item_2/id = 2
+popup/item_3/text = "1280 x 1024"
+popup/item_3/id = 3
+popup/item_4/text = "1360 x 768"
+popup/item_4/id = 4
+popup/item_5/text = "1366 x 768"
+popup/item_5/id = 5
+popup/item_6/text = "1440 x 900"
+popup/item_6/id = 6
+popup/item_7/text = "1600 x 900"
+popup/item_7/id = 7
+popup/item_8/text = "1680 x 1050"
+popup/item_8/id = 8
+popup/item_9/text = "1920 x 1080"
+popup/item_9/id = 9
+popup/item_10/text = "1920 x 1200"
+popup/item_10/id = 10
+popup/item_11/text = "2560 x 1080"
+popup/item_11/id = 11
+popup/item_12/text = "2560 x 1440"
+popup/item_12/id = 12
+popup/item_13/text = "2560 x 1600"
+popup/item_13/id = 13
+popup/item_14/text = "2880 x 1800"
+popup/item_14/id = 14
+popup/item_15/text = "3440 x 1440"
+popup/item_15/id = 15
+popup/item_16/text = "3840 x 2160"
+popup/item_16/id = 16
+popup/item_17/text = "5120 x 1440"
+popup/item_17/id = 17
+popup/item_18/text = "256 x 144"
+popup/item_18/id = 18
+
+[node name="HSeparator" type="HSeparator" parent="Tabs/Graphics" unique_id=829637409]
+layout_mode = 2
+
+[node name="WindowMode" type="OptionButton" parent="Tabs/Graphics" unique_id=873765220]
+layout_mode = 2
+keep_pressed_outside = true
+selected = 2
+allow_reselect = true
+item_count = 3
+popup/item_0/text = "Windowed"
+popup/item_0/id = 0
+popup/item_1/text = "Borderless"
+popup/item_1/id = 1
+popup/item_2/text = "Fullscreen"
+popup/item_2/id = 2
+
+[node name="HSeparator2" type="HSeparator" parent="Tabs/Graphics" unique_id=1045785734]
+layout_mode = 2
+
+[node name="MSAA" type="OptionButton" parent="Tabs/Graphics" unique_id=1877302967]
+layout_mode = 2
+keep_pressed_outside = true
+selected = 1
+allow_reselect = true
+item_count = 4
+popup/item_0/text = "Disabled"
+popup/item_0/id = 0
+popup/item_1/text = "MSAA 2x (Average)"
+popup/item_1/id = 1
+popup/item_2/text = "MSAA 4x (Slow)"
+popup/item_2/id = 2
+popup/item_3/text = "MSAA 8x (Slowest)"
+popup/item_3/id = 3
+
+[node name="HSeparator3" type="HSeparator" parent="Tabs/Graphics" unique_id=803341089]
+layout_mode = 2
+
+[node name="VSync" type="CheckBox" parent="Tabs/Graphics" unique_id=426683055]
+layout_mode = 2
+button_pressed = true
+text = "VSync"
+
+[node name="HSeparator4" type="HSeparator" parent="Tabs/Graphics" unique_id=761321794]
+layout_mode = 2
+
+[node name="FPSLimit" type="HSplitContainer" parent="Tabs/Graphics" unique_id=368383940]
+layout_mode = 2
+collapsed = true
+
+[node name="Label" type="Label" parent="Tabs/Graphics/FPSLimit" unique_id=1071537625]
+layout_mode = 2
+text = "FPS Limit"
+
+[node name="HSlider" type="HSlider" parent="Tabs/Graphics/FPSLimit" unique_id=1723357683]
+layout_mode = 2
+max_value = 120.0
+step = 10.0
+rounded = true
+
+[node name="HSeparator5" type="HSeparator" parent="Tabs/Graphics" unique_id=1346504492]
+layout_mode = 2
+
+[node name="RenderScale" type="HSplitContainer" parent="Tabs/Graphics" unique_id=236639725]
+layout_mode = 2
+collapsed = true
+
+[node name="Label" type="Label" parent="Tabs/Graphics/RenderScale" unique_id=492636010]
+layout_mode = 2
+text = "Render Scale"
+
+[node name="HSlider" type="HSlider" parent="Tabs/Graphics/RenderScale" unique_id=1607428128]
+layout_mode = 2
+min_value = 0.2
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="HSeparator6" type="HSeparator" parent="Tabs/Graphics" unique_id=273513415]
+layout_mode = 2
+
+[node name="Shadows" type="CheckBox" parent="Tabs/Graphics" unique_id=409565828]
+layout_mode = 2
+button_pressed = true
+text = "Shadows"
+
+[node name="Playtest" type="VBoxContainer" parent="Tabs" unique_id=1018805050]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="Respawn" type="Button" parent="Tabs/Playtest" unique_id=1635471125]
+layout_mode = 2
+text = "Respawn"
+
+[node name="HSeparator3" type="HSeparator" parent="Tabs/Playtest" unique_id=248204886]
+layout_mode = 2
+
+[node name="Kill Human" type="Button" parent="Tabs/Playtest" unique_id=485554675]
+layout_mode = 2
+text = "Kill Human"
+
+[node name="HSeparator" type="HSeparator" parent="Tabs/Playtest" unique_id=219198227]
+layout_mode = 2
+
+[node name="Feedback" type="Button" parent="Tabs/Playtest" unique_id=137666647]
+layout_mode = 2
+text = "Submit Feedback"
+
+[connection signal="pressed" from="Tabs/Main/OpenConfig" to="." method="_on_open_config_pressed"]
+[connection signal="pressed" from="Tabs/Main/Quit" to="." method="_on_quit_pressed"]
+[connection signal="item_selected" from="Tabs/Graphics/Resolution" to="." method="_on_resolution_item_selected"]
+[connection signal="item_selected" from="Tabs/Graphics/WindowMode" to="." method="_on_window_mode_item_selected"]
+[connection signal="item_selected" from="Tabs/Graphics/MSAA" to="." method="_on_msaa_item_selected"]
+[connection signal="toggled" from="Tabs/Graphics/VSync" to="." method="_on_v_sync_toggled"]
+[connection signal="value_changed" from="Tabs/Graphics/FPSLimit/HSlider" to="." method="_on_fps_limit_value_changed"]
+[connection signal="value_changed" from="Tabs/Graphics/RenderScale/HSlider" to="." method="_on_render_scale_value_changed"]
+[connection signal="toggled" from="Tabs/Graphics/Shadows" to="." method="_on_shadows_toggled"]
+[connection signal="pressed" from="Tabs/Playtest/Respawn" to="." method="_on_respawn_pressed"]
+[connection signal="pressed" from="Tabs/Playtest/Kill Human" to="." method="_on_kill_human_pressed"]
+[connection signal="pressed" from="Tabs/Playtest/Feedback" to="." method="_on_feedback_pressed"]

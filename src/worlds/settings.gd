@@ -110,11 +110,20 @@ func _input(event: InputEvent) -> void:
 				player.in_menu = true
 			
 			focus_current_tab()
+	
+	if event.is_action_pressed("ui_next") && visible:
+		tabs.current_tab += 1
+		call_deferred("focus_current_tab")
+	if event.is_action_pressed("ui_previous") && visible:
+		tabs.current_tab -= 1
+		call_deferred("focus_current_tab")
 
 
 func focus_current_tab() -> void:
 	var tab := tabs.get_current_tab_control()
-
+	
+	print(tab)
+	
 	if tab == null:
 		return
 
@@ -260,6 +269,15 @@ func _on_kill_human_pressed() -> void:
 
 func _on_open_config_pressed() -> void:
 	OS.shell_show_in_file_manager(ProjectSettings.globalize_path("user://settings.cfg"))
+
+
+func _on_respawn_pressed() -> void:
+	for player in get_tree().get_nodes_in_group("player"):
+		player.respawn()
+
+
+func _on_quit_pressed() -> void:
+	get_tree().quit()
 
 
 #endregion

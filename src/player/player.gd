@@ -109,12 +109,7 @@ func _input(event: InputEvent) -> void:
 		yaw   -= event.relative.x * mouseSens
 		pitch -= event.relative.y * mouseSens
 		pitch = clamp(pitch, -pitchLimit, pitchLimit)
-	
-	if Input.is_action_just_pressed("quit"):
-		get_tree().quit()
-	
-	if Input.is_action_just_pressed("respawn"):
-		respawn()
+
 
 func _updateJoystickLook(delta: float) -> void:
 	if in_menu:

@@ -7,12 +7,11 @@
 [ext_resource type="Material" uid="uid://ci285st0xq6io" path="res://assets/materials/grass.tres" id="8_81vy7"]
 [ext_resource type="PackedScene" uid="uid://duiq0innusdhe" path="res://assets/placeholder/tree.tscn" id="9_0o1wr"]
 [ext_resource type="PackedScene" uid="uid://bg2y0o72evcm5" path="res://assets/placeholder/table.tscn" id="10_5hvht"]
-[ext_resource type="LightmapGIData" uid="uid://q6xtb18l0o5j" path="res://src/worlds/backyard_blockout.lmbake" id="10_5odvn"]
 [ext_resource type="PackedScene" uid="uid://78s4ppdv8elc" path="res://assets/placeholder/fence.tscn" id="11_0o1wr"]
 [ext_resource type="PackedScene" uid="uid://errouh1vod63" path="res://src/pickup/strawberry.tscn" id="11_1mkdf"]
 [ext_resource type="PackedScene" uid="uid://cjr6secee7fs6" path="res://src/anthill/anthill.tscn" id="11_5odvn"]
 [ext_resource type="PackedScene" uid="uid://l55qepa7ybjl" path="res://src/npc/human.tscn" id="12_1mkdf"]
-[ext_resource type="Script" uid="uid://g4huhx7gfafa" path="res://src/worlds/settings.gd" id="12_5odvn"]
+[ext_resource type="PackedScene" uid="uid://dd5h3p5qoqnea" path="res://src/hud/settings_menu.tscn" id="13_5odvn"]
 [ext_resource type="PackedScene" uid="uid://cvimbh7d8yat3" path="res://src/pickup/banana.tscn" id="14_a1g66"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_1mkdf"]
@@ -79,13 +78,6 @@ ssao_enabled = true
 ssao_radius = 16.0
 glow_enabled = true
 fog_density = 0.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1mkdf"]
-draw_center = false
-border_width_left = 6
-border_width_top = 6
-border_width_right = 6
-border_width_bottom = 6
 
 [node name="BackyardBlockout" type="Node3D" unique_id=1953811230]
 script = ExtResource("1_81vy7")
@@ -630,10 +622,6 @@ directional_shadow_max_distance = 931.6
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1543290727]
 environment = SubResource("Environment_2p36d")
 
-[node name="LightmapGI" type="LightmapGI" parent="." unique_id=694269072]
-visible = false
-light_data = ExtResource("10_5odvn")
-
 [node name="Spawners" type="Node3D" parent="." unique_id=540988454]
 
 [node name="SpawnLocation" type="Marker3D" parent="Spawners" unique_id=520073172 groups=["spawn_locations"]]
@@ -672,196 +660,4 @@ transform = Transform3D(1, 0, 0, 0, 0.18075947, 0.9835273, 0, -0.9835273, 0.1807
 
 [node name="Human" parent="." unique_id=692812724 instance=ExtResource("12_1mkdf")]
 
-[node name="SettingsMenu" type="Control" parent="." unique_id=712257985]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 1280.0
-offset_bottom = 720.0
-script = ExtResource("12_5odvn")
-
-[node name="Tabs" type="TabContainer" parent="SettingsMenu" unique_id=202120384]
-layout_mode = 0
-offset_right = 416.0
-offset_bottom = 247.0
-focus_mode = 2
-current_tab = 0
-use_hidden_tabs_for_min_size = true
-
-[node name="Graphics" type="VBoxContainer" parent="SettingsMenu/Tabs" unique_id=1848714173]
-layout_mode = 2
-metadata/_tab_index = 0
-
-[node name="Resolution" type="OptionButton" parent="SettingsMenu/Tabs/Graphics" unique_id=2014806921]
-layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxFlat_1mkdf")
-keep_pressed_outside = true
-selected = 1
-allow_reselect = true
-item_count = 19
-popup/item_0/text = "800 x 1280"
-popup/item_0/id = 0
-popup/item_1/text = "1280 x 720"
-popup/item_1/id = 1
-popup/item_2/text = "1280 x 800"
-popup/item_2/id = 2
-popup/item_3/text = "1280 x 1024"
-popup/item_3/id = 3
-popup/item_4/text = "1360 x 768"
-popup/item_4/id = 4
-popup/item_5/text = "1366 x 768"
-popup/item_5/id = 5
-popup/item_6/text = "1440 x 900"
-popup/item_6/id = 6
-popup/item_7/text = "1600 x 900"
-popup/item_7/id = 7
-popup/item_8/text = "1680 x 1050"
-popup/item_8/id = 8
-popup/item_9/text = "1920 x 1080"
-popup/item_9/id = 9
-popup/item_10/text = "1920 x 1200"
-popup/item_10/id = 10
-popup/item_11/text = "2560 x 1080"
-popup/item_11/id = 11
-popup/item_12/text = "2560 x 1440"
-popup/item_12/id = 12
-popup/item_13/text = "2560 x 1600"
-popup/item_13/id = 13
-popup/item_14/text = "2880 x 1800"
-popup/item_14/id = 14
-popup/item_15/text = "3440 x 1440"
-popup/item_15/id = 15
-popup/item_16/text = "3840 x 2160"
-popup/item_16/id = 16
-popup/item_17/text = "5120 x 1440"
-popup/item_17/id = 17
-popup/item_18/text = "256 x 144"
-popup/item_18/id = 18
-
-[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="SettingsMenu/Tabs/Graphics/Resolution" unique_id=2085092297]
-transform = Transform3D(-0.12266616, 0, -0.9924481, 0, 1, 0, 0.9924481, 0, -0.12266616, 92.64774, 30.198143, 133.71971)
-height = 4.8
-vertices = PackedVector3Array(-118.537766, 0, 90.49488, -102.98703, 0, 107.304054, -117.36922, 0, 125.01212, -136.96495, 0, 118.09069, -136.6054, 0, 98.045525)
-affect_navigation_mesh = true
-
-[node name="HSeparator" type="HSeparator" parent="SettingsMenu/Tabs/Graphics" unique_id=554328285]
-layout_mode = 2
-
-[node name="WindowMode" type="OptionButton" parent="SettingsMenu/Tabs/Graphics" unique_id=1274027557]
-layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxFlat_1mkdf")
-keep_pressed_outside = true
-selected = 2
-allow_reselect = true
-item_count = 3
-popup/item_0/text = "Windowed"
-popup/item_0/id = 0
-popup/item_1/text = "Borderless"
-popup/item_1/id = 1
-popup/item_2/text = "Fullscreen"
-popup/item_2/id = 2
-
-[node name="HSeparator2" type="HSeparator" parent="SettingsMenu/Tabs/Graphics" unique_id=1725345872]
-layout_mode = 2
-
-[node name="MSAA" type="OptionButton" parent="SettingsMenu/Tabs/Graphics" unique_id=2013616386]
-layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxFlat_1mkdf")
-keep_pressed_outside = true
-selected = 1
-allow_reselect = true
-item_count = 4
-popup/item_0/text = "Disabled"
-popup/item_0/id = 0
-popup/item_1/text = "MSAA 2x (Average)"
-popup/item_1/id = 1
-popup/item_2/text = "MSAA 4x (Slow)"
-popup/item_2/id = 2
-popup/item_3/text = "MSAA 8x (Slowest)"
-popup/item_3/id = 3
-
-[node name="HSeparator3" type="HSeparator" parent="SettingsMenu/Tabs/Graphics" unique_id=1013571241]
-layout_mode = 2
-
-[node name="VSync" type="CheckBox" parent="SettingsMenu/Tabs/Graphics" unique_id=980410393]
-layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxFlat_1mkdf")
-button_pressed = true
-text = "VSync"
-
-[node name="HSeparator4" type="HSeparator" parent="SettingsMenu/Tabs/Graphics" unique_id=7847861]
-layout_mode = 2
-
-[node name="FPSLimit" type="HSplitContainer" parent="SettingsMenu/Tabs/Graphics" unique_id=1548104749]
-layout_mode = 2
-collapsed = true
-
-[node name="Label" type="Label" parent="SettingsMenu/Tabs/Graphics/FPSLimit" unique_id=1199191232]
-layout_mode = 2
-text = "FPS Limit"
-
-[node name="HSlider" type="HSlider" parent="SettingsMenu/Tabs/Graphics/FPSLimit" unique_id=637193104]
-layout_mode = 2
-max_value = 120.0
-step = 10.0
-rounded = true
-
-[node name="HSeparator5" type="HSeparator" parent="SettingsMenu/Tabs/Graphics" unique_id=819631467]
-layout_mode = 2
-
-[node name="RenderScale" type="HSplitContainer" parent="SettingsMenu/Tabs/Graphics" unique_id=2068617172]
-layout_mode = 2
-collapsed = true
-
-[node name="Label" type="Label" parent="SettingsMenu/Tabs/Graphics/RenderScale" unique_id=1522942247]
-layout_mode = 2
-text = "Render Scale"
-
-[node name="HSlider" type="HSlider" parent="SettingsMenu/Tabs/Graphics/RenderScale" unique_id=258804601]
-layout_mode = 2
-min_value = 0.2
-max_value = 1.0
-step = 0.01
-value = 1.0
-
-[node name="HSeparator6" type="HSeparator" parent="SettingsMenu/Tabs/Graphics" unique_id=93868204]
-layout_mode = 2
-
-[node name="Shadows" type="CheckBox" parent="SettingsMenu/Tabs/Graphics" unique_id=1630634613]
-layout_mode = 2
-theme_override_styles/focus = SubResource("StyleBoxFlat_1mkdf")
-button_pressed = true
-text = "Shadows"
-
-[node name="Playtest" type="VBoxContainer" parent="SettingsMenu/Tabs" unique_id=803609757]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 1
-
-[node name="Kill Human" type="Button" parent="SettingsMenu/Tabs/Playtest" unique_id=387420493]
-layout_mode = 2
-text = "Kill Human"
-
-[node name="HSeparator" type="HSeparator" parent="SettingsMenu/Tabs/Playtest" unique_id=325915026]
-layout_mode = 2
-
-[node name="OpenConfig" type="Button" parent="SettingsMenu/Tabs/Playtest" unique_id=1239502134]
-layout_mode = 2
-text = "Open Config"
-
-[node name="HSeparator2" type="HSeparator" parent="SettingsMenu/Tabs/Playtest" unique_id=851113331]
-layout_mode = 2
-
-[node name="Feedback" type="Button" parent="SettingsMenu/Tabs/Playtest" unique_id=124704936]
-layout_mode = 2
-text = "Submit Feedback"
-
-[connection signal="item_selected" from="SettingsMenu/Tabs/Graphics/Resolution" to="SettingsMenu" method="_on_resolution_item_selected"]
-[connection signal="item_selected" from="SettingsMenu/Tabs/Graphics/WindowMode" to="SettingsMenu" method="_on_window_mode_item_selected"]
-[connection signal="item_selected" from="SettingsMenu/Tabs/Graphics/MSAA" to="SettingsMenu" method="_on_msaa_item_selected"]
-[connection signal="toggled" from="SettingsMenu/Tabs/Graphics/VSync" to="SettingsMenu" method="_on_v_sync_toggled"]
-[connection signal="value_changed" from="SettingsMenu/Tabs/Graphics/FPSLimit/HSlider" to="SettingsMenu" method="_on_fps_limit_value_changed"]
-[connection signal="value_changed" from="SettingsMenu/Tabs/Graphics/RenderScale/HSlider" to="SettingsMenu" method="_on_render_scale_value_changed"]
-[connection signal="toggled" from="SettingsMenu/Tabs/Graphics/Shadows" to="SettingsMenu" method="_on_shadows_toggled"]
-[connection signal="pressed" from="SettingsMenu/Tabs/Playtest/Kill Human" to="SettingsMenu" method="_on_kill_human_pressed"]
-[connection signal="pressed" from="SettingsMenu/Tabs/Playtest/OpenConfig" to="SettingsMenu" method="_on_open_config_pressed"]
-[connection signal="pressed" from="SettingsMenu/Tabs/Playtest/Feedback" to="SettingsMenu" method="_on_feedback_pressed"]
+[node name="SettingsMenu" parent="." unique_id=703693376 instance=ExtResource("13_5odvn")]
