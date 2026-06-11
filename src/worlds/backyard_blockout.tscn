@@ -546,25 +546,25 @@ affect_navigation_mesh = true
 [node name="Fences" type="Node3D" parent="NavigationRegion3D" unique_id=1745626675]
 
 [node name="Fence" parent="NavigationRegion3D/Fences" unique_id=1353338463 instance=ExtResource("11_0o1wr")]
-transform = Transform3D(0.07733826, -2.0039525e-16, -1.4438892e-23, 0, -3.2115348e-09, 0.121107176, -2.1094236e-16, -0.07347135, -5.2937628e-09, 229, -6.5132446, 152)
+transform = Transform3D(0.07733826, -2.0039525e-16, -1.659052e-23, 0, -3.2115348e-09, 0.1391541, -2.1094236e-16, -0.07347135, -6.082619e-09, 229, -6.651899, 152)
 
 [node name="Fence2" parent="NavigationRegion3D/Fences" unique_id=146218539 instance=ExtResource("11_0o1wr")]
-transform = Transform3D(0.07733826, -2.0039525e-16, -1.4438892e-23, 0, -3.2115348e-09, 0.121107176, -2.1094236e-16, -0.07347135, -5.2937628e-09, 229, -6.5132446, 2.850006)
+transform = Transform3D(0.07733826, -2.0039525e-16, -1.659052e-23, 0, -3.2115348e-09, 0.1391541, -2.1094236e-16, -0.07347135, -6.082619e-09, 229, -6.651899, 2.850006)
 
 [node name="Fence3" parent="NavigationRegion3D/Fences" unique_id=1228522410 instance=ExtResource("11_0o1wr")]
-transform = Transform3D(0.07733826, -2.0039525e-16, -1.4438892e-23, 0, -3.2115348e-09, 0.121107176, -2.1094236e-16, -0.07347135, -5.2937628e-09, -226.3787, -6.5132446, 152)
+transform = Transform3D(0.07733826, -2.0039525e-16, -1.659052e-23, 0, -3.2115348e-09, 0.1391541, -2.1094236e-16, -0.07347135, -6.082619e-09, -226.3787, -6.651899, 152)
 
 [node name="Fence4" parent="NavigationRegion3D/Fences" unique_id=65810160 instance=ExtResource("11_0o1wr")]
-transform = Transform3D(0.07733826, -2.0039525e-16, -1.4438892e-23, 0, -3.2115348e-09, 0.121107176, -2.1094236e-16, -0.07347135, -5.2937628e-09, -226.3787, -6.5132446, 2.850006)
+transform = Transform3D(0.07733826, -2.0039525e-16, -1.659052e-23, 0, -3.2115348e-09, 0.1391541, -2.1094236e-16, -0.07347135, -6.082619e-09, -226.3787, -6.651899, 2.850006)
 
 [node name="Fence8" parent="NavigationRegion3D/Fences" unique_id=1345751707 instance=ExtResource("11_0o1wr")]
-transform = Transform3D(-3.3805632e-09, -0.07494078, -4.7853312e-09, 0, -3.2115348e-09, 0.10732903, -0.07733826, 3.2757657e-09, 2.0917349e-16, 229, 0, -152.78177)
+transform = Transform3D(-3.3805632e-09, -0.07494078, -5.5925375e-09, 0, -3.2115348e-09, 0.12543367, -0.07733826, 3.2757657e-09, 2.444576e-16, 229, -0.24367142, -152.78177)
 
 [node name="Fence9" parent="NavigationRegion3D/Fences" unique_id=1791035254 instance=ExtResource("11_0o1wr")]
-transform = Transform3D(-3.3805632e-09, -0.07494078, -5.399638e-09, 0, -3.2115348e-09, 0.121107176, -0.07733826, 3.2757657e-09, 2.360257e-16, 76.867004, -6.5132446, -152.78177)
+transform = Transform3D(-3.3805632e-09, -0.07494078, -6.2042713e-09, 0, -3.2115348e-09, 0.1391541, -0.07733826, 3.2757657e-09, 2.7119734e-16, 76.867004, -6.651899, -152.78177)
 
 [node name="Fence10" parent="NavigationRegion3D/Fences" unique_id=1513983617 instance=ExtResource("11_0o1wr")]
-transform = Transform3D(-3.3805632e-09, -0.07494078, -5.399638e-09, 0, -3.2115348e-09, 0.121107176, -0.07733826, 3.2757657e-09, 2.360257e-16, -75.112976, -6.5132446, -152.78177)
+transform = Transform3D(-3.3805632e-09, -0.07494078, -6.2042713e-09, 0, -3.2115348e-09, 0.1391541, -0.07733826, 3.2757657e-09, 2.7119734e-16, -75.112976, -6.651899, -152.78177)
 
 [node name="Anthill" parent="NavigationRegion3D" unique_id=157153453 instance=ExtResource("11_5odvn")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 165.1924, -1.1870127, -198.05473)
