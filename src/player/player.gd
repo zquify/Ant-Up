@@ -102,6 +102,7 @@ var dead := false
 
 
 func _ready() -> void:
+	GameManager.game_over_triggered.connect(_on_game_over)
 	gravityController.setup(self, movementController)
 	movementController.setup(self, gravityController)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -353,3 +354,7 @@ func die() -> void:
 	antMesh.visible = false
 	
 	GameManager.game_over()
+
+
+func _on_game_over() -> void:
+	in_menu = true

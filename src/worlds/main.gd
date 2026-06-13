@@ -41,3 +41,6 @@ func count_total_food() -> void:
 
 func _on_main_menu_pressed() -> void:
 	get_tree().change_scene_to_file(GameManager.TITLE)
+
+func _on_restart_pressed() -> void:
+	get_tree().reload_current_scene()

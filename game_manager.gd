@@ -5,17 +5,21 @@ const TITLE = "res://title.tscn"
 
 enum GameState { PLAYING, GAME_OVER }
 
-var state: GameState = GameState.PLAYING
+var state: GameState = GameState.GAME_OVER
 
 var high_score: int = 0
 var score: int = 0
 var target_score: int = 0
+
+var timer: float = 500.0
+var time_left: float = timer
 
 signal game_over_triggered
 
 
 func _ready() -> void:
 	print(TITLE)
+
 
 func save_high_score() -> void:
 	if score > high_score:
@@ -39,6 +43,17 @@ func load_high_score() -> int:
 	return high_score
 
 
+func _process(delta: float) -> void:
+	if state != GameState.PLAYING:
+		return
+
+	time_left -= delta
+
+	if time_left <= 0:
+		time_left = 0
+		game_over()
+
+
 func game_over() -> void:
 	if state == GameState.GAME_OVER:
 		return
@@ -51,3 +66,4 @@ func reset() -> void:
 	state = GameState.PLAYING
 	score = 0
 	target_score = 0
+	time_left = timer
