@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dd5h3p5qoqnea"]
 
-[ext_resource type="Script" uid="uid://g4huhx7gfafa" path="res://src/worlds/settings.gd" id="1_tc6f2"]
+[ext_resource type="Script" uid="uid://g4huhx7gfafa" path="res://src/hud/settings.gd" id="1_tc6f2"]
 
 [node name="SettingsMenu" type="Control" unique_id=703693376]
 layout_mode = 3
@@ -14,19 +14,13 @@ layout_mode = 0
 offset_right = 416.0
 offset_bottom = 247.0
 focus_mode = 2
-current_tab = 0
+current_tab = 2
 use_hidden_tabs_for_min_size = true
 
 [node name="Main" type="VBoxContainer" parent="Tabs" unique_id=2010935739]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
-
-[node name="Respawn" type="Button" parent="Tabs/Main" unique_id=1635471125]
-layout_mode = 2
-text = "Respawn"
-
-[node name="HSeparator3" type="HSeparator" parent="Tabs/Main" unique_id=1826757908]
-layout_mode = 2
 
 [node name="Restart" type="Button" parent="Tabs/Main" unique_id=114747878]
 layout_mode = 2
@@ -182,7 +176,6 @@ button_pressed = true
 text = "Shadows"
 
 [node name="Playtest" type="VBoxContainer" parent="Tabs" unique_id=1018805050]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
@@ -200,7 +193,6 @@ layout_mode = 2
 layout_mode = 2
 text = "Submit Feedback"
 
-[connection signal="pressed" from="Tabs/Main/Respawn" to="." method="_on_respawn_pressed"]
 [connection signal="pressed" from="Tabs/Main/Restart" to="." method="_on_restart_pressed"]
 [connection signal="pressed" from="Tabs/Main/OpenConfig" to="." method="_on_open_config_pressed"]
 [connection signal="pressed" from="Tabs/Main/Quit" to="." method="_on_quit_pressed"]

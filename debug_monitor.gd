@@ -6,9 +6,6 @@ var timer := 0.0
 
 
 func _ready() -> void:
-	print("DebugMonitor loaded")
-	print("Logging to: ", ProjectSettings.globalize_path(LOG_FILE))
-	
 	var file := FileAccess.open(LOG_FILE, FileAccess.READ_WRITE)
 	
 	if file:
@@ -27,6 +24,8 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	var player = get_tree().get_first_node_in_group("player")
+	
 	timer += delta
 
 	if timer < 5.0:
@@ -62,6 +61,13 @@ func _process(delta: float) -> void:
 		),
 		"pin_joints": _count_pin_joints(get_tree().root)
 	}
+	
+	if player:
+		data["heartbeat"] = player.heartbeat
+		data["player_pos"] = player.global_position
+		data["player_vel"] = player.velocity
+		data["attached"] = player.attached
+		data["on_floor"] = player.is_on_floor()
 
 	file.store_line(JSON.stringify(data))
 	file.close()

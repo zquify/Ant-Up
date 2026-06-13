@@ -93,6 +93,11 @@ var jumpGraceTimer := 0.0
 
 var in_menu: bool = false
 
+# Debug
+var heartbeat := 0
+
+var dead := false
+
 #endregion
 
 
@@ -136,6 +141,16 @@ func respawn():
 	velocity = Vector3.ZERO
 
 func _physics_process(delta: float) -> void:
+	heartbeat += 1
+	
+	if dead:
+		return
+
+	assert(velocity.is_finite())
+	assert(global_position.is_finite())
+	assert(currentUp.is_finite())
+	assert(supposedUp.is_finite())
+	
 	_updateJoystickLook(delta)
 	
 	gravityController.updateUpAxis(delta)
@@ -319,3 +334,22 @@ func handle_holding_objects():
 		if dropBelowPlayer and groundRay.is_colliding():
 			if groundRay.get_collider() == heldObject:
 				drop_held_object()
+
+func die() -> void:
+	if dead:
+		return
+
+	dead = true
+
+	# Drop anything being carried
+	drop_held_object()
+
+	# Stop movement
+	velocity = Vector3.ZERO
+	movementController.clearExternalKick()
+
+	# Disable controls
+	in_menu = true
+	antMesh.visible = false
+	
+	GameManager.game_over()

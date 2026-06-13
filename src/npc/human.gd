@@ -78,7 +78,7 @@ func handle_stuck() -> void:
 func update_targets() -> void:
 	player_target = get_tree().get_first_node_in_group("player")
 
-	if player_target:
+	if player_target and not player_target.dead:
 		player_detector.look_at(player_target.global_position, Vector3.UP)
 
 		if player_detector.is_colliding():
@@ -202,13 +202,13 @@ func find_closest_misplaced_fruit():
 	return closest
 
 func stomp_player(player) -> void:
-	player.respawn()
+	player.die()
 
 func set_random_target() -> void:
 	var region_rid: RID = nav_region.get_rid()
 	var random_point: Vector3 = NavigationServer3D.region_get_random_point(region_rid, 1, false)
 	nav_agent.target_position = random_point
 
-func _on_stomp_area_body_entered(body: Node3D) -> void:
+func _on_stomp_area_body_entered(body: Node3D) -> void:	
 	if body.is_in_group("player"):
 		stomp_player(body)

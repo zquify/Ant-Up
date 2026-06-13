@@ -10,12 +10,17 @@ extends Control
 @onready var render_scale_option: HSlider = $Tabs/Graphics/RenderScale/HSlider
 @onready var shadows_option: CheckBox = $Tabs/Graphics/Shadows
 
+@export var pause_menu_mode := true
 
 const SETTINGS_FILE = "user://settings.cfg"
 var config := ConfigFile.new()
 
+
 func _ready() -> void:
-	visible = false
+	if pause_menu_mode:
+		visible = false
+	else:
+		visible = true
 	load_settings()
 
 
@@ -86,6 +91,9 @@ func load_settings():
 
 
 func _input(event: InputEvent) -> void:
+	
+	if !pause_menu_mode:
+		return
 	
 	if event.is_action_pressed("ui_cancel"):
 		if visible:
@@ -280,7 +288,7 @@ func _on_restart_pressed() -> void:
 
 
 func _on_open_config_pressed() -> void:
-	OS.shell_show_in_file_manager(ProjectSettings.globalize_path("user://settings.cfg"))
+	OS.shell_open(ProjectSettings.globalize_path("user://"))
 
 
 func _on_quit_pressed() -> void:

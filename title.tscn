@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://dttfeod25llbm"]
+
+[ext_resource type="Script" uid="uid://q3thuvb1vtg4" path="res://title.gd" id="1_oyqm6"]
+[ext_resource type="PackedScene" uid="uid://blow3hih0wtfk" path="res://src/worlds/backyard_blockout.tscn" id="2_kpexm"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_06r0y"]
+font_size = 135
+
+[node name="Title" type="Control" unique_id=82144848]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_oyqm6")
+game_scene = ExtResource("2_kpexm")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=302369017]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 640.0
+offset_bottom = 312.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1002229189]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="CenterContainer/VBoxContainer" unique_id=591551825]
+layout_mode = 2
+text = "Ant Up!"
+label_settings = SubResource("LabelSettings_06r0y")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HighScore" type="Label" parent="CenterContainer/VBoxContainer" unique_id=2096732103]
+layout_mode = 2
+text = "High Score: 0"
+horizontal_alignment = 1
+
+[node name="Play" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1102841151]
+layout_mode = 2
+text = "Play"
+
+[node name="Settings" type="Button" parent="CenterContainer/VBoxContainer" unique_id=410637513]
+layout_mode = 2
+text = "Settings"
+
+[node name="Quit" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1052457354]
+layout_mode = 2
+text = "Quit"
+
+[node name="Config" type="Button" parent="." unique_id=315710809]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = -48.0
+offset_right = 152.0
+offset_bottom = -17.0
+grow_vertical = 0
+text = "Config"
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]

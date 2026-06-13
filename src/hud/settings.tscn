@@ -1,0 +1,308 @@
+[gd_scene format=3 uid="uid://befmb3ebe5rlj"]
+
+[node name="Settings" type="Control" unique_id=368793181]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -360.0
+offset_right = -640.0
+offset_bottom = -360.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="." unique_id=1136105299]
+layout_mode = 0
+offset_left = 128.0
+offset_top = 64.0
+offset_right = 1152.0
+offset_bottom = 640.0
+ratio = 1.7778
+stretch_mode = 3
+
+[node name="TabContainer" type="TabContainer" parent="AspectRatioContainer" unique_id=362141278]
+layout_mode = 2
+current_tab = 2
+
+[node name="Graphics" type="VBoxContainer" parent="AspectRatioContainer/TabContainer" unique_id=1146417216]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="VSplitContainer" type="VSplitContainer" parent="AspectRatioContainer/TabContainer/Graphics" unique_id=664110646]
+layout_mode = 2
+split_offsets = PackedInt32Array(31, 66, 109, 144, 187, 230, 273, 316, 359, 394)
+dragging_enabled = false
+dragger_visibility = 1
+split_offset = 31
+
+[node name="DisplayMode" type="HSplitContainer" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer" unique_id=1673620505]
+layout_mode = 2
+split_offsets = PackedInt32Array(105)
+dragging_enabled = false
+dragger_visibility = 1
+split_offset = 105
+
+[node name="Label" type="Label" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer/DisplayMode" unique_id=2126837841]
+layout_mode = 2
+text = "Display Mode"
+
+[node name="OptionButton" type="OptionButton" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer/DisplayMode" unique_id=1595973127]
+layout_mode = 2
+selected = 2
+allow_reselect = true
+item_count = 3
+popup/item_0/text = "Fullscreen"
+popup/item_0/id = 0
+popup/item_1/text = "Borderless Window"
+popup/item_1/id = 1
+popup/item_2/text = "Windowed"
+popup/item_2/id = 2
+
+[node name="Resolution" type="HSplitContainer" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer" unique_id=827448640]
+layout_mode = 2
+split_offsets = PackedInt32Array(111, 189, 0)
+dragging_enabled = false
+dragger_visibility = 1
+split_offset = 111
+
+[node name="Label" type="Label" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer/Resolution" unique_id=880537582]
+layout_mode = 2
+text = "Resolution"
+
+[node name="ResX" type="TextEdit" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer/Resolution" unique_id=334290142]
+layout_mode = 2
+text = "1280"
+
+[node name="Label2" type="Label" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer/Resolution" unique_id=556300047]
+layout_mode = 2
+text = "x"
+
+[node name="ResY" type="TextEdit" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer/Resolution" unique_id=72632952]
+layout_mode = 2
+text = "720
+"
+
+[node name="VSync" type="CheckBox" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer" unique_id=1228741352]
+layout_mode = 2
+text = "V-Sync"
+
+[node name="FPSLimit" type="HSplitContainer" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer" unique_id=1541199052]
+layout_mode = 2
+dragging_enabled = false
+dragger_visibility = 1
+
+[node name="Label" type="Label" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer/FPSLimit" unique_id=947108022]
+layout_mode = 2
+text = "FPS Limit"
+
+[node name="HSlider" type="HSlider" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer/FPSLimit" unique_id=1056768637]
+layout_mode = 2
+min_value = 10.0
+max_value = 121.0
+value = 60.0
+
+[node name="ShadowQuality" type="HSplitContainer" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer" unique_id=1321477259]
+layout_mode = 2
+split_offsets = PackedInt32Array(105)
+dragging_enabled = false
+dragger_visibility = 1
+split_offset = 105
+
+[node name="Label" type="Label" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer/ShadowQuality" unique_id=1108159584]
+layout_mode = 2
+text = "Shadow Quality"
+
+[node name="OptionButton" type="OptionButton" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer/ShadowQuality" unique_id=1132387809]
+layout_mode = 2
+allow_reselect = true
+item_count = 3
+popup/item_0/text = "Low"
+popup/item_0/id = 0
+popup/item_1/text = "Medium"
+popup/item_1/id = 1
+popup/item_2/text = "High"
+popup/item_2/id = 2
+
+[node name="TextureQuality" type="HSplitContainer" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer" unique_id=1143278073]
+layout_mode = 2
+split_offsets = PackedInt32Array(105)
+dragging_enabled = false
+dragger_visibility = 1
+split_offset = 105
+
+[node name="Label" type="Label" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer/TextureQuality" unique_id=1103992271]
+layout_mode = 2
+text = "Texture Quality"
+
+[node name="OptionButton" type="OptionButton" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer/TextureQuality" unique_id=1773793491]
+layout_mode = 2
+allow_reselect = true
+item_count = 3
+popup/item_0/text = "Low"
+popup/item_0/id = 0
+popup/item_1/text = "Medium"
+popup/item_1/id = 1
+popup/item_2/text = "High"
+popup/item_2/id = 2
+
+[node name="AntiAliasing" type="HSplitContainer" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer" unique_id=701358615]
+layout_mode = 2
+split_offsets = PackedInt32Array(105)
+dragging_enabled = false
+dragger_visibility = 1
+split_offset = 105
+
+[node name="Label" type="Label" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer/AntiAliasing" unique_id=395252377]
+layout_mode = 2
+text = "Anti-Aliasing"
+
+[node name="OptionButton" type="OptionButton" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer/AntiAliasing" unique_id=109478906]
+layout_mode = 2
+allow_reselect = true
+item_count = 4
+popup/item_0/text = "None"
+popup/item_0/id = 0
+popup/item_1/text = "MSAA"
+popup/item_1/id = 1
+popup/item_2/text = "FXAA"
+popup/item_2/id = 2
+popup/item_3/text = "TAA"
+popup/item_3/id = 3
+
+[node name="SSAO" type="CheckBox" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer" unique_id=1969256609]
+layout_mode = 2
+text = "SSAO"
+
+[node name="ReflectionQuality" type="HSplitContainer" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer" unique_id=1979784385]
+layout_mode = 2
+split_offsets = PackedInt32Array(105)
+dragging_enabled = false
+dragger_visibility = 1
+split_offset = 105
+
+[node name="Label" type="Label" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer/ReflectionQuality" unique_id=823014760]
+layout_mode = 2
+text = "Foliage Density"
+
+[node name="OptionButton" type="OptionButton" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer/ReflectionQuality" unique_id=1339054069]
+layout_mode = 2
+allow_reselect = true
+item_count = 4
+popup/item_0/text = "Off"
+popup/item_0/id = 0
+popup/item_1/text = "Low"
+popup/item_1/id = 1
+popup/item_2/text = "Medium"
+popup/item_2/id = 2
+popup/item_3/text = "High"
+popup/item_3/id = 3
+
+[node name="Brightness" type="HSplitContainer" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer" unique_id=1205782898]
+layout_mode = 2
+dragging_enabled = false
+dragger_visibility = 1
+
+[node name="Label" type="Label" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer/Brightness" unique_id=1055482873]
+layout_mode = 2
+text = "Brightness"
+
+[node name="HSlider" type="HSlider" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer/Brightness" unique_id=852902209]
+layout_mode = 2
+min_value = 10.0
+value = 50.0
+
+[node name="FOV" type="HSplitContainer" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer" unique_id=908681997]
+layout_mode = 2
+dragging_enabled = false
+dragger_visibility = 1
+
+[node name="Label" type="Label" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer/FOV" unique_id=17171239]
+layout_mode = 2
+text = "FOV"
+
+[node name="HSlider" type="HSlider" parent="AspectRatioContainer/TabContainer/Graphics/VSplitContainer/FOV" unique_id=158991039]
+layout_mode = 2
+min_value = 10.0
+value = 50.0
+
+[node name="Audio" type="VBoxContainer" parent="AspectRatioContainer/TabContainer" unique_id=339550435]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="VSplitContainer" type="VSplitContainer" parent="AspectRatioContainer/TabContainer/Audio" unique_id=1966883360]
+layout_mode = 2
+split_offsets = PackedInt32Array(0, 0, 0, 0)
+
+[node name="MasterVolume" type="HSplitContainer" parent="AspectRatioContainer/TabContainer/Audio/VSplitContainer" unique_id=1755256386]
+layout_mode = 2
+dragging_enabled = false
+dragger_visibility = 1
+
+[node name="Label" type="Label" parent="AspectRatioContainer/TabContainer/Audio/VSplitContainer/MasterVolume" unique_id=892383700]
+layout_mode = 2
+text = "Master Volume"
+
+[node name="HSlider" type="HSlider" parent="AspectRatioContainer/TabContainer/Audio/VSplitContainer/MasterVolume" unique_id=1432998084]
+layout_mode = 2
+value = 75.0
+
+[node name="MusicVolume" type="HSplitContainer" parent="AspectRatioContainer/TabContainer/Audio/VSplitContainer" unique_id=1354546613]
+layout_mode = 2
+dragging_enabled = false
+dragger_visibility = 1
+
+[node name="Label" type="Label" parent="AspectRatioContainer/TabContainer/Audio/VSplitContainer/MusicVolume" unique_id=2012180581]
+layout_mode = 2
+text = "Music Volume"
+
+[node name="HSlider" type="HSlider" parent="AspectRatioContainer/TabContainer/Audio/VSplitContainer/MusicVolume" unique_id=1969325109]
+layout_mode = 2
+value = 100.0
+
+[node name="SFXVolume" type="HSplitContainer" parent="AspectRatioContainer/TabContainer/Audio/VSplitContainer" unique_id=1966293834]
+layout_mode = 2
+dragging_enabled = false
+dragger_visibility = 1
+
+[node name="Label" type="Label" parent="AspectRatioContainer/TabContainer/Audio/VSplitContainer/SFXVolume" unique_id=1608634663]
+layout_mode = 2
+text = "SFX Volume"
+
+[node name="HSlider" type="HSlider" parent="AspectRatioContainer/TabContainer/Audio/VSplitContainer/SFXVolume" unique_id=440577420]
+layout_mode = 2
+value = 100.0
+
+[node name="VoiceChatVolume" type="HSplitContainer" parent="AspectRatioContainer/TabContainer/Audio/VSplitContainer" unique_id=843106485]
+layout_mode = 2
+dragging_enabled = false
+dragger_visibility = 1
+
+[node name="Label" type="Label" parent="AspectRatioContainer/TabContainer/Audio/VSplitContainer/VoiceChatVolume" unique_id=923562466]
+layout_mode = 2
+text = "Voice Chat Volume"
+
+[node name="HSlider" type="HSlider" parent="AspectRatioContainer/TabContainer/Audio/VSplitContainer/VoiceChatVolume" unique_id=2057626178]
+layout_mode = 2
+value = 100.0
+
+[node name="MicVolume" type="HSplitContainer" parent="AspectRatioContainer/TabContainer/Audio/VSplitContainer" unique_id=1986696192]
+layout_mode = 2
+dragging_enabled = false
+dragger_visibility = 1
+
+[node name="Label" type="Label" parent="AspectRatioContainer/TabContainer/Audio/VSplitContainer/MicVolume" unique_id=802487282]
+layout_mode = 2
+text = "Mic Volume"
+
+[node name="HSlider" type="HSlider" parent="AspectRatioContainer/TabContainer/Audio/VSplitContainer/MicVolume" unique_id=778818006]
+layout_mode = 2
+value = 100.0
+
+[node name="Controls" type="VBoxContainer" parent="AspectRatioContainer/TabContainer" unique_id=676152761]
+layout_mode = 2
+metadata/_tab_index = 2

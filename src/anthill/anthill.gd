@@ -1,19 +1,25 @@
 extends Node3D
 
-@onready var score: int = 0
 @onready var area_3d: Area3D = $Area3D
 
 
-
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	$Label3D.text = str(score)
+	area_3d.body_entered.connect(_on_body_entered)
 
+func _on_body_entered(body: Node) -> void:
+	if not body.is_in_group("carryable"):
+		return
+	
+	if body.delivered:
+		return
+	
+	body.delivered = true
+	
+	GameManager.score += body.score
+	$Label3D.text = str(GameManager.score)
+	
+	_check_win()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	score = get_score("carryable")
-	$Label3D.text = str(score)
 
 func get_score(group_name: String) -> int:
 	var count = 0
@@ -26,3 +32,11 @@ func get_score(group_name: String) -> int:
 			count += body.score
 			
 	return count
+
+
+func _check_win() -> void:
+	if GameManager.state != GameManager.GameState.PLAYING:
+		return
+	
+	if GameManager.score >= GameManager.target_score:
+		GameManager.game_over()

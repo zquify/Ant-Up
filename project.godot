@@ -12,12 +12,14 @@ config_version=5
 
 config/name="Ant Up!"
 config/version="26w24d"
-run/main_scene="uid://blow3hih0wtfk"
+run/main_scene="uid://dttfeod25llbm"
 config/features=PackedStringArray("4.6", "Forward Plus")
+run/max_fps=60
 
 [autoload]
 
 DebugMonitor="*uid://d1wr0cerismny"
+GameManager="*uid://fgbf4d0tk3yh"
 
 [debug]
 

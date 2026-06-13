@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://errouh1vod63" path="res://src/pickup/strawberry.tscn" id="11_1mkdf"]
 [ext_resource type="PackedScene" uid="uid://cjr6secee7fs6" path="res://src/anthill/anthill.tscn" id="11_5odvn"]
 [ext_resource type="PackedScene" uid="uid://l55qepa7ybjl" path="res://src/npc/human.tscn" id="12_1mkdf"]
-[ext_resource type="PackedScene" uid="uid://dd5h3p5qoqnea" path="res://src/hud/settings_menu.tscn" id="13_5odvn"]
+[ext_resource type="Script" uid="uid://b6lxgqpst4uki" path="res://src/worlds/end_game_menu.gd" id="14_0bsxb"]
 [ext_resource type="PackedScene" uid="uid://cvimbh7d8yat3" path="res://src/pickup/banana.tscn" id="14_a1g66"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_1mkdf"]
@@ -660,4 +660,43 @@ transform = Transform3D(1, 0, 0, 0, 0.18075947, 0.9835273, 0, -0.9835273, 0.1807
 
 [node name="Human" parent="." unique_id=692812724 instance=ExtResource("12_1mkdf")]
 
-[node name="SettingsMenu" parent="." unique_id=703693376 instance=ExtResource("13_5odvn")]
+[node name="EndGameMenu" type="Control" parent="." unique_id=1381695986]
+visible = false
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("14_0bsxb")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="EndGameMenu" unique_id=802048157]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -29.0
+offset_right = 100.0
+offset_bottom = 29.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Score" type="Label" parent="EndGameMenu/VBoxContainer" unique_id=1311113774]
+layout_mode = 2
+text = "High Score:"
+horizontal_alignment = 1
+
+[node name="MainMenu" type="Button" parent="EndGameMenu/VBoxContainer" unique_id=2145816596]
+layout_mode = 2
+text = "Main Menu"
+
+[connection signal="pressed" from="EndGameMenu/VBoxContainer/MainMenu" to="." method="_on_main_menu_pressed"]

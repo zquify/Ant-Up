@@ -11,6 +11,7 @@ collision_layer = 4
 collision_mask = 3
 mass = 10.0
 gravity_scale = 3.0
+continuous_cd = true
 angular_damp = 0.5
 script = ExtResource("1_ee1t8")
 
