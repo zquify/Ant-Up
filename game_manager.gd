@@ -11,8 +11,8 @@ var high_score: int = 0
 var score: int = 0
 var target_score: int = 0
 
-var timer: float = 500.0
-var time_left: float = timer
+const MATCH_TIME: float = 500.0
+var time_left: float = MATCH_TIME
 
 signal game_over_triggered
 
@@ -66,4 +66,4 @@ func reset() -> void:
 	state = GameState.PLAYING
 	score = 0
 	target_score = 0
-	time_left = timer
+	time_left = MATCH_TIME
