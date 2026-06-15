@@ -10,3 +10,4 @@ func _on_game_over() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	GameManager.save_high_score()
 	$VBoxContainer/Score.text = "Score: " + str(GameManager.score)
+	$VBoxContainer/HBoxContainer/Restart.grab_focus()
