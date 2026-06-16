@@ -66,8 +66,7 @@ func get_avatar_texture(steam_id: int) -> Texture2D:
 	if AVATAR_CACHE.has(steam_id):
 		return AVATAR_CACHE[steam_id]
 
-	var avatar_id = Steam.getMediumFriendAvatar(steam_id)
-
+	var avatar_id = Steam.getLargeFriendAvatar(steam_id)
 	if avatar_id <= 0:
 		return null
 

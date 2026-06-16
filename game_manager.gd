@@ -11,7 +11,7 @@ var high_score: int = 0
 var score: int = 0
 var target_score: int = 0
 
-const MATCH_TIME: float = 260.0
+const MATCH_TIME: float = 2600.0
 var time_left: float = MATCH_TIME
 
 signal game_over_triggered

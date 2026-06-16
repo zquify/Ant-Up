@@ -94,11 +94,11 @@ var manualAttachLockTimer := 0.0
 var jumpGraceTimer := 0.0
 
 var in_menu: bool = false
+var dead := false
+var is_local := false
 
 # Debug
 var heartbeat := 0
-
-var dead := false
 
 #endregion
 
@@ -107,6 +107,16 @@ func _ready() -> void:
 	GameManager.game_over_triggered.connect(_on_game_over)
 	gravityController.setup(self, movementController)
 	movementController.setup(self, gravityController)
+	
+	if player_id == Globals.STEAM_ID:
+		is_local = true
+	
+	
+	if is_local:
+		cam.current = true
+	else:
+		cam.current = false
+	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _input(event: InputEvent) -> void:
@@ -153,9 +163,9 @@ func _physics_process(delta: float) -> void:
 		return
 	
 	# ONLY send your own player
-	if player_id == Globals.STEAM_ID:
+	if is_local:
 		send_network_state()
-
+	
 	assert(velocity.is_finite())
 	assert(global_position.is_finite())
 	assert(currentUp.is_finite())
@@ -381,7 +391,7 @@ func send_network_state():
 
 
 func apply_network_state(data: Dictionary) -> void:
-	if player_id == Globals.STEAM_ID:
+	if is_local:
 		return
 
 	global_position = data["pos"]
