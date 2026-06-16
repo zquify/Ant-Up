@@ -182,11 +182,17 @@ func handle_fruit() -> void:
 	nav_agent.target_position = reachable_pos
 
 	if global_position.distance_to(current_fruit.global_position) <= fruit_pickup_distance:
-
-		# Only the authority that owns the fruit can reset it
+		# Only the fruit's authority can reset it, but send a claim request if we don't own it
 		if current_fruit.authority_id == Globals.STEAM_ID:
 			current_fruit.return_home()
-
+		else:
+			# We don't own it, so request ownership and return it
+			Network.send_to_all({
+				"type": "carryable_claim",
+				"id": current_fruit.network_id,
+				"owner": Globals.STEAM_ID
+			})
+			current_fruit.return_home()
 		current_fruit = null
 		state = State.WANDER
 		set_random_target()
