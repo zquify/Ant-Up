@@ -51,6 +51,8 @@ func _process(delta: float) -> void:
 	if time_left <= 0:
 		time_left = 0
 		game_over()
+	
+	Network.read_packets()
 
 
 func game_over() -> void:

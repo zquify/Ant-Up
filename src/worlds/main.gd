@@ -13,10 +13,6 @@ func _ready():
 	calculate_total_score()
 
 
-func _process(_delta: float) -> void:
-	Network.read_packets()
-
-
 func calculate_total_score() -> void:
 	var total := 0
 

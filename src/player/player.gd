@@ -157,6 +157,9 @@ func respawn():
 	velocity = Vector3.ZERO
 
 func _physics_process(delta: float) -> void:
+	if !is_local:
+		return
+	
 	heartbeat += 1
 	
 	if dead:
@@ -221,24 +224,20 @@ func _physics_process(delta: float) -> void:
 	handle_holding_objects()
 
 func _updateAntRotation(delta: float) -> void:
+	if !is_local:
+		return
+	
 	# Get the planar velocity (velocity without the vertical component)
 	var up := currentUp.normalized()
 	var planarVel := velocity - up * velocity.dot(up)
 	
 	# Only rotate if moving with significant speed
 	if planarVel.length() > 0.5:
-		# Convert the world-space planar velocity to the rig's local space
 		var localVel := rigRoot.global_transform.basis.inverse() * planarVel
-		
-		# Calculate the target angle in local XZ plane (Y is up in local space)
 		var targetAngle := atan2(localVel.x, localVel.z)
 		
-		# Smoothly interpolate the ant's Y rotation toward the target
-		var currentRotation := antMesh.rotation.y
-		var angleDiff := fmod(targetAngle - currentRotation + PI, TAU) - PI
-		var newRotation := currentRotation + angleDiff * antRotationSpeed * delta
-		
-		antMesh.rotation.y = newRotation
+		# lerp_angle automatically handles the shortest path and angle wrapping
+		antMesh.rotation.y = lerp_angle(antMesh.rotation.y, targetAngle, antRotationSpeed * delta)
 
 func _updateCameraRig() -> void:
 	var up := currentUp.normalized()
@@ -383,11 +382,14 @@ func send_network_state():
 	var data = {
 		"steam_id": player_id,
 		"pos": global_position,
-		"rot": rotation,
+		"rot": antMesh.global_rotation,
 		"vel": velocity
 	}
-
+	
 	Network.send_to_all(data)
+	
+	if heartbeat % 60 == 0:
+		print("Sending from ", player_id)
 
 
 func apply_network_state(data: Dictionary) -> void:
@@ -395,5 +397,5 @@ func apply_network_state(data: Dictionary) -> void:
 		return
 
 	global_position = data["pos"]
-	rotation = data["rot"]
+	antMesh.global_rotation = data["rot"]
 	velocity = data["vel"]

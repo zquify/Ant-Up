@@ -35,3 +35,5 @@ func handle_packet(data: Dictionary):
 	var player = get_tree().get_first_node_in_group("players_" + str(steam_id))
 	if player:
 		player.apply_network_state(data)
+	
+	print("Received packet from ", steam_id)
