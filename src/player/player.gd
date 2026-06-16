@@ -151,6 +151,10 @@ func _physics_process(delta: float) -> void:
 	
 	if dead:
 		return
+	
+	# ONLY send your own player
+	if player_id == Globals.STEAM_ID:
+		send_network_state()
 
 	assert(velocity.is_finite())
 	assert(global_position.is_finite())
@@ -363,3 +367,23 @@ func die() -> void:
 
 func _on_game_over() -> void:
 	in_menu = true
+
+
+func send_network_state():
+	var data = {
+		"steam_id": player_id,
+		"pos": global_position,
+		"rot": rotation,
+		"vel": velocity
+	}
+
+	Network.send_to_all(data)
+
+
+func apply_network_state(data: Dictionary) -> void:
+	if player_id == Globals.STEAM_ID:
+		return
+
+	global_position = data["pos"]
+	rotation = data["rot"]
+	velocity = data["vel"]

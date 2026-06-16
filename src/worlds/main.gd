@@ -6,10 +6,15 @@ extends Node3D
 @onready var max_fps = Engine.max_fps
 
 
-func _ready() -> void:
+func _ready():
 	GameManager.reset()
+	await get_tree().process_frame
 	spawn_players()
 	calculate_total_score()
+
+
+func _process(_delta: float) -> void:
+	Network.read_packets()
 
 
 func calculate_total_score() -> void:
@@ -29,13 +34,23 @@ func respawn() -> void:
 
 
 func spawn_players() -> void:
+	for member in Globals.LOBBY_MEMBERS:
+		spawn_player(member["steam_id"])
+
+
+func spawn_player(steam_id: int) -> void:
 	var player = player_scene.instantiate()
 
-	player.player_id = Globals.STEAM_ID
+	player.player_id = steam_id
+	player.name = str(steam_id)
 
 	player.global_transform = pick_spawn()
 
 	$Players.add_child(player)
+
+	player.add_to_group("players_" + str(steam_id))
+
+	Network.register_peer(steam_id)
 
 
 func pick_spawn() -> Transform3D:
