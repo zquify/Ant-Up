@@ -18,8 +18,7 @@ signal game_over_triggered
 
 
 func _ready() -> void:
-	print(TITLE)
-
+	pass
 
 func save_high_score() -> void:
 	if score > high_score:

@@ -76,7 +76,10 @@ func handle_stuck() -> void:
 	set_random_target()
 
 func update_targets() -> void:
-	player_target = get_tree().get_first_node_in_group("player")
+	var players = get_tree().get_nodes_in_group("player")
+
+	if players.size() > 0:
+		player_target = players[0]
 
 	if player_target and not player_target.dead:
 		player_detector.look_at(player_target.global_position, Vector3.UP)

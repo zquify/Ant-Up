@@ -75,6 +75,8 @@ class_name Player
 @onready var interactRay = $gravityControl/Ant/InteractRay
 @onready var drop_point: Marker3D = $gravityControl/Ant/DropPoint
 
+var player_id := 0
+
 
 # shared runtime state
 var pitch := 0.0

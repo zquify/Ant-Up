@@ -20,6 +20,7 @@ run/max_fps=60
 
 DebugMonitor="*uid://d1wr0cerismny"
 GameManager="*uid://fgbf4d0tk3yh"
+Globals="*uid://c1rtgc5q4pokt"
 
 [debug]
 

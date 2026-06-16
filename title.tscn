@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dttfeod25llbm"]
 
 [ext_resource type="Script" uid="uid://q3thuvb1vtg4" path="res://title.gd" id="1_oyqm6"]
-[ext_resource type="PackedScene" uid="uid://blow3hih0wtfk" path="res://src/worlds/backyard_blockout.tscn" id="2_kpexm"]
+[ext_resource type="PackedScene" uid="uid://wh5yrn43ooq4" path="res://multiplayer/steam_lobby.tscn" id="2_oyqm6"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_06r0y"]
 font_size = 135
@@ -14,7 +14,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_oyqm6")
-game_scene = ExtResource("2_kpexm")
+multiplayer_scene = ExtResource("2_oyqm6")
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=302369017]
 layout_mode = 1

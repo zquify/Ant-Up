@@ -8,7 +8,7 @@ extends Node3D
 
 func _ready() -> void:
 	GameManager.reset()
-	respawn()
+	spawn_players()
 	calculate_total_score()
 
 
@@ -25,6 +25,16 @@ func respawn() -> void:
 	var spawn_pos = pick_spawn()
 	var player = player_scene.instantiate()
 	player.global_transform = spawn_pos
+	$Players.add_child(player)
+
+
+func spawn_players() -> void:
+	var player = player_scene.instantiate()
+
+	player.player_id = Globals.STEAM_ID
+
+	player.global_transform = pick_spawn()
+
 	$Players.add_child(player)
 
 

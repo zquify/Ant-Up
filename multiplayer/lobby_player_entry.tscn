@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://ciqxh6a0js33l"]
+
+[ext_resource type="Script" uid="uid://bbhk3btvnur4c" path="res://multiplayer/lobby_player_entry.gd" id="1_f8eb5"]
+
+[node name="LobbyPlayerEntry" type="HBoxContainer" unique_id=1302691672]
+offset_right = 259.0
+offset_bottom = 64.0
+size_flags_horizontal = 3
+script = ExtResource("1_f8eb5")
+
+[node name="Avatar" type="TextureRect" parent="." unique_id=1584205700]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="." unique_id=1111073777]
+layout_mode = 2
+text = "Rest in Peace Oliver Tree"
+vertical_alignment = 1

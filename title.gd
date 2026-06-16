@@ -1,6 +1,6 @@
 extends Control
 
-@export var game_scene: PackedScene
+@export var multiplayer_scene: PackedScene
 
 @onready var high_score: Label = $CenterContainer/VBoxContainer/HighScore
 @onready var play: Button = $CenterContainer/VBoxContainer/Play
@@ -10,7 +10,7 @@ func _ready():
 	play.grab_focus()
 
 func _on_play_pressed():
-	get_tree().change_scene_to_packed(game_scene)
+	get_tree().change_scene_to_packed(multiplayer_scene)
 
 func _on_settings_pressed():
 	pass
