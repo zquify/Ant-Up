@@ -282,11 +282,19 @@ var grabJoint: PinJoint3D
 
 
 func set_held_object(body):
-	if !(body is RigidBody3D):
+	if !(body is Carryable):
 		return
 
 	heldObject = body
 	heldObject.collision_layer = 2
+	
+	heldObject.authority_id = Globals.STEAM_ID
+
+	Network.send_to_all({
+		"type": "carryable_claim",
+		"id": heldObject.network_id,
+		"owner": Globals.STEAM_ID
+	})
 
 	var shortest_distance_squared := INF
 	closest_node = null

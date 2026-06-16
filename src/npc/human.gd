@@ -24,6 +24,12 @@ var border := fruit_pickup_distance
 @export var chase_memory_time := 2.0
 var chase_memory := 0.0
 
+var is_authority := false
+var net_timer := 0.0
+
+var network_target_position := Vector3.ZERO
+var network_velocity := Vector3.ZERO
+
 enum State {
 	WANDER,
 	CHASE_PLAYER,
@@ -33,11 +39,35 @@ enum State {
 var state := State.WANDER
 
 func _ready() -> void:
+	add_to_group("ai_" + str(name))
+	
 	await get_tree().physics_frame
+
+	is_authority = Globals.IS_HOST
+
 	last_position = global_position
 	set_random_target()
 
+
+func _process(delta: float) -> void:
+	if is_authority:
+		return
+
+	global_position = global_position.lerp(
+		network_target_position,
+		12.0 * delta
+	)
+
+	velocity = velocity.lerp(
+		network_velocity,
+		12.0 * delta
+	)
+
+
 func _physics_process(delta: float) -> void:
+	if !is_authority:
+		return
+	
 	update_targets()
 
 	match state:
@@ -53,6 +83,20 @@ func _physics_process(delta: float) -> void:
 	move_ai(delta)
 
 	check_if_stuck(delta)
+	
+	if is_authority:
+		net_timer += delta
+		if net_timer >= 0.05:
+			net_timer = 0.0
+
+			Network.send_to_all({
+				"type": "ai_state",
+				"id": name,
+				"pos": global_position,
+				"vel": velocity,
+				"rot_y": rotation.y,
+				"state": state
+			})
 
 func check_if_stuck(delta: float) -> void:
 	var moved_distance = global_position.distance_to(last_position)
@@ -138,7 +182,11 @@ func handle_fruit() -> void:
 	nav_agent.target_position = reachable_pos
 
 	if global_position.distance_to(current_fruit.global_position) <= fruit_pickup_distance:
-		current_fruit.return_home()
+
+		# Only the authority that owns the fruit can reset it
+		if current_fruit.authority_id == Globals.STEAM_ID:
+			current_fruit.return_home()
+
 		current_fruit = null
 		state = State.WANDER
 		set_random_target()

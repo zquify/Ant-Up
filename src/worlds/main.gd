@@ -5,11 +5,16 @@ extends Node3D
 
 @onready var max_fps = Engine.max_fps
 
+var next_carryable_id := 1
+
 
 func _ready():
 	GameManager.reset()
+	
 	await get_tree().process_frame
+	
 	spawn_players()
+	register_carryables()
 	calculate_total_score()
 
 
@@ -61,5 +66,17 @@ func count_total_food() -> void:
 func _on_main_menu_pressed() -> void:
 	get_tree().change_scene_to_file(GameManager.TITLE)
 
+
 func _on_restart_pressed() -> void:
 	get_tree().reload_current_scene()
+
+
+func register_carryables():
+	for body in get_tree().get_nodes_in_group("carryable"):
+		body.network_id = next_carryable_id
+		next_carryable_id += 1
+
+		# Host owns everything initially
+		body.authority_id = Steam.getLobbyOwner(Globals.LOBBY_ID)
+
+		Network.register_carryable(body)
