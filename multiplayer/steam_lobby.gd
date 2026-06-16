@@ -31,6 +31,21 @@ func _ready():
 	# Initial button state
 	update_Start_Button()
 
+var timer := 0.0
+
+func _process(delta):
+	if Globals.LOBBY_ID == 0:
+		return
+
+	timer += delta
+
+	if timer >= 1.0:
+		timer = 0.0
+
+		Network.send_to_all({
+			"steam_id": Globals.STEAM_ID,
+			"type": "test"
+		})
 
 
 func create_Lobby():
@@ -70,6 +85,12 @@ func get_Lobby_Members():
 		var MEMBER_STEAM_NAME = Steam.getFriendPersonaName(MEMBER_STEAM_ID)
 		# Add members to list
 		add_Player_List(MEMBER_STEAM_ID, MEMBER_STEAM_NAME)
+	
+	for member in Globals.LOBBY_MEMBERS:
+		if member["steam_id"] == Globals.STEAM_ID:
+			continue
+
+		Network.register_peer(member["steam_id"])
 	
 	# Update button state
 	update_Start_Button()

@@ -104,20 +104,19 @@ var heartbeat := 0
 
 
 func _ready() -> void:
-	GameManager.game_over_triggered.connect(_on_game_over)
-	gravityController.setup(self, movementController)
-	movementController.setup(self, gravityController)
-	
 	if player_id == Globals.STEAM_ID:
 		is_local = true
 	
-	
 	if is_local:
-		cam.current = true
-	else:
-		cam.current = false
+		
+		GameManager.game_over_triggered.connect(_on_game_over)
+		gravityController.setup(self, movementController)
+		movementController.setup(self, gravityController)
+		
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	if !is_local:
+		cam.current = false
 
 func _input(event: InputEvent) -> void:
 	if in_menu:
@@ -379,6 +378,9 @@ func _on_game_over() -> void:
 
 
 func send_network_state():
+	if heartbeat == 1:
+		print("FIRST SEND ", Time.get_ticks_msec())
+		
 	var data = {
 		"steam_id": player_id,
 		"pos": global_position,
@@ -387,15 +389,19 @@ func send_network_state():
 	}
 	
 	Network.send_to_all(data)
-	
-	if heartbeat % 60 == 0:
-		print("Sending from ", player_id)
 
 
 func apply_network_state(data: Dictionary) -> void:
 	if is_local:
 		return
-
+	
+	print(
+		"Applying state from ",
+		data["steam_id"],
+		" pos=",
+		data["pos"]
+	)
+	
 	global_position = data["pos"]
 	antMesh.global_rotation = data["rot"]
 	velocity = data["vel"]

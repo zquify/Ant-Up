@@ -32,6 +32,16 @@ func _ready():
 	
 	Steam.join_requested.connect(_on_join_requested)
 	check_command_line()
+	Steam.p2p_session_request.connect(_on_p2p_session_request)
+	Steam.p2p_session_connect_fail.connect(_on_p2p_session_connect_fail)
+
+
+func _on_p2p_session_request(remote_id):
+	print("P2P session request from ", remote_id)
+	Steam.acceptP2PSessionWithUser(remote_id)
+
+func _on_p2p_session_connect_fail(remote_id, error):
+	print("P2P connect failed: ", remote_id, " error=", error)
 
 
 func _process(_delta: float) -> void:

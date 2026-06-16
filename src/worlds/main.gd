@@ -46,8 +46,6 @@ func spawn_player(steam_id: int) -> void:
 
 	player.add_to_group("players_" + str(steam_id))
 
-	Network.register_peer(steam_id)
-
 
 func pick_spawn() -> Transform3D:
 	var spawns = get_tree().get_nodes_in_group("spawn_locations")
