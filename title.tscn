@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dttfeod25llbm"]
 
 [ext_resource type="Script" uid="uid://q3thuvb1vtg4" path="res://title.gd" id="1_oyqm6"]
-[ext_resource type="PackedScene" uid="uid://wh5yrn43ooq4" path="res://multiplayer/steam_lobby.tscn" id="2_oyqm6"]
+[ext_resource type="PackedScene" uid="uid://b4aukl5x23tid" path="res://multiplayer/steam_lobby.tscn" id="2_oyqm6"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_06r0y"]
 font_size = 135

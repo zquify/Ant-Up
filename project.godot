@@ -208,4 +208,4 @@ lightmapping/size/mode=0
 initialization/app_id=4829120
 initialization/initialize_on_startup=true
 initialization/app_id.release_app_id=4829120
-initialization/app_id.playtest_app_id=4829320
+initialization/app_id.demo_app_id=4865730

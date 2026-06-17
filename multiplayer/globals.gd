@@ -16,7 +16,7 @@ const STEAM_LOBBY = preload("res://multiplayer/steam_lobby.tscn")
 var AVATAR_CACHE := {}
 
 func _ready():
-	var INIT = Steam.steamInit()
+	var _INIT = Steam.steamInit()
 	#if not INIT:
 		#print("Failed to initialize Steam. Shutting down...")
 		#get_tree().quit()
