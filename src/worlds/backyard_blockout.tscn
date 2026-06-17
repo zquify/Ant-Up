@@ -653,11 +653,14 @@ transform = Transform3D(0.38262418, -0.76036805, -0.524823, 0.82800215, 0.030195
 [node name="Strawberry5" parent="Carryables" unique_id=1714143886 instance=ExtResource("11_1mkdf")]
 transform = Transform3D(0.6167997, 0.6106786, -0.49661842, -0.7849315, 0.43018776, -0.44589365, -0.05865857, 0.66483843, 0.7446806, 68.59421, 207.83139, -132.33342)
 
-[node name="Strawberry6" parent="Carryables" unique_id=918199296 instance=ExtResource("11_1mkdf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 158.39635, 0, -129.709)
-
 [node name="Banana" parent="Carryables" unique_id=1824742691 instance=ExtResource("14_a1g66")]
 transform = Transform3D(1, 0, 0, 0, 0.18075947, 0.9835273, 0, -0.9835273, 0.18075947, -119.48252, 31.892765, 109.63659)
+
+[node name="Banana2" parent="Carryables" unique_id=1217592183 instance=ExtResource("14_a1g66")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 215.95135, 0.2590444, -205.96852)
+
+[node name="Strawberry2" parent="Carryables" unique_id=397692345 instance=ExtResource("11_1mkdf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 209.776, 3.8146973e-06, -199.75499)
 
 [node name="Human" parent="." unique_id=692812724 instance=ExtResource("12_1mkdf")]
 
