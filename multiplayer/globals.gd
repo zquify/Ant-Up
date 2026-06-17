@@ -17,18 +17,18 @@ var AVATAR_CACHE := {}
 
 func _ready():
 	var INIT = Steam.steamInit()
-	if not INIT:
-		print("Failed to initialize Steam. Shutting down...")
-		get_tree().quit()
+	#if not INIT:
+		#print("Failed to initialize Steam. Shutting down...")
+		#get_tree().quit()
 	
 	ONLINE = Steam.loggedOn()
 	STEAM_ID = Steam.getSteamID()
 	STEAM_NAME = Steam.getPersonaName()
 	OWNED = Steam.isSubscribed()
 	
-	if OWNED == false:
-		print("User does not own this game")
-		get_tree().quit()
+	#if OWNED == false:
+		#print("User does not own this game")
+		#get_tree().quit()
 	
 	Steam.join_requested.connect(_on_join_requested)
 	check_command_line()
