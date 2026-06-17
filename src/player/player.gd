@@ -97,6 +97,10 @@ var in_menu: bool = false
 var dead := false
 var is_local := false
 
+var network_target_position := Vector3.ZERO
+var network_target_rotation := Vector3.ZERO
+var network_send_timer := 0.0
+
 # Debug
 var heartbeat := 0
 
@@ -155,6 +159,23 @@ func respawn():
 	global_transform = mm.pick_spawn()
 	velocity = Vector3.ZERO
 
+
+func _process(delta: float) -> void:
+	if !is_local:
+		# Interpolate remote player position and rotation
+		global_position = global_position.lerp(
+			network_target_position,
+			20.0 * delta
+		)
+		var rot = antMesh.global_rotation
+		antMesh.global_rotation = Vector3(
+			lerp_angle(rot.x, network_target_rotation.x, 20.0 * delta),
+			lerp_angle(rot.y, network_target_rotation.y, 20.0 * delta),
+			lerp_angle(rot.z, network_target_rotation.z, 20.0 * delta)
+		)
+		return
+
+
 func _physics_process(delta: float) -> void:
 	if !is_local:
 		return
@@ -164,8 +185,10 @@ func _physics_process(delta: float) -> void:
 	if dead:
 		return
 	
-	# ONLY send your own player
-	if is_local:
+	# ONLY send your own player (20 packets per second)
+	network_send_timer += delta
+	if network_send_timer >= 0.05:
+		network_send_timer = 0.0
 		send_network_state()
 	
 	assert(velocity.is_finite())
@@ -386,9 +409,6 @@ func _on_game_over() -> void:
 
 
 func send_network_state():
-	if heartbeat == 1:
-		print("FIRST SEND ", Time.get_ticks_msec())
-		
 	var data = {
 		"steam_id": player_id,
 		"pos": global_position,
@@ -403,13 +423,6 @@ func apply_network_state(data: Dictionary) -> void:
 	if is_local:
 		return
 	
-	print(
-		"Applying state from ",
-		data["steam_id"],
-		" pos=",
-		data["pos"]
-	)
-	
-	global_position = data["pos"]
-	antMesh.global_rotation = data["rot"]
+	network_target_position = data["pos"]
+	network_target_rotation = data["rot"]
 	velocity = data["vel"]

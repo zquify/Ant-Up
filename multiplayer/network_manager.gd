@@ -4,7 +4,6 @@ var peers := {}
 var carryables := {}
 
 func register_peer(steam_id: int):
-	print("Registering peer ", steam_id)
 	peers[steam_id] = true
 
 func unregister_peer(steam_id: int):
@@ -17,20 +16,14 @@ func send_to_all(data: Dictionary):
 		if id == Globals.STEAM_ID:
 			continue
 		
-		var result = Steam.sendP2PPacket(
+		var _result = Steam.sendP2PPacket(
 			id,
 			bytes,
 			Steam.P2P_SEND_UNRELIABLE
 		)
-		
-		if !result:
-			print("Failed sending to ", id)
 
 func read_packets():
 	var size = Steam.getAvailableP2PPacketSize()
-	
-	if size > 0:
-		print("Packets available")
 	
 	while size > 0:
 		var packet = Steam.readP2PPacket(size)
@@ -88,7 +81,6 @@ func handle_packet(data: Dictionary):
 		return
 
 	if data.get("type", "") == "test":
-		print("Received test packet from ", data["steam_id"])
 		return
 
 	# Player movement packets fall through to here

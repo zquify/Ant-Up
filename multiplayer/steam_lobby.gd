@@ -278,7 +278,6 @@ func _on_Lobby_Data_Update(_success, lobbyID, _memberID, key):
 	# When ready status changes, update host's view
 	if key == "ready_status":
 		var ready_data = Steam.getLobbyData(lobbyID, "ready_status")
-		print("Ready status data: " + ready_data)
 		
 		# Parse and store ready statuses
 		var ready_states = {}
