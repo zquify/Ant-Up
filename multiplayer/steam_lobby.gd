@@ -3,6 +3,7 @@ extends Control
 @export var game_scene: PackedScene
 
 @onready var name_label: Label = $SteamName
+@onready var steam_avatar: TextureRect = $SteamAvatar
 @onready var chat_label: Label = $Chat/ChatLabel
 @onready var lobby_output: RichTextLabel = $Chat/ChatLog
 @onready var lobby_popup: Panel = $Lobbies
@@ -17,6 +18,7 @@ extends Control
 func _ready():
 	# Set steam name on screen
 	name_label.text = Globals.STEAM_NAME
+	steam_avatar.texture = Globals.get_avatar_texture(Globals.STEAM_ID)
 	
 	# Steamwork Connections
 	Steam.lobby_created.connect(_on_Lobby_Created)
