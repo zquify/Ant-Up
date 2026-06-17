@@ -296,6 +296,10 @@ func _on_Lobby_Data_Update(_success, lobbyID, _memberID, key):
 
 
 func _on_Lobby_Match_List(lobbies):
+	# Clear previous lobby list
+	for child in lobby_list.get_children():
+		child.queue_free()
+	
 	for LOBBY in lobbies:
 		# Grab desired lobby data
 		var LOBBY_NAME = Steam.getLobbyData(LOBBY, "name")

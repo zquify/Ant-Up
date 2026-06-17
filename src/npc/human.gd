@@ -121,9 +121,17 @@ func handle_stuck() -> void:
 
 func update_targets() -> void:
 	var players = get_tree().get_nodes_in_group("player")
-
+	
 	if players.size() > 0:
-		player_target = players[0]
+		# Find the closest player instead of always picking the first one
+		var closest_player = null
+		var closest_dist = INF
+		for player in players:
+			var dist = global_position.distance_squared_to(player.global_position)
+			if dist < closest_dist:
+				closest_dist = dist
+				closest_player = player
+		player_target = closest_player
 
 	if player_target and not player_target.dead:
 		player_detector.look_at(player_target.global_position, Vector3.UP)
