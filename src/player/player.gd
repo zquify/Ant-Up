@@ -12,7 +12,6 @@ class_name Player
 @onready var cam: Camera3D     = $gravityControl/yawAxis/pitchAxis/SpringArm3D/Camera3D
 ## Shape cast pointing downward to detect surfaces beneath the player
 @onready var downProbe: ShapeCast3D = $ShapeCast3D
-
 ## The visual ant mesh that rotates to face movement direction
 @onready var antMesh: Node3D = $gravityControl/Ant
 ## How fast the ant mesh rotates to face movement direction (degrees/sec)
@@ -21,7 +20,6 @@ class_name Player
 @onready var gravityController: GravityController = $controllers/gravityController
 ## Handles WASD movement, jumping, and external impulses
 @onready var movementController: MovementController = $controllers/movementController
-
 ## Whether the arrow texture image points upward (affects rotation offset)
 @export var arrowTexturePointsUp := true
 
@@ -77,7 +75,6 @@ class_name Player
 
 var player_id := 0
 
-
 # shared runtime state
 var pitch := 0.0
 var yaw := 0.0
@@ -92,18 +89,15 @@ var justForceAttached := false
 var justManuallyAttached := false
 var manualAttachLockTimer := 0.0
 var jumpGraceTimer := 0.0
-
 var in_menu: bool = false
 var dead := false
 var is_local := false
-
 var network_target_position := Vector3.ZERO
 var network_target_rotation := Vector3.ZERO
 var network_send_timer := 0.0
 
 # Debug
 var heartbeat := 0
-
 #endregion
 
 
@@ -112,7 +106,6 @@ func _ready() -> void:
 		is_local = true
 	
 	if is_local:
-		
 		GameManager.game_over_triggered.connect(_on_game_over)
 		gravityController.setup(self, movementController)
 		movementController.setup(self, gravityController)
@@ -121,6 +114,7 @@ func _ready() -> void:
 	
 	if !is_local:
 		cam.current = false
+
 
 func _input(event: InputEvent) -> void:
 	if in_menu:
@@ -141,18 +135,15 @@ func _updateJoystickLook(delta: float) -> void:
 	
 	var lookX := Input.get_axis("look_left", "look_right")
 	var lookY := Input.get_axis("look_up", "look_down")
-
 	# Deadzone
 	if abs(lookX) < 0.1:
 		lookX = 0.0
-
 	if abs(lookY) < 0.1:
 		lookY = 0.0
-
 	yaw -= lookX * stickLookSens * delta
 	pitch -= lookY * stickLookSens * delta
-
 	pitch = clamp(pitch, -pitchLimit, pitchLimit)
+
 
 func respawn():
 	var mm = get_parent().get_parent()
@@ -199,51 +190,41 @@ func _physics_process(delta: float) -> void:
 	_updateJoystickLook(delta)
 	
 	gravityController.updateUpAxis(delta)
-
 	if !in_menu: movementController.updatePlanarAndJump(delta)
-
 	gravityController.applyVerticalAccel(delta)
-
-
 	var imp := movementController.consumeUnsafeImpulse()
 	if imp != Vector3.ZERO:
-			# carry it into the "external" channel so planar steering won't kill it next frame
+		# carry it into the "external" channel so planar steering won't kill it next frame
 		movementController.addExternalKickWorld(imp)
-			# explicit unsafe injection (your requested point)
+		# explicit unsafe injection (your requested point)
 		velocity += imp
-
-
 	preMoveVel = velocity
 	move_and_slide()
-
-
 	_updateCameraRig()
-
-		# ---- break external recoil if we collide into something ----
+	
+	# ---- break external recoil if we collide into something ----
 	# ---- recoil impact: stop/slide external + force-attach to contacted surface ----
 	if movementController.externalVel != Vector3.ZERO and get_slide_collision_count() > 0:
 		var ext := movementController.externalVel
 		var bestN := Vector3.ZERO
 		var bestPush := 0.0
-
 		for i in range(get_slide_collision_count()):
 			var n := (get_slide_collision(i).get_normal() as Vector3).normalized()
 			var push := -ext.dot(n)
 			if push > bestPush:
 				bestPush = push
 				bestN = n
-
 		if bestPush > 0.05 and bestN != Vector3.ZERO:
 			movementController.clearExternalKick()
 			velocity = velocity.slide(bestN)
-
 			gravityController.forceAttachToNormal(bestN)
 			justForceAttached = true
-
+	
 	gravityController.updateAttachmentAfterMove(delta)
 	gravityController.clampIntoFloor()
 	_updateAntRotation(delta)
 	handle_holding_objects()
+
 
 func _updateAntRotation(delta: float) -> void:
 	if !is_local:
@@ -261,23 +242,21 @@ func _updateAntRotation(delta: float) -> void:
 		# lerp_angle automatically handles the shortest path and angle wrapping
 		antMesh.rotation.y = lerp_angle(antMesh.rotation.y, targetAngle, antRotationSpeed * delta)
 
+
 func _updateCameraRig() -> void:
 	var up := currentUp.normalized()
-
 	var refForward := (-rigRoot.global_transform.basis.z).normalized()
 	refForward = refForward - up * refForward.dot(up)
-
 	if refForward.length() < 0.001:
 		var tmp := Vector3.FORWARD if abs(up.dot(Vector3.FORWARD)) < 0.99 else Vector3.RIGHT
 		refForward = tmp - up * tmp.dot(up)
-
 	var fwd := refForward.normalized()
 	var right := fwd.cross(currentUp).normalized()
 	var targetBasis := Basis(right, up, -fwd).orthonormalized()
-
 	rigRoot.global_transform.basis = targetBasis
 	yawNode.rotation = Vector3(0.0, yaw, 0.0)
 	pitchNode.rotation = Vector3(pitch, 0.0, 0.0)
+
 
 func _screenArrowAngle(camRef: Camera3D, worldDir: Vector3) -> float:
 	var d := worldDir.normalized()
@@ -291,16 +270,18 @@ func _screenArrowAngle(camRef: Camera3D, worldDir: Vector3) -> float:
 	var y := dProj.dot(up)
 	return Vector2(x, -y).angle()
 
+
 func addImpulseWorld(imp: Vector3) -> void:
 	movementController.addExternalKickWorld(imp)
+
 
 func addImpulseWorldUnsafe(imp: Vector3) -> void:
 	movementController.addUnsafeImpulseWorld(imp)
 
+
 var heldObject: RigidBody3D
 var closest_node: Marker3D
 var grabJoint: PinJoint3D
-
 @onready var grabAnchor: StaticBody3D = $gravityControl/Ant/GrabAnchor
 
 
@@ -357,20 +338,16 @@ func set_held_object(body):
 	var correction := grabAnchor.global_position - closest_node.global_position
 	heldObject.global_position += correction
 	
-	# ONLY CREATE PINJOINT IF WE'RE THE AUTHORITY
-	# Other carriers will just hold the reference but not physically connect
-	if is_authority_now:
-		grabJoint = PinJoint3D.new()
-		get_tree().current_scene.add_child(grabJoint)
-		grabJoint.global_position = grabAnchor.global_position
-		grabJoint.node_a = grabAnchor.get_path()
-		grabJoint.node_b = heldObject.get_path()
-		print_debug("Authority: Created PinJoint for object")
-	else:
-		print_debug("Not authority: Holding visually only (no PinJoint)")
+	# Create PinJoint immediately so we feel the pickup
+	grabJoint = PinJoint3D.new()
+	get_tree().current_scene.add_child(grabJoint)
+	grabJoint.global_position = grabAnchor.global_position
+	grabJoint.node_a = grabAnchor.get_path()
+	grabJoint.node_b = heldObject.get_path()
 	
-	print_debug("Successfully picked up object: ", heldObject.name, " (Authority: ", is_authority_now, ")")
- 
+	print_debug("Successfully picked up object: ", heldObject.name)
+
+
 func drop_held_object():
 	if grabJoint:
 		grabJoint.queue_free()
@@ -391,7 +368,8 @@ func drop_held_object():
 	
 	heldObject = null
 	closest_node = null
- 
+
+
 func handle_holding_objects():
 	if Input.is_action_just_pressed("interact"):
 		if heldObject:
@@ -410,21 +388,15 @@ func handle_holding_objects():
 				drop_held_object()
 
 
-
-
 func die() -> void:
 	if dead:
 		return
-
 	dead = true
-
 	# Drop anything being carried
 	drop_held_object()
-
 	# Stop movement
 	velocity = Vector3.ZERO
 	movementController.clearExternalKick()
-
 	# Disable controls
 	in_menu = true
 	antMesh.visible = false
