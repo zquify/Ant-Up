@@ -72,11 +72,11 @@ func _on_restart_pressed() -> void:
 
 
 func register_carryables():
+	var host_id = Steam.getLobbyOwner(Globals.LOBBY_ID)
 	for body in get_tree().get_nodes_in_group("carryable"):
 		body.network_id = next_carryable_id
 		next_carryable_id += 1
-
-		# Host owns everything initially
-		body.authority_id = Steam.getLobbyOwner(Globals.LOBBY_ID)
-
+		# Set default authority to host
+		body.default_authority_id = host_id
+		body.authority_id = host_id
 		Network.register_carryable(body)

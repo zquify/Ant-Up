@@ -11,7 +11,6 @@ func unregister_peer(steam_id: int):
 
 func send_to_all(data: Dictionary):
 	var bytes = var_to_bytes(data)
-
 	for id in peers.keys():
 		if id == Globals.STEAM_ID:
 			continue
@@ -29,17 +28,12 @@ func read_packets():
 		var packet = Steam.readP2PPacket(size)
 		if packet.is_empty():
 			return
-
 		var data = bytes_to_var(packet["data"])
 		handle_packet(data)
-
 		size = Steam.getAvailableP2PPacketSize()
-
-var seen_first_packet := false
 
 func handle_packet(data: Dictionary):
 	if data.get("type") == "ai_state":
-		
 		var ai = get_tree().get_first_node_in_group("ai_" + str(data["id"]))
 		if ai == null:
 			return
@@ -51,45 +45,54 @@ func handle_packet(data: Dictionary):
 		ai.network_velocity = data["vel"]
 		ai.rotation.y = data["rot_y"]
 		ai.state = data["state"]
-		
 		return
-
-	if data.get("type","") == "carryable_claim":
-
+	
+	# Handle carryable pickup
+	if data.get("type") == "carryable_pickup":
 		var body = carryables.get(data["id"])
-
 		if body:
-			body.authority_id = data["owner"]
-
+			body.carriers[data["steam_id"]] = true
+			body.authority_id = data.get("authority_id", 0)
 		return
-
-	if data.get("type","") == "carryable_state":
-
+	
+	# Handle carryable drop
+	if data.get("type") == "carryable_drop":
 		var body = carryables.get(data["id"])
-
+		if body:
+			body.carriers.erase(data["steam_id"])
+			body.authority_id = data.get("authority_id", 0)
+			
+			# Reset collision if no more carriers
+			if body.carriers.size() == 0:
+				body.axis_lock_angular_x = false
+				body.collision_layer = 4
+		return
+	
+	# Handle carryable state (physics authority sending updates)
+	if data.get("type") == "carryable_state":
+		var body = carryables.get(data["id"])
 		if body == null:
 			return
-
+		
+		# Only non-authority players receive state updates
 		if body.authority_id == Globals.STEAM_ID:
 			return
-
+		
 		body.network_target_position = data["pos"]
 		body.network_target_rotation = data["rot"]
 		body.linear_velocity = data["lin_vel"]
 		body.angular_velocity = data["ang_vel"]
-
 		return
-
+	
 	if data.get("type", "") == "test":
 		return
-
-	# Player movement packets fall through to here
-	var steam_id = data["steam_id"]
-
-	var player = get_tree().get_first_node_in_group("players_" + str(steam_id))
-	if player:
-		player.apply_network_state(data)
-
+	
+	# Player movement packets
+	var steam_id = data.get("steam_id")
+	if steam_id:
+		var player = get_tree().get_first_node_in_group("players_" + str(steam_id))
+		if player:
+			player.apply_network_state(data)
 
 func register_carryable(body):
 	carryables[body.network_id] = body

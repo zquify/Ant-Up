@@ -307,82 +307,110 @@ var grabJoint: PinJoint3D
 func set_held_object(body):
 	if !(body is Carryable):
 		return
-
-	heldObject = body
-	heldObject.collision_layer = 2
 	
-	heldObject.authority_id = Globals.STEAM_ID
-
-	Network.send_to_all({
-		"type": "carryable_claim",
-		"id": heldObject.network_id,
-		"owner": Globals.STEAM_ID
-	})
-
-	var shortest_distance_squared := INF
-	closest_node = null
-
-	var carry_points := heldObject.find_child("CarryPoints")
-
-	if carry_points == null:
+	# Don't pick up if we're already holding something
+	if heldObject != null:
 		return
-
+	
+	# VERIFY WE CAN PICK IT UP BEFORE MODIFYING ANY STATE
+	var carry_points = body.find_child("CarryPoints")
+	if carry_points == null:
+		print_debug("Object has no CarryPoints node")
+		return
+	
+	var shortest_distance_squared := INF
+	var closest_node_temp = null
 	for target in carry_points.get_children():
 		if target is Marker3D:
 			var dist = interactRay.get_collision_point(0).distance_squared_to(
 				target.global_position
 			)
-
 			if dist < shortest_distance_squared:
 				shortest_distance_squared = dist
-				closest_node = target
-
-	if closest_node == null:
+				closest_node_temp = target
+	
+	if closest_node_temp == null:
+		print_debug("No valid carry points found")
 		return
-
-	# Snap the chosen carry point onto the grab anchor.
+	
+	# NOW we know we can pick it up - modify state
+	heldObject = body
+	closest_node = closest_node_temp
+	
+	# Tell the carryable that we're now carrying it
+	heldObject.add_carrier(Globals.STEAM_ID)
+	
+	# Check if we're becoming the authority
+	var is_authority_before = (heldObject.authority_id == Globals.STEAM_ID)
+	
+	# If nobody had authority, we become authority
+	if heldObject.authority_id == 0:
+		heldObject.authority_id = Globals.STEAM_ID
+	
+	# Update authority on our local copy immediately
+	var is_authority_now = (heldObject.authority_id == Globals.STEAM_ID)
+	
+	# Set collision after confirming pickup
+	heldObject.collision_layer = 2
+	
+	# Snap the chosen carry point onto the grab anchor
 	var correction := grabAnchor.global_position - closest_node.global_position
 	heldObject.global_position += correction
-
-	# Stop barrel rolls while carried.
-	#heldObject.axis_lock_angular_x = true
-
-	grabJoint = PinJoint3D.new()
-	get_tree().current_scene.add_child(grabJoint)
-
-	grabJoint.global_position = grabAnchor.global_position
-
-	grabJoint.node_a = grabAnchor.get_path()
-	grabJoint.node_b = heldObject.get_path()
-
+	
+	# ONLY CREATE PINJOINT IF WE'RE THE AUTHORITY
+	# Other carriers will just hold the reference but not physically connect
+	if is_authority_now:
+		grabJoint = PinJoint3D.new()
+		get_tree().current_scene.add_child(grabJoint)
+		grabJoint.global_position = grabAnchor.global_position
+		grabJoint.node_a = grabAnchor.get_path()
+		grabJoint.node_b = heldObject.get_path()
+		print_debug("Authority: Created PinJoint for object")
+	else:
+		print_debug("Not authority: Holding visually only (no PinJoint)")
+	
+	print_debug("Successfully picked up object: ", heldObject.name, " (Authority: ", is_authority_now, ")")
+ 
 func drop_held_object():
 	if grabJoint:
 		grabJoint.queue_free()
 		grabJoint = null
-
+	
 	if heldObject:
-		heldObject.axis_lock_angular_x = false
-		heldObject.collision_layer = 4
-
+		# Tell the carryable that we're no longer carrying it
+		heldObject.remove_carrier(Globals.STEAM_ID)
+		
+		# Only reset collision if no one else is carrying it
+		if not heldObject.is_carried():
+			heldObject.axis_lock_angular_x = false
+			heldObject.collision_layer = 4
+		
+		print_debug("Dropped object: ", heldObject.name)
+	else:
+		print_debug("Tried to drop but no held object")
+	
 	heldObject = null
 	closest_node = null
-
+ 
 func handle_holding_objects():
-
 	if Input.is_action_just_pressed("interact"):
 		if heldObject:
 			drop_held_object()
 		elif interactRay.is_colliding():
 			set_held_object(interactRay.get_collider(0))
-
+	
 	if heldObject:
-
+		# Check if we're too far from the object
 		if heldObject.global_position.distance_to(grabAnchor.global_position) > maxDistanceFromHold:
 			drop_held_object()
-
+		
+		# Check if we're below the object (ground collision)
 		if dropBelowPlayer and groundRay.is_colliding():
 			if groundRay.get_collider() == heldObject:
 				drop_held_object()
+
+
+
 
 func die() -> void:
 	if dead:
