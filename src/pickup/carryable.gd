@@ -3,57 +3,74 @@ class_name Carryable
 
 @onready var starting_transform: Transform3D = self.global_transform
 @export var score: int = 1
+
 var delivered := false
 var network_id := -1
 
 # Multiple carriers system
 var carriers := {}  # { steam_id: true, ... }
-var carrier_joints := {}  # { steam_id: PinJoint3D, ... } - joints for each carrier
-var authority_id := 0  # Current physics authority (carrier or host)
-var default_authority_id := 0  # Host authority (set during registration)
+var carrier_joints := {}  # { steam_id: PinJoint3D, ... }
+var carrier_joint_target_distances := {}  # { steam_id: float, ... } - target distance for shrinking
+var carrier_joint_shrink_rate := 2.0  # units per second
 
-# Network interpolation for non-authority
+var network_owner_id := 0  # Who sends sync packets
+var default_authority_id := 0  # Host (set during registration)
+
+# Network interpolation for non-carriers only
 var network_target_position := Vector3.ZERO
 var network_target_rotation := Basis.IDENTITY
 var send_timer := 0.0
 
-
 func _ready():
-	# Initialize network targets to current position so we don't lerp to origin when dropped
 	network_target_position = global_position
 	network_target_rotation = global_basis
-
+	print_debug("Carryable ready. network_owner_id=", network_owner_id, " Globals.STEAM_ID=", Globals.STEAM_ID)
+	update_label_color()
 
 func _process(delta):
-	# Skip if we're the authority (we handle our own physics)
-	if authority_id == Globals.STEAM_ID:
+	# Shrink PinJoints for all carriers (local simulation)
+	for steam_id in carrier_joints.keys():
+		var joint = carrier_joints[steam_id]
+		if joint == null:
+			continue
+		
+		var current_distance = joint.global_position.distance_to(global_position)
+		var target_distance = carrier_joint_target_distances.get(steam_id, 0.0)
+		
+		# Shrink toward target, but never grow
+		if current_distance > target_distance:
+			target_distance = move_toward(current_distance, 0.0, carrier_joint_shrink_rate * delta)
+			carrier_joint_target_distances[steam_id] = target_distance
+	
+	# Carriers simulate locally, don't lerp from network
+	if is_carrier():
 		return
 	
-	# Interpolate position/rotation from the authority
-	global_position = global_position.lerp(
-		network_target_position,
-		15.0 * delta
-	)
-	global_basis = global_basis.slerp(
-		network_target_rotation,
-		15.0 * delta
-	)
-
-
-func return_home():
-	linear_velocity = Vector3.ZERO
-	angular_velocity = Vector3.ZERO
-	global_transform = starting_transform
-
+	# Non-carriers only: interpolate from network owner
+	if network_owner_id != Globals.STEAM_ID:
+		global_position = global_position.lerp(
+			network_target_position,
+			15.0 * delta
+		)
+		global_basis = global_basis.slerp(
+			network_target_rotation,
+			15.0 * delta
+		)
 
 func _physics_process(delta):
-	# Only the authority handles physics
-	if authority_id != Globals.STEAM_ID:
+	# Simulate physics if you're owner or a carrier
+	if not _should_simulate_physics():
 		sleeping = true
 		return
 	
 	sleeping = false
 	
+	# Only the owner sends sync packets to the network
+	# Carriers (non-owner) simulate locally but don't send syncs
+	if network_owner_id != Globals.STEAM_ID:
+		return  # Carrier: run local physics but don't send network updates
+	
+	# Owner: run physics and send syncs
 	send_timer += delta
 	if send_timer < 0.05:
 		return
@@ -70,6 +87,16 @@ func _physics_process(delta):
 		"carriers": Array(carriers.keys())
 	})
 
+func _should_simulate_physics() -> bool:
+	# Both owner and carriers simulate physics locally
+	if network_owner_id == Globals.STEAM_ID:
+		return true
+	if is_carrier():
+		return true
+	return false
+
+func is_carrier() -> bool:
+	return Globals.STEAM_ID in carriers
 
 func add_carrier(steam_id: int) -> void:
 	"""Add a new carrier to this object"""
@@ -78,15 +105,15 @@ func add_carrier(steam_id: int) -> void:
 	
 	carriers[steam_id] = true
 	
-	# First carrier (or host) becomes authority
-	if carriers.size() == 1:
-		authority_id = steam_id
-	elif authority_id == 0:
-		# Fallback: use first carrier as authority
-		authority_id = steam_id
+	# First carrier becomes network owner (replaces previous owner if any)
+	if carriers.size() == 1:  # This is the first carrier
+		network_owner_id = steam_id
+		print_debug("Authority transferred! New owner: ", steam_id, " (I am ", Globals.STEAM_ID, ")")
+		update_label_color()
+	else:
+		print_debug("New carrier added: ", steam_id, " but keeping existing owner: ", network_owner_id, " (I am ", Globals.STEAM_ID, ")")
 	
-	# Update network targets to current position when picked up
-	# This ensures we don't lerp to stale positions
+	# Update network targets so we don't lerp to stale positions
 	network_target_position = global_position
 	network_target_rotation = global_basis
 	
@@ -95,9 +122,8 @@ func add_carrier(steam_id: int) -> void:
 		"type": "carryable_pickup",
 		"id": network_id,
 		"steam_id": steam_id,
-		"authority_id": authority_id
+		"network_owner_id": network_owner_id
 	})
-
 
 func remove_carrier(steam_id: int) -> void:
 	"""Remove a carrier from this object"""
@@ -105,6 +131,7 @@ func remove_carrier(steam_id: int) -> void:
 		return
 	
 	carriers.erase(steam_id)
+	print_debug("Carrier removed: ", steam_id, " Remaining carriers: ", Array(carriers.keys()), " (I am ", Globals.STEAM_ID, ")")
 	
 	# Clean up the joint for this carrier
 	if steam_id in carrier_joints:
@@ -112,47 +139,50 @@ func remove_carrier(steam_id: int) -> void:
 		if joint:
 			joint.queue_free()
 		carrier_joints.erase(steam_id)
+		carrier_joint_target_distances.erase(steam_id)
 	
-	# If authority drops and there are other carriers, reassign authority
-	if steam_id == authority_id and carriers.size() > 0:
-		# Another player is still holding it
-		authority_id = carriers.keys()[0]
-	elif steam_id == authority_id and carriers.size() == 0:
-		# Last carrier dropped - they keep authority to simulate falling physics
-		authority_id = steam_id
+	# If network owner drops and there are other carriers, reassign ownership
+	if steam_id == network_owner_id and carriers.size() > 0:
+		network_owner_id = carriers.keys()[0]
+		print_debug("Owner dropped but others remain. New owner: ", network_owner_id)
+		update_label_color()
+	elif steam_id == network_owner_id and carriers.size() == 0:
+		# Last carrier dropped - they keep ownership to simulate falling physics
+		network_owner_id = steam_id
+		print_debug("Last carrier dropped. They keep ownership: ", network_owner_id)
+		update_label_color()
 	
-	# Notify network - include current position/velocity so host knows where it actually is
+	# Notify network
 	Network.send_to_all({
 		"type": "carryable_drop",
 		"id": network_id,
 		"steam_id": steam_id,
-		"authority_id": authority_id,
+		"network_owner_id": network_owner_id,
 		"pos": global_position,
 		"rot": global_basis,
 		"lin_vel": linear_velocity,
 		"ang_vel": angular_velocity
 	})
 
-
 func is_carried() -> bool:
 	return carriers.size() > 0
-
 
 func get_carriers() -> Array:
 	return carriers.keys()
 
-
-# Called by the network manager when a remote player picks up this object
+# Called by network manager when a remote carrier picks up this object
 func create_carrier_joint(steam_id: int, player: CharacterBody3D) -> void:
-	"""Create a PinJoint for a non-authority carrier"""
+	"""Create a PinJoint for a new carrier"""
 	if steam_id in carrier_joints:
 		return  # Joint already exists
 	
-	# Get the player's grab anchor
 	var grab_anchor = player.get_node_or_null("gravityControl/Ant/GrabAnchor")
 	if grab_anchor == null:
 		print_debug("Warning: Could not find grab anchor for player ", steam_id)
 		return
+	
+	# Create joint at current distance
+	var current_distance = grab_anchor.global_position.distance_to(global_position)
 	
 	var joint = PinJoint3D.new()
 	get_tree().current_scene.add_child(joint)
@@ -161,10 +191,11 @@ func create_carrier_joint(steam_id: int, player: CharacterBody3D) -> void:
 	joint.node_b = self.get_path()
 	
 	carrier_joints[steam_id] = joint
-	print_debug("Created PinJoint for non-authority carrier: ", steam_id)
+	carrier_joint_target_distances[steam_id] = current_distance
+	
+	print_debug("Created PinJoint for carrier: ", steam_id, " at distance ", current_distance)
 
-
-# Called by the network manager when a remote player drops this object
+# Called by network manager when a remote carrier drops this object
 func remove_carrier_joint(steam_id: int) -> void:
 	"""Remove the PinJoint for a carrier"""
 	if steam_id in carrier_joints:
@@ -172,4 +203,20 @@ func remove_carrier_joint(steam_id: int) -> void:
 		if joint:
 			joint.queue_free()
 		carrier_joints.erase(steam_id)
+		carrier_joint_target_distances.erase(steam_id)
 		print_debug("Removed PinJoint for carrier: ", steam_id)
+
+func return_home():
+	linear_velocity = Vector3.ZERO
+	angular_velocity = Vector3.ZERO
+	global_transform = starting_transform
+
+func update_label_color() -> void:
+	var label = get_node_or_null("Label3D")
+	if label == null:
+		return
+	
+	if network_owner_id == Globals.STEAM_ID:
+		label.modulate = Color.GREEN  # You have authority
+	else:
+		label.modulate = Color.YELLOW  # You don't have authority

@@ -2,65 +2,34 @@ extends CharacterBody3D
 class_name Player
 
 #region variables
-## Node that controls pitch (up/down) rotation
 @onready var pitchNode: Node3D = $gravityControl/yawAxis/pitchAxis
-## Node that controls yaw (left/right) rotation
 @onready var yawNode: Node3D   = $gravityControl/yawAxis
-## Root node of the camera rig, rotates to match surface orientation
 @onready var rigRoot: Node3D   = $gravityControl
-## The player's camera
 @onready var cam: Camera3D     = $gravityControl/yawAxis/pitchAxis/SpringArm3D/Camera3D
-## Shape cast pointing downward to detect surfaces beneath the player
 @onready var downProbe: ShapeCast3D = $ShapeCast3D
-## The visual ant mesh that rotates to face movement direction
 @onready var antMesh: Node3D = $gravityControl/Ant
-## How fast the ant mesh rotates to face movement direction (degrees/sec)
 @export var antRotationSpeed := 10.0 
-## Handles gravity, surface attachment, and detachment logic
 @onready var gravityController: GravityController = $controllers/gravityController
-## Handles WASD movement, jumping, and external impulses
 @onready var movementController: MovementController = $controllers/movementController
-## Whether the arrow texture image points upward (affects rotation offset)
 @export var arrowTexturePointsUp := true
 
-# shared tuning (controllers will read these off the player)
-## How fast the camera rig rotates to match the surface normal (higher = snappier)
 @export var rigReorientRate := 20.0
-## Maximum movement speed in units per second
 @export var speed := 15.0
-## Gravity acceleration when not attached (units/sec²)
 @export var gravityStrength := 50.0
-## Stick force pulling you into surfaces when attached (units/sec²)
 @export var stickStrength := 90.0
-## Maximum speed you can stick to surfaces (prevents infinite acceleration)
 @export var maxStickSpeed := 100.0
-## Vertical velocity applied when jumping
 @export var jumpSpeed := 20.0
-## Mouse sensitivity multiplier
 @export var mouseSens := 0.001
-## Joystick sensitivity multiplier
 @export var stickLookSens := 2.5
-## Maximum raycast distance for manual surface attachment (interact key)
 @export var attachRange := 2.5
-## Maximum pitch angle in radians (prevents looking too far up/down)
 @export var pitchLimit := deg_to_rad(85.0)
-## If true, automatically attach to walls when falling into them
 @export var autoAttach := true
-## Minimum dot product between surface normal and UP to be considered a "wall"
-## (0 = horizontal surface, 1 = vertical surface pointing up)
 @export var attachWallDot := 0.5
-## Minimum dot product between camera forward and surface normal to auto-attach
-## (higher = must look more directly at the surface)
-@export var faceDot := 0.7 # this big value means (closer to 1 = floor becomes wall) at 0.8 a 20 deg slope becomes a wall
-## How long you can lose surface contact before detaching (seconds)
+@export var faceDot := 0.7
 @export var detachGrace := 0.10
-## Speed of smoothing surface normal changes (higher = faster snapping)
-@export var supportNormalSmoothStep := 25.0     # bigger = snaps faster, smaller = smoother
-## Ignore surface normal changes smaller than this (degrees)
-@export var supportNormalDeadzoneDeg := 0.35    # ignore tiny normal changes (degrees)
-## Weight given to previous surface normal (0-1, prevents jitter)
-@export var continuityWeight := 0.35            # 0..1, biases toward last normal
-## Impulse decay rate (unused in current code)
+@export var supportNormalSmoothStep := 25.0
+@export var supportNormalDeadzoneDeg := 0.35
+@export var continuityWeight := 0.35
 @export var decayOfImpluse := 0.3
 
 @export_category("Holding Objects")
@@ -74,8 +43,6 @@ class_name Player
 @onready var drop_point: Marker3D = $gravityControl/Ant/DropPoint
 
 var player_id := 0
-
-# shared runtime state
 var pitch := 0.0
 var yaw := 0.0
 var currentUp := Vector3.UP
@@ -96,10 +63,15 @@ var network_target_position := Vector3.ZERO
 var network_target_rotation := Vector3.ZERO
 var network_send_timer := 0.0
 
-# Debug
 var heartbeat := 0
-#endregion
 
+# Holding objects
+var heldObject: Carryable
+var closest_node: Marker3D
+var grabJoint: PinJoint3D
+@onready var grabAnchor: StaticBody3D = $gravityControl/Ant/GrabAnchor
+
+#endregion
 
 func _ready() -> void:
 	if player_id == Globals.STEAM_ID:
@@ -115,7 +87,6 @@ func _ready() -> void:
 	if !is_local:
 		cam.current = false
 
-
 func _input(event: InputEvent) -> void:
 	if in_menu:
 		return
@@ -128,14 +99,12 @@ func _input(event: InputEvent) -> void:
 		pitch -= event.relative.y * mouseSens
 		pitch = clamp(pitch, -pitchLimit, pitchLimit)
 
-
 func _updateJoystickLook(delta: float) -> void:
 	if in_menu:
 		return
 	
 	var lookX := Input.get_axis("look_left", "look_right")
 	var lookY := Input.get_axis("look_up", "look_down")
-	# Deadzone
 	if abs(lookX) < 0.1:
 		lookX = 0.0
 	if abs(lookY) < 0.1:
@@ -144,12 +113,10 @@ func _updateJoystickLook(delta: float) -> void:
 	pitch -= lookY * stickLookSens * delta
 	pitch = clamp(pitch, -pitchLimit, pitchLimit)
 
-
 func respawn():
 	var mm = get_parent().get_parent()
 	global_transform = mm.pick_spawn()
 	velocity = Vector3.ZERO
-
 
 func _process(delta: float) -> void:
 	if !is_local:
@@ -166,7 +133,6 @@ func _process(delta: float) -> void:
 		)
 		return
 
-
 func _physics_process(delta: float) -> void:
 	if !is_local:
 		return
@@ -176,7 +142,7 @@ func _physics_process(delta: float) -> void:
 	if dead:
 		return
 	
-	# ONLY send your own player (20 packets per second)
+	# Send player state (20 packets per second)
 	network_send_timer += delta
 	if network_send_timer >= 0.05:
 		network_send_timer = 0.0
@@ -194,16 +160,12 @@ func _physics_process(delta: float) -> void:
 	gravityController.applyVerticalAccel(delta)
 	var imp := movementController.consumeUnsafeImpulse()
 	if imp != Vector3.ZERO:
-		# carry it into the "external" channel so planar steering won't kill it next frame
 		movementController.addExternalKickWorld(imp)
-		# explicit unsafe injection (your requested point)
 		velocity += imp
 	preMoveVel = velocity
 	move_and_slide()
 	_updateCameraRig()
 	
-	# ---- break external recoil if we collide into something ----
-	# ---- recoil impact: stop/slide external + force-attach to contacted surface ----
 	if movementController.externalVel != Vector3.ZERO and get_slide_collision_count() > 0:
 		var ext := movementController.externalVel
 		var bestN := Vector3.ZERO
@@ -225,23 +187,18 @@ func _physics_process(delta: float) -> void:
 	_updateAntRotation(delta)
 	handle_holding_objects()
 
-
 func _updateAntRotation(delta: float) -> void:
 	if !is_local:
 		return
 	
-	# Get the planar velocity (velocity without the vertical component)
 	var up := currentUp.normalized()
 	var planarVel := velocity - up * velocity.dot(up)
 	
-	# Only rotate if moving with significant speed
 	if planarVel.length() > 0.5:
 		var localVel := rigRoot.global_transform.basis.inverse() * planarVel
 		var targetAngle := atan2(localVel.x, localVel.z)
 		
-		# lerp_angle automatically handles the shortest path and angle wrapping
 		antMesh.rotation.y = lerp_angle(antMesh.rotation.y, targetAngle, antRotationSpeed * delta)
-
 
 func _updateCameraRig() -> void:
 	var up := currentUp.normalized()
@@ -257,7 +214,6 @@ func _updateCameraRig() -> void:
 	yawNode.rotation = Vector3(0.0, yaw, 0.0)
 	pitchNode.rotation = Vector3(pitch, 0.0, 0.0)
 
-
 func _screenArrowAngle(camRef: Camera3D, worldDir: Vector3) -> float:
 	var d := worldDir.normalized()
 	var right := camRef.global_transform.basis.x
@@ -270,20 +226,11 @@ func _screenArrowAngle(camRef: Camera3D, worldDir: Vector3) -> float:
 	var y := dProj.dot(up)
 	return Vector2(x, -y).angle()
 
-
 func addImpulseWorld(imp: Vector3) -> void:
 	movementController.addExternalKickWorld(imp)
 
-
 func addImpulseWorldUnsafe(imp: Vector3) -> void:
 	movementController.addUnsafeImpulseWorld(imp)
-
-
-var heldObject: RigidBody3D
-var closest_node: Marker3D
-var grabJoint: PinJoint3D
-@onready var grabAnchor: StaticBody3D = $gravityControl/Ant/GrabAnchor
-
 
 func set_held_object(body):
 	if !(body is Carryable):
@@ -321,24 +268,14 @@ func set_held_object(body):
 	# Tell the carryable that we're now carrying it
 	heldObject.add_carrier(Globals.STEAM_ID)
 	
-	# Check if we're becoming the authority
-	var is_authority_before = (heldObject.authority_id == Globals.STEAM_ID)
-	
-	# If nobody had authority, we become authority
-	if heldObject.authority_id == 0:
-		heldObject.authority_id = Globals.STEAM_ID
-	
-	# Update authority on our local copy immediately
-	var is_authority_now = (heldObject.authority_id == Globals.STEAM_ID)
-	
-	# Set collision after confirming pickup
+	# Set collision
 	heldObject.collision_layer = 2
 	
-	# Snap the chosen carry point onto the grab anchor
+	# Snap the chosen carry point to the grab anchor
 	var correction := grabAnchor.global_position - closest_node.global_position
 	heldObject.global_position += correction
 	
-	# Create PinJoint immediately so we feel the pickup
+	# Create PinJoint at current distance (will shrink)
 	grabJoint = PinJoint3D.new()
 	get_tree().current_scene.add_child(grabJoint)
 	grabJoint.global_position = grabAnchor.global_position
@@ -346,7 +283,6 @@ func set_held_object(body):
 	grabJoint.node_b = heldObject.get_path()
 	
 	print_debug("Successfully picked up object: ", heldObject.name)
-
 
 func drop_held_object():
 	if grabJoint:
@@ -369,7 +305,6 @@ func drop_held_object():
 	heldObject = null
 	closest_node = null
 
-
 func handle_holding_objects():
 	if Input.is_action_just_pressed("interact"):
 		if heldObject:
@@ -387,7 +322,6 @@ func handle_holding_objects():
 			if groundRay.get_collider() == heldObject:
 				drop_held_object()
 
-
 func die() -> void:
 	if dead:
 		return
@@ -403,10 +337,8 @@ func die() -> void:
 	
 	GameManager.game_over()
 
-
 func _on_game_over() -> void:
 	in_menu = true
-
 
 func send_network_state():
 	var data = {
@@ -417,7 +349,6 @@ func send_network_state():
 	}
 	
 	Network.send_to_all(data)
-
 
 func apply_network_state(data: Dictionary) -> void:
 	if is_local:
