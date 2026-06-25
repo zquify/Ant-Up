@@ -57,10 +57,10 @@ func handle_packet(data: Dictionary):
 			# Update local state
 			body.carriers[steam_id] = true
 			body.network_owner_id = network_owner_id
+			body.update_collision_layers_for_local_player()  # ← ADD THIS
 			body.update_label_color()
 			
 			# Only carriers create joints for other carriers
-			# Non-carriers just receive syncs, don't create joints
 			if body.is_carrier() and steam_id != Globals.STEAM_ID:
 				var player = get_tree().get_first_node_in_group("players_" + str(steam_id))
 				if player:
@@ -68,7 +68,7 @@ func handle_packet(data: Dictionary):
 			
 			print_debug("Carryable pickup: steam_id=", steam_id, " owner=", network_owner_id)
 		return
-	
+
 	# Handle carryable drop
 	if data.get("type") == "carryable_drop":
 		var body = carryables.get(data["id"])
@@ -80,12 +80,8 @@ func handle_packet(data: Dictionary):
 			body.carriers.erase(steam_id)
 			body.remove_carrier_joint(steam_id)
 			body.network_owner_id = network_owner_id
+			body.update_collision_layers_for_local_player()  # ← ADD THIS
 			body.update_label_color()
-			
-			# Reset collision if no more carriers
-			if body.carriers.size() == 0:
-				body.axis_lock_angular_x = false
-				body.collision_layer = 4
 			
 			print_debug("Carryable drop: steam_id=", steam_id, " owner=", network_owner_id)
 		return
@@ -110,6 +106,10 @@ func handle_packet(data: Dictionary):
 		var new_carriers = data.get("carriers", [])
 		body.carriers = {}
 		for steam_id in new_carriers:
+			# Don't re-add the local player if they just dropped
+			var local_player = get_tree().get_first_node_in_group("players_" + str(Globals.STEAM_ID))
+			if steam_id == Globals.STEAM_ID and local_player and local_player.just_dropped_object:
+				continue  # ← SKIP adding yourself back if you just dropped
 			body.carriers[steam_id] = true
 		
 		return
