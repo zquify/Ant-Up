@@ -62,6 +62,7 @@ func handle_packet(data: Dictionary):
 			
 			# Only carriers create joints for other carriers
 			if body.is_carrier() and steam_id != Globals.STEAM_ID:
+
 				var player = get_tree().get_first_node_in_group("players_" + str(steam_id))
 				if player:
 					body.create_carrier_joint(steam_id, player)
@@ -78,6 +79,7 @@ func handle_packet(data: Dictionary):
 			
 			# Remove the carrier and their joint
 			body.carriers.erase(steam_id)
+			
 			body.remove_carrier_joint(steam_id)
 			body.network_owner_id = network_owner_id
 			body.update_collision_layers_for_local_player()  # ← ADD THIS
@@ -104,13 +106,26 @@ func handle_packet(data: Dictionary):
 		
 		# Sync carriers list (non-carriers don't create joints)
 		var new_carriers = data.get("carriers", [])
-		body.carriers = {}
-		for steam_id in new_carriers:
-			# Don't re-add the local player if they just dropped
-			var local_player = get_tree().get_first_node_in_group("players_" + str(Globals.STEAM_ID))
-			if steam_id == Globals.STEAM_ID and local_player and local_player.just_dropped_object:
-				continue  # ← SKIP adding yourself back if you just dropped
-			body.carriers[steam_id] = true
+
+		# Convert incoming list into a set for fast lookup
+		var new_set := {}
+		for id in new_carriers:
+			new_set[id] = true
+
+		# REMOVE carriers that no longer exist
+		for existing_id in body.carriers.keys():
+			if not new_set.has(existing_id):
+				body.carriers.erase(existing_id)
+				body.remove_carrier_joint(existing_id)
+
+		# ADD only new carriers
+		for id in new_carriers:
+			if not body.carriers.has(id):
+				body.carriers[id] = true
+
+				var player = get_tree().get_first_node_in_group("players_" + str(id))
+				if player:
+					body.create_carrier_joint(id, player)
 		
 		return
 	

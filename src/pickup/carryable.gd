@@ -18,7 +18,6 @@ var send_timer := 0.0
 func _ready():
 	network_target_position = global_position
 	network_target_rotation = global_basis
-	print_debug("Carryable ready. network_owner_id=", network_owner_id, " Globals.STEAM_ID=", Globals.STEAM_ID)
 	update_label_color()
 func _process(delta):
 	# Shrink PinJoints for all carriers (local simulation)
@@ -147,13 +146,25 @@ func remove_carrier(steam_id: int) -> void:
 	# Update collision layers for local player
 	update_collision_layers_for_local_player()
 	
-	# Clean up the joint for this carrier
+	# Remove the dropped player's joint if it exists.
 	if steam_id in carrier_joints:
 		var joint = carrier_joints[steam_id]
 		if joint:
 			joint.queue_free()
 		carrier_joints.erase(steam_id)
 		carrier_joint_target_distances.erase(steam_id)
+
+	# If *I* just stopped being a carrier, destroy every remaining
+	# carrier joint because this client should no longer simulate
+	# the carryable.
+	if steam_id == Globals.STEAM_ID:
+		for id in carrier_joints.keys():
+			var joint = carrier_joints[id]
+			if joint:
+				joint.queue_free()
+
+		carrier_joints.clear()
+		carrier_joint_target_distances.clear()
 	
 	# If network owner drops and there are other carriers, reassign ownership
 	if steam_id == network_owner_id and carriers.size() > 0:
@@ -183,6 +194,11 @@ func get_carriers() -> Array:
 	return carriers.keys()
 # Called by network manager when a remote carrier picks up this object
 func create_carrier_joint(steam_id: int, player: CharacterBody3D) -> void:
+	if steam_id == Globals.STEAM_ID:
+		push_error("BUG: create_carrier_joint() called for local player!")
+		print_stack()
+		return
+	
 	"""Create a PinJoint for a new carrier"""
 	if steam_id in carrier_joints:
 		return  # Joint already exists
@@ -203,10 +219,9 @@ func create_carrier_joint(steam_id: int, player: CharacterBody3D) -> void:
 	
 	carrier_joints[steam_id] = joint
 	carrier_joint_target_distances[steam_id] = current_distance
-	
-	print_debug("Created PinJoint for carrier: ", steam_id, " at distance ", current_distance)
 # Called by network manager when a remote carrier drops this object
 func remove_carrier_joint(steam_id: int) -> void:
+	
 	"""Remove the PinJoint for a carrier"""
 	if steam_id in carrier_joints:
 		var joint = carrier_joints[steam_id]
@@ -214,7 +229,6 @@ func remove_carrier_joint(steam_id: int) -> void:
 			joint.queue_free()
 		carrier_joints.erase(steam_id)
 		carrier_joint_target_distances.erase(steam_id)
-		print_debug("Removed PinJoint for carrier: ", steam_id)
 func return_home():
 	linear_velocity = Vector3.ZERO
 	angular_velocity = Vector3.ZERO
