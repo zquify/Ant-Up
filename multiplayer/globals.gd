@@ -31,6 +31,7 @@ func _ready():
 		#get_tree().quit()
 	
 	Steam.join_requested.connect(_on_join_requested)
+	Steam.avatar_loaded.connect(_on_avatar_loaded)
 	check_command_line()
 	Steam.p2p_session_request.connect(_on_p2p_session_request)
 	Steam.p2p_session_connect_fail.connect(_on_p2p_session_connect_fail)
@@ -71,13 +72,31 @@ func check_command_line():
 				break
 
 
+signal avatar_updated(steam_id)
+
+func _on_avatar_loaded(steam_id: int, avatar_size: int):
+	# Remove any cached null/old texture
+	AVATAR_CACHE.erase(steam_id)
+
+	# Rebuild the texture now that Steam has it
+	get_avatar_texture(steam_id)
+
+	avatar_updated.emit(steam_id)
+
+
 func get_avatar_texture(steam_id: int) -> Texture2D:
 
 	if AVATAR_CACHE.has(steam_id):
 		return AVATAR_CACHE[steam_id]
-
+	
 	var avatar_id = Steam.getLargeFriendAvatar(steam_id)
-	if avatar_id <= 0:
+		
+	if avatar_id == 0:
+		return null
+	
+	if avatar_id == -1:
+		# Steam has started downloading it.
+		# avatar_loaded will fire later.
 		return null
 
 	var size = Steam.getImageSize(avatar_id)

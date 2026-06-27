@@ -27,8 +27,7 @@ func _ready():
 	Steam.lobby_chat_update.connect(_on_Lobby_Chat_Update)
 	Steam.lobby_message.connect(_on_Lobby_Message)
 	
-	
-	
+	Globals.avatar_updated.connect(_on_avatar_updated)
 	
 	# Initial button state
 	update_Start_Button()
@@ -251,6 +250,12 @@ func _on_Lobby_Joined(lobbyID, _permissions, _locked, _response):
 	# Get lobby members
 	get_Lobby_Members()
 
+
+func _on_avatar_updated(_steam_id):
+	refresh_Player_List()
+
+	if Globals.STEAM_ID != 0:
+		steam_avatar.texture = Globals.get_avatar_texture(Globals.STEAM_ID)
 
 
 func _on_Lobby_Chat_Update(_lobbyID, _changedID, makingChangeID, chatState):
