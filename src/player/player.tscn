@@ -189,8 +189,7 @@ collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_ocv17")
 stickStrength = 900.0
-followSpeed = 50.0
-maxDistanceFromHold = 10.0
+followSpeed = 10000.0
 groundRay = NodePath("gravityControl/Ant/GroundRay")
 
 [node name="colShape" type="CollisionShape3D" parent="." unique_id=206197205]

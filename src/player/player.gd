@@ -35,7 +35,6 @@ class_name Player
 @export_category("Holding Objects")
 
 @export var followSpeed = 5.0
-@export var maxDistanceFromHold = 5.0
 @export var dropBelowPlayer = true
 @export var groundRay: RayCast3D
 @export var held_object_max_climb_angle := 30.0
@@ -334,10 +333,6 @@ func handle_holding_objects():
 			print_debug("Interact pressed but raycast not hitting anything")
 	
 	if heldObject:
-		# Check if we're too far from the object
-		if heldObject.global_position.distance_to(grabAnchor.global_position) > maxDistanceFromHold:
-			drop_held_object()
-		
 		# Check if we're below the object (ground collision)
 		if dropBelowPlayer and groundRay.is_colliding():
 			if groundRay.get_collider() == heldObject:
