@@ -279,26 +279,26 @@ func _on_Lobby_Chat_Update(_lobbyID, _changedID, makingChangeID, chatState):
 
 
 
-func _on_Lobby_Data_Update(_success, lobbyID, _memberID, key):
-	# When ready status changes, update host's view
-	if key == "ready_status":
-		var ready_data = Steam.getLobbyData(lobbyID, "ready_status")
-		
-		# Parse and store ready statuses
-		var ready_states = {}
-		for line in ready_data.split(";"):
-			if line.is_empty():
-				continue
-			var parts = line.split(":")
-			if parts.size() == 2:
-				ready_states[int(parts[0])] = (parts[1] == "true")
-		
-		Globals.PLAYERS_READY_STATUS = ready_states
-		
-		# If host, display updated ready statuses
-		if Globals.IS_HOST:
-			display_Message("Ready status updated")
-
+func _on_Lobby_Data_Update(_success, lobbyID, _memberID):
+	var ready_data = Steam.getLobbyData(lobbyID, "ready_status")
+	
+	if ready_data.is_empty():
+		return
+	
+	var ready_states = {}
+	
+	for line in ready_data.split(";"):
+		if line.is_empty():
+			continue
+	
+		var parts = line.split(":")
+		if parts.size() == 2:
+			ready_states[int(parts[0])] = (parts[1] == "true")
+	
+	Globals.PLAYERS_READY_STATUS = ready_states
+	
+	if Globals.IS_HOST:
+		display_Message("Ready status updated")
 
 
 func _on_Lobby_Match_List(lobbies):

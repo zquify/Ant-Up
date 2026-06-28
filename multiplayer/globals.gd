@@ -74,7 +74,7 @@ func check_command_line():
 
 signal avatar_updated(steam_id)
 
-func _on_avatar_loaded(steam_id: int, avatar_size: int):
+func _on_avatar_loaded(steam_id: int, _avatar_size: int, _avatar_handle: int):
 	# Remove any cached null/old texture
 	AVATAR_CACHE.erase(steam_id)
 

@@ -51,41 +51,41 @@ func handle_packet(data: Dictionary):
 	if data.get("type") == "carryable_pickup":
 		var body = carryables.get(data["id"])
 		if body:
-			var steam_id = data["steam_id"]
+			var member_id = data["steam_id"]
 			var network_owner_id = data.get("network_owner_id", 0)
 			
 			# Update local state
-			body.carriers[steam_id] = true
+			body.carriers[member_id] = true
 			body.network_owner_id = network_owner_id
 			body.update_collision_layers_for_local_player()  # ← ADD THIS
 			body.update_label_color()
 			
 			# Only carriers create joints for other carriers
-			if body.is_carrier() and steam_id != Globals.STEAM_ID:
+			if body.is_carrier() and member_id != Globals.STEAM_ID:
 
-				var player = get_tree().get_first_node_in_group("players_" + str(steam_id))
+				var player = get_tree().get_first_node_in_group("players_" + str(member_id))
 				if player:
-					body.create_carrier_joint(steam_id, player)
+					body.create_carrier_joint(member_id, player)
 			
-			print_debug("Carryable pickup: steam_id=", steam_id, " owner=", network_owner_id)
+			print_debug("Carryable pickup: steam_id=", member_id, " owner=", network_owner_id)
 		return
 
 	# Handle carryable drop
 	if data.get("type") == "carryable_drop":
 		var body = carryables.get(data["id"])
 		if body:
-			var steam_id = data["steam_id"]
+			var member_id = data["steam_id"]
 			var network_owner_id = data.get("network_owner_id", 0)
 			
 			# Remove the carrier and their joint
-			body.carriers.erase(steam_id)
+			body.carriers.erase(member_id)
 			
-			body.remove_carrier_joint(steam_id)
+			body.remove_carrier_joint(member_id)
 			body.network_owner_id = network_owner_id
 			body.update_collision_layers_for_local_player()  # ← ADD THIS
 			body.update_label_color()
 			
-			print_debug("Carryable drop: steam_id=", steam_id, " owner=", network_owner_id)
+			print_debug("Carryable drop: steam_id=", member_id, " owner=", network_owner_id)
 		return
 	
 	# Handle carryable state (network owner sending updates to non-carriers)
