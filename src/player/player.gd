@@ -1,6 +1,8 @@
 extends CharacterBody3D
 class_name Player
+
 #region variables
+
 @onready var pitchNode: Node3D = $gravityControl/yawAxis/pitchAxis
 @onready var yawNode: Node3D   = $gravityControl/yawAxis
 @onready var rigRoot: Node3D   = $gravityControl
@@ -29,7 +31,9 @@ class_name Player
 @export var supportNormalDeadzoneDeg := 0.35
 @export var continuityWeight := 0.35
 @export var decayOfImpluse := 0.3
+
 @export_category("Holding Objects")
+
 @export var followSpeed = 5.0
 @export var maxDistanceFromHold = 5.0
 @export var dropBelowPlayer = true
@@ -37,6 +41,7 @@ class_name Player
 @export var held_object_max_climb_angle := 30.0
 @onready var interactRay = $gravityControl/Ant/InteractRay
 @onready var drop_point: Marker3D = $gravityControl/Ant/DropPoint
+
 var player_id := 0
 var pitch := 0.0
 var yaw := 0.0
@@ -58,13 +63,18 @@ var network_target_position := Vector3.ZERO
 var network_target_rotation := Vector3.ZERO
 var network_send_timer := 0.0
 var heartbeat := 0
+
 # Holding objects
 var heldObject: Carryable
 var closest_node: Marker3D
 var grabJoint: PinJoint3D
 var just_dropped_object := false
 @onready var grabAnchor: StaticBody3D = $gravityControl/Ant/GrabAnchor
+
+
 #endregion
+
+
 func _ready() -> void:
 	if player_id == Globals.STEAM_ID:
 		is_local = true
@@ -78,6 +88,8 @@ func _ready() -> void:
 	
 	if !is_local:
 		cam.current = false
+
+
 func _input(event: InputEvent) -> void:
 	if in_menu:
 		return
@@ -89,6 +101,8 @@ func _input(event: InputEvent) -> void:
 		yaw   -= event.relative.x * mouseSens
 		pitch -= event.relative.y * mouseSens
 		pitch = clamp(pitch, -pitchLimit, pitchLimit)
+
+
 func _updateJoystickLook(delta: float) -> void:
 	if in_menu:
 		return
@@ -102,10 +116,14 @@ func _updateJoystickLook(delta: float) -> void:
 	yaw -= lookX * stickLookSens * delta
 	pitch -= lookY * stickLookSens * delta
 	pitch = clamp(pitch, -pitchLimit, pitchLimit)
+
+
 func respawn():
 	var mm = get_parent().get_parent()
 	global_transform = mm.pick_spawn()
 	velocity = Vector3.ZERO
+
+
 func _process(delta: float) -> void:
 	# Clear the just_dropped_object flag after a frame so network updates can work normally again
 	if just_dropped_object:
@@ -124,6 +142,8 @@ func _process(delta: float) -> void:
 			lerp_angle(rot.z, network_target_rotation.z, 20.0 * delta)
 		)
 		return
+
+
 func _physics_process(delta: float) -> void:
 	if !is_local:
 		return
@@ -177,6 +197,8 @@ func _physics_process(delta: float) -> void:
 	gravityController.clampIntoFloor()
 	_updateAntRotation(delta)
 	handle_holding_objects()
+
+
 func _updateAntRotation(delta: float) -> void:
 	if !is_local:
 		return
@@ -189,6 +211,8 @@ func _updateAntRotation(delta: float) -> void:
 		var targetAngle := atan2(localVel.x, localVel.z)
 		
 		antMesh.rotation.y = lerp_angle(antMesh.rotation.y, targetAngle, antRotationSpeed * delta)
+
+
 func _updateCameraRig() -> void:
 	var up := currentUp.normalized()
 	var refForward := (-rigRoot.global_transform.basis.z).normalized()
@@ -202,6 +226,8 @@ func _updateCameraRig() -> void:
 	rigRoot.global_transform.basis = targetBasis
 	yawNode.rotation = Vector3(0.0, yaw, 0.0)
 	pitchNode.rotation = Vector3(pitch, 0.0, 0.0)
+
+
 func _screenArrowAngle(camRef: Camera3D, worldDir: Vector3) -> float:
 	var d := worldDir.normalized()
 	var right := camRef.global_transform.basis.x
@@ -213,10 +239,16 @@ func _screenArrowAngle(camRef: Camera3D, worldDir: Vector3) -> float:
 	var x := dProj.dot(right)
 	var y := dProj.dot(up)
 	return Vector2(x, -y).angle()
+
+
 func addImpulseWorld(imp: Vector3) -> void:
 	movementController.addExternalKickWorld(imp)
+
+
 func addImpulseWorldUnsafe(imp: Vector3) -> void:
 	movementController.addUnsafeImpulseWorld(imp)
+
+
 func set_held_object(body):
 	if !(body is Carryable):
 		return
@@ -269,6 +301,8 @@ func set_held_object(body):
 	grabJoint.node_b = heldObject.get_path()
 	
 	print_debug("Successfully picked up object: ", heldObject.name)
+
+
 func drop_held_object():
 	if grabJoint:
 		grabJoint.queue_free()
@@ -287,6 +321,8 @@ func drop_held_object():
 	
 	heldObject = null
 	closest_node = null
+
+
 func handle_holding_objects():
 	if Input.is_action_just_pressed("interact"):
 		if heldObject:
@@ -306,6 +342,8 @@ func handle_holding_objects():
 		if dropBelowPlayer and groundRay.is_colliding():
 			if groundRay.get_collider() == heldObject:
 				drop_held_object()
+
+
 func die() -> void:
 	if dead:
 		return
@@ -320,8 +358,12 @@ func die() -> void:
 	antMesh.visible = false
 	
 	GameManager.game_over()
+
+
 func _on_game_over() -> void:
 	in_menu = true
+
+
 func send_network_state():
 	var data = {
 		"steam_id": player_id,
@@ -331,6 +373,8 @@ func send_network_state():
 	}
 	
 	Network.send_to_all(data)
+
+
 func apply_network_state(data: Dictionary) -> void:
 	if is_local:
 		return
