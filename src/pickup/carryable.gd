@@ -1,9 +1,13 @@
 extends RigidBody3D
 class_name Carryable
+
 @onready var starting_transform: Transform3D = self.global_transform
+
 @export var score: int = 1
+
 var delivered := false
 var network_id := -1
+
 # Multiple carriers system
 var carriers := {}  # { steam_id: true, ... }
 var carrier_joints := {}  # { steam_id: PinJoint3D, ... }
@@ -11,14 +15,19 @@ var carrier_joint_target_distances := {}  # { steam_id: float, ... } - target di
 var carrier_joint_shrink_rate := 2.0  # units per second
 var network_owner_id := 0  # Who sends sync packets
 var default_authority_id := 0  # Host (set during registration)
+
 # Network interpolation for non-carriers only
 var network_target_position := Vector3.ZERO
 var network_target_rotation := Basis.IDENTITY
 var send_timer := 0.0
+
+
 func _ready():
 	network_target_position = global_position
 	network_target_rotation = global_basis
 	update_label_color()
+
+
 func _process(delta):
 	# Shrink PinJoints for all carriers (local simulation)
 	for steam_id in carrier_joints.keys():
@@ -48,6 +57,8 @@ func _process(delta):
 			network_target_rotation,
 			15.0 * delta
 		)
+
+
 func _physics_process(delta):
 	# Simulate physics if you're owner or a carrier
 	if not _should_simulate_physics():
@@ -77,6 +88,8 @@ func _physics_process(delta):
 		"ang_vel": angular_velocity,
 		"carriers": Array(carriers.keys())
 	})
+
+
 func _should_simulate_physics() -> bool:
 	# Both owner and carriers simulate physics locally
 	if network_owner_id == Globals.STEAM_ID:
@@ -84,8 +97,12 @@ func _should_simulate_physics() -> bool:
 	if is_carrier():
 		return true
 	return false
+
+
 func is_carrier() -> bool:
 	return Globals.STEAM_ID in carriers
+
+
 func update_collision_layers_for_local_player() -> void:
 	"""Update collision layers based on whether the local player is a carrier"""
 	if is_carrier():
@@ -96,6 +113,8 @@ func update_collision_layers_for_local_player() -> void:
 		# I'm not carrying it - use layer 3
 		set_collision_layer_value(2, false)
 		set_collision_layer_value(3, true)
+
+
 func add_carrier(steam_id: int) -> void:
 	"""Add a new carrier to this object"""
 	var already_carrying = steam_id in carriers
@@ -135,6 +154,8 @@ func add_carrier(steam_id: int) -> void:
 			"steam_id": steam_id,
 			"network_owner_id": network_owner_id
 		})
+
+
 func remove_carrier(steam_id: int) -> void:
 	"""Remove a carrier from this object"""
 	if steam_id not in carriers:
@@ -188,10 +209,16 @@ func remove_carrier(steam_id: int) -> void:
 		"lin_vel": linear_velocity,
 		"ang_vel": angular_velocity
 	})
+
+
 func is_carried() -> bool:
 	return carriers.size() > 0
+
+
 func get_carriers() -> Array:
 	return carriers.keys()
+
+
 # Called by network manager when a remote carrier picks up this object
 func create_carrier_joint(steam_id: int, player: CharacterBody3D) -> void:
 	if steam_id == Globals.STEAM_ID:
@@ -219,6 +246,8 @@ func create_carrier_joint(steam_id: int, player: CharacterBody3D) -> void:
 	
 	carrier_joints[steam_id] = joint
 	carrier_joint_target_distances[steam_id] = current_distance
+
+
 # Called by network manager when a remote carrier drops this object
 func remove_carrier_joint(steam_id: int) -> void:
 	
@@ -229,10 +258,14 @@ func remove_carrier_joint(steam_id: int) -> void:
 			joint.queue_free()
 		carrier_joints.erase(steam_id)
 		carrier_joint_target_distances.erase(steam_id)
+
+
 func return_home():
 	linear_velocity = Vector3.ZERO
 	angular_velocity = Vector3.ZERO
 	global_transform = starting_transform
+
+
 func update_label_color() -> void:
 	var label = get_node_or_null("Label3D")
 	if label == null:
