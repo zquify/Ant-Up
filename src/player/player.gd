@@ -35,6 +35,12 @@ class_name Player
 @export_category("Holding Objects")
 
 @export var followSpeed = 5.0
+
+@export var carry_pull_strength := 90.0
+@export var carry_pull_damping := 18.0
+@export var carry_slack := 0.15
+@export var carry_max_pull := 25.0
+
 @export var dropBelowPlayer = true
 @export var groundRay: RayCast3D
 @export var held_object_max_climb_angle := 30.0
@@ -168,6 +174,9 @@ func _physics_process(delta: float) -> void:
 	gravityController.updateUpAxis(delta)
 	if !in_menu: movementController.updatePlanarAndJump(delta)
 	gravityController.applyVerticalAccel(delta)
+	
+	applyCarryPull(delta)
+	
 	var imp := movementController.consumeUnsafeImpulse()
 	if imp != Vector3.ZERO:
 		movementController.addExternalKickWorld(imp)
@@ -196,6 +205,49 @@ func _physics_process(delta: float) -> void:
 	gravityController.clampIntoFloor()
 	_updateAntRotation(delta)
 	handle_holding_objects()
+
+
+func applyCarryPull(delta: float) -> void:
+	if heldObject == null:
+		return
+
+	if closest_node == null:
+		return
+
+	var offset := closest_node.global_position - grabAnchor.global_position
+
+	# Ignore gravity direction so it doesn't try to pull us into walls
+	var surfaceNormal := currentUp
+
+	if attached:
+		offset = offset.slide(surfaceNormal)
+
+	var distance := offset.length()
+
+	if distance <= carry_slack:
+		return
+
+	var direction := offset / distance
+
+	# How stretched is the "rope"?
+	var stretch = clamp(
+		distance - carry_slack,
+		0.0,
+		1.25
+	)
+
+	# Velocity toward the carry point
+	var along := velocity.dot(direction)
+
+	# Spring + damping
+	var force = stretch * carry_pull_strength \
+	- along * carry_pull_damping
+
+	force = clamp(force, 0.0, carry_max_pull)
+
+	movementController.addExternalKickWorld(
+		direction * force * delta
+	)
 
 
 func _updateAntRotation(delta: float) -> void:

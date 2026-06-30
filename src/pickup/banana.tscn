@@ -12,7 +12,7 @@ points = PackedVector3Array(1.5349554, -0.08253866, 0.1635686, 4.8534765, 3.2298
 [node name="Banana" type="RigidBody3D" unique_id=2115943628 groups=["carryable", "no_crawl"]]
 collision_layer = 4
 collision_mask = 3
-mass = 10.0
+mass = 50.0
 gravity_scale = 3.0
 continuous_cd = true
 angular_damp = 0.5
